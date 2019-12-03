@@ -13,6 +13,7 @@ calculateFuelRec = sum . takeWhile (> 0) . drop 1 . iterate calculateFuel
 --To find it, individually calculate the fuel needed for the mass of each module (your puzzle input),
 --    then add together all the fuel values.
 --What is the sum of the fuel requirements for all of the modules on your spacecraft?
+main :: IO ()
 main = do
   masses <- map read . lines <$> readFile "./input.txt"
   putStr "Part1: "
