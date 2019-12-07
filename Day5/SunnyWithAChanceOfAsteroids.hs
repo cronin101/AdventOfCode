@@ -7,7 +7,7 @@ data State =
     { programCounter :: Int
     , programTape    :: [Int]
     , outputs        :: [Int]
-    , input          :: Int
+    , inputs         :: [Int]
     }
   deriving (Show)
 
@@ -53,23 +53,28 @@ getJumpLocation test (m1, m2) tape nextPc
     p2 = tape !! (nextPc - 1)
 
 processProgram :: State -> State
-processProgram state@(State pc tape outputs input) =
+processProgram state@(State pc tape outputs inputs) =
   case (tape !! pc) of
     99 -> state
     op ->
       case (getLastDigit op) of
-        4 -> processNonJumpingState tape $ pushOutput (modes)
+        4 -> processNonJumpingState tape (pushOutput (modes)) inputs
         5 -> jumpTo $ jumpLocationAfterTest (/= 0)
         6 -> jumpTo $ jumpLocationAfterTest (== 0)
-        _ -> processNonJumpingState (setValue $ performOp $ modes) outputs
+        d ->
+          processNonJumpingState
+            (setValue $ performOp $ modes)
+            outputs
+            (bool inputs (tail inputs) (d == 3))
       where modes = getModes op
             jumpLocationAfterTest test = getJumpLocation test modes tape nextPc
   where
     pushOutput (m1, _) =
       (bool (tape !! resultLocation) resultLocation (m1 == '1')) : outputs
-    jumpTo destination = processProgram $ State destination tape outputs input
-    processNonJumpingState t o = processProgram $ State nextPc t o input
-    (arity, operation) = getArityAndOperation (tape !! pc) input
+    jumpTo destination = processProgram $ State destination tape outputs inputs
+    processNonJumpingState t o nextInputs =
+      processProgram $ State nextPc t o nextInputs
+    (arity, operation) = getArityAndOperation (tape !! pc) (head inputs)
     nextPc = pc + arity + 2
     resultLocation = tape !! (nextPc - 1)
     performOp (m1, m2) =
@@ -80,6 +85,6 @@ main :: IO ()
 main = do
   tape <- map (read :: String -> Int) . splitOn "," <$> readFile "./input.txt"
   putStrLn "Part One:"
-  print $ outputs $ processProgram $ State 0 tape [] 1
+  print $ outputs $ processProgram $ State 0 tape [] [1]
   putStrLn "Part Two:"
-  print $ outputs $ processProgram $ State 0 tape [] 5
+  print $ outputs $ processProgram $ State 0 tape [] [5]
