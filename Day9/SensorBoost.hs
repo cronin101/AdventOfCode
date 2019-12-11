@@ -60,6 +60,23 @@ getArityOfHeadOp state =
     8 -> 2
     9 -> 0
 
+getParameters :: State -> [Int]
+getParameters state =
+  take (getArityOfHeadOp state) $
+  map (tapeLookup $ programTape state) $ [(programCounter state) + 1 ..]
+
+getLocationParam :: State -> Int
+getLocationParam state@(State pc tape _ _ _ _) =
+  tapeLookup (tape) (pc + (getArityOfHeadOp state) + 1)
+
+getStoreLocation :: State -> Char -> Int
+getStoreLocation state mode =
+  case mode of
+    '0' -> locationParam
+    '2' -> locationParam + (relativeBase state)
+  where
+    locationParam = getLocationParam state
+
 getNextState :: State -> State
 getNextState state@(State pc tape outputs inputs _ relativeBase) =
   case (getTapeHead $ state) of
@@ -69,7 +86,8 @@ getNextState state@(State pc tape outputs inputs _ relativeBase) =
         2 -> stateWithStore $ operation (*)
         3 -> (stateWithStore (const $ head inputs)) {inputs = tail inputs}
         4 ->
-          stateWithoutJump {outputs = (fetch state m1 locationParam) : outputs}
+          stateWithoutJump
+            {outputs = (fetch state m1 (getLocationParam state)) : outputs}
         5 ->
           stateWithJump $
           getJumpLocation (/= 0) state (programCounter stateWithoutJump)
@@ -78,7 +96,8 @@ getNextState state@(State pc tape outputs inputs _ relativeBase) =
           getJumpLocation (== 0) state (programCounter stateWithoutJump)
         7 -> stateWithStore $ operation (testToInt (<))
         8 -> stateWithStore $ operation (testToInt (==))
-        9 -> stateWithShiftedRelativeBase $ fetch state m1 locationParam
+        9 ->
+          stateWithShiftedRelativeBase $ fetch state m1 $ getLocationParam state
         _ -> error $ show state
       where arity = getArityOfHeadOp state
             modes@[m1, m2, m3] = getModes tapeHead
@@ -88,25 +107,18 @@ getNextState state@(State pc tape outputs inputs _ relativeBase) =
             stateWithoutJump = state {programCounter = (pc + arity + 2)}
             stateWithStore operation =
               stateWithoutJump
-                {programTape = (setValue $ operation $ parameters)}
-            parameters = take arity $ map (tapeLookup tape) $ [pc + 1 ..]
+                {programTape = (setValue $ operation $ getParameters state)}
             operation op [p1, p2] = op (fetch state m1 p1) (fetch state m2 p2)
-            locationParam = tapeLookup tape (pc + arity + 1)
-            storeLocation mode =
-              case mode of
-                '0' -> locationParam
-                '2' -> locationParam + relativeBase
             setValue value =
-              IntMap.insert (storeLocation (modes !! arity)) value tape
+              IntMap.insert (getStoreLocation state (modes !! arity)) value tape
 
 getJumpLocation :: (Int -> Bool) -> State -> Int -> Int
-getJumpLocation test state@(State _ tape _ _ _ relativeBase) nextPc
+getJumpLocation test state@(State programCounter tape _ _ _ relativeBase) nextPc
   | test (fetch state m1 p1) = fetch state m2 p2
   | otherwise = nextPc
   where
     [m1, m2, m3] = getModes . getTapeHead $ state
-    p1 = tapeLookup tape (nextPc - 2)
-    p2 = tapeLookup tape (nextPc - 1)
+    [p1, p2] = take 2 $ map (tapeLookup tape) [programCounter + 1 ..]
 
 processProgram :: State -> State
 processProgram state@(State pc tape outputs inputs _ relativeBase) =
