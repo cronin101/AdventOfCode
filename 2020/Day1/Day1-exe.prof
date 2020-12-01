@@ -1,49 +1,47 @@
-	Tue Dec  1 22:38 2020 Time and Allocation Profiling Report  (Final)
+	Wed Dec  2 00:25 2020 Time and Allocation Profiling Report  (Final)
 
 	   Day1-exe +RTS -N -p -RTS
 
 	total time  =        0.00 secs   (0 ticks @ 1000 us, 16 processors)
-	total alloc =   1,625,912 bytes  (excludes profiling overheads)
+	total alloc =     663,072 bytes  (excludes profiling overheads)
 
-COST CENTRE MODULE           SRC                        %time %alloc
+COST CENTRE MODULE           SRC                         %time %alloc
 
-MAIN        MAIN             <built-in>                   0.0   18.4
-CAF         GHC.IO.Handle.FD <entire-module>              0.0    2.1
-pairs       Lib              src/Lib.hs:16:1-77           0.0   10.9
-loadInput   Lib              src/Lib.hs:(41,1)-(42,70)    0.0   67.3
+MAIN        MAIN             <built-in>                    0.0   45.1
+CAF         GHC.IO.Handle.FD <entire-module>               0.0    5.2
+pairs       Lib              src/Lib.hs:20:1-77            0.0   26.7
+loadInput   Lib              src/Lib.hs:(45,1)-(47,24)     0.0   20.0
+main        Main             app/Main.hs:(10,1)-(18,22)    0.0    1.9
 
 
-                                                                                               individual      inherited
-COST CENTRE              MODULE                  SRC                        no.     entries  %time %alloc   %time %alloc
+                                                                                             individual      inherited
+COST CENTRE              MODULE                SRC                        no.     entries  %time %alloc   %time %alloc
 
-MAIN                     MAIN                    <built-in>                 166          0    0.0   18.4     0.0  100.0
- CAF                     GHC.Conc.Signal         <entire-module>            266          0    0.0    0.0     0.0    0.0
- CAF                     GHC.IO.Encoding         <entire-module>            247          0    0.0    0.2     0.0    0.2
- CAF                     GHC.IO.Encoding.Iconv   <entire-module>            245          0    0.0    0.0     0.0    0.0
- CAF                     GHC.IO.Exception        <entire-module>            239          0    0.0    0.0     0.0    0.0
- CAF                     GHC.IO.FD               <entire-module>            238          0    0.0    0.0     0.0    0.0
- CAF                     GHC.IO.Handle.FD        <entire-module>            236          0    0.0    2.1     0.0    2.1
- CAF                     GHC.IO.Handle.Internals <entire-module>            235          0    0.0    0.0     0.0    0.0
- CAF                     GHC.IO.Handle.Text      <entire-module>            234          0    0.0    0.0     0.0    0.0
- CAF                     GHC.Show                <entire-module>            217          0    0.0    0.0     0.0    0.0
- CAF                     Text.Read.Lex           <entire-module>            198          0    0.0    0.0     0.0    0.0
- CAF                     GHC.Event.Thread        <entire-module>            183          0    0.0    0.1     0.0    0.1
- CAF:loadInput5          Lib                     <no location info>         299          0    0.0    0.0     0.0    0.0
- CAF:main1               Main                    <no location info>         330          0    0.0    0.0     0.0    0.0
-  main                   Main                    app/Main.hs:(10,1)-(18,22) 332          1    0.0    0.0     0.0    0.0
- CAF:main3               Main                    <no location info>         329          0    0.0    0.0     0.0    0.0
-  main                   Main                    app/Main.hs:(10,1)-(18,22) 334          0    0.0    0.0     0.0    0.0
-   loadInput             Lib                     src/Lib.hs:(41,1)-(42,70)  335          1    0.0    0.0     0.0    0.0
- CAF:main4               Main                    <no location info>         328          0    0.0    0.0     0.0    0.0
- main                    Main                    app/Main.hs:(10,1)-(18,22) 333          0    0.0    0.8     0.0   79.0
-  main.desiredPair       Main                    app/Main.hs:12:7-54        338          1    0.0    0.0     0.0    7.4
-   findPairWithSum       Lib                     src/Lib.hs:38:1-65         340          1    0.0    0.0     0.0    0.0
-   pairs                 Lib                     src/Lib.hs:16:1-77         339          1    0.0    7.4     0.0    7.4
-  main.desiredTriplet    Main                    app/Main.hs:16:7-52        342          1    0.0    0.0     0.0    3.5
-   findTripletWithSum    Lib                     src/Lib.hs:(30,1)-(35,3)   343          1    0.0    0.0     0.0    3.5
-    findTripletWithSum.z Lib                     src/Lib.hs:33:9-31         345        597    0.0    0.0     0.0    0.0
-    pairs                Lib                     src/Lib.hs:16:1-77         344          1    0.0    3.5     0.0    3.5
-  main.pairProduct       Main                    app/Main.hs:13:7-47        337          1    0.0    0.0     0.0    0.0
-  main.tripletProduct    Main                    app/Main.hs:17:7-68        341          1    0.0    0.0     0.0    0.0
-   main.tripletProduct.\ Main                    app/Main.hs:17:44-52       346          1    0.0    0.0     0.0    0.0
-  loadInput              Lib                     src/Lib.hs:(41,1)-(42,70)  336          0    0.0   67.3     0.0   67.3
+MAIN                     MAIN                  <built-in>                 167          0    0.0   45.1     0.0  100.0
+ CAF                     GHC.Conc.Signal       <entire-module>            267          0    0.0    0.1     0.0    0.1
+ CAF                     GHC.IO.Encoding       <entire-module>            248          0    0.0    0.5     0.0    0.5
+ CAF                     GHC.IO.Encoding.Iconv <entire-module>            246          0    0.0    0.0     0.0    0.0
+ CAF                     GHC.IO.FD             <entire-module>            239          0    0.0    0.0     0.0    0.0
+ CAF                     GHC.IO.Handle.FD      <entire-module>            237          0    0.0    5.2     0.0    5.2
+ CAF                     GHC.IO.Handle.Text    <entire-module>            235          0    0.0    0.0     0.0    0.0
+ CAF                     GHC.Show              <entire-module>            218          0    0.0    0.1     0.0    0.1
+ CAF                     GHC.Event.Poll        <entire-module>            185          0    0.0    0.0     0.0    0.0
+ CAF                     GHC.Event.Thread      <entire-module>            184          0    0.0    0.2     0.0    0.2
+ CAF:main1               Main                  <no location info>         332          0    0.0    0.0     0.0    0.0
+  main                   Main                  app/Main.hs:(10,1)-(18,22) 334          1    0.0    0.0     0.0    0.0
+ CAF:main3               Main                  <no location info>         331          0    0.0    0.0     0.0    0.0
+  main                   Main                  app/Main.hs:(10,1)-(18,22) 336          0    0.0    0.0     0.0    0.0
+   loadInput             Lib                   src/Lib.hs:(45,1)-(47,24)  337          1    0.0    0.0     0.0    0.0
+ CAF:main4               Main                  <no location info>         330          0    0.0    0.1     0.0    0.1
+ main                    Main                  app/Main.hs:(10,1)-(18,22) 335          0    0.0    1.9     0.0   48.7
+  main.desiredPair       Main                  app/Main.hs:12:7-54        340          1    0.0    0.0     0.0   18.2
+   findPairWithSum       Lib                   src/Lib.hs:42:1-65         342          1    0.0    0.0     0.0    0.0
+   pairs                 Lib                   src/Lib.hs:20:1-77         341          1    0.0   18.2     0.0   18.2
+  main.desiredTriplet    Main                  app/Main.hs:16:7-52        344          1    0.0    0.0     0.0    8.6
+   findTripletWithSum    Lib                   src/Lib.hs:(34,1)-(39,3)   345          1    0.0    0.0     0.0    8.6
+    findTripletWithSum.z Lib                   src/Lib.hs:37:9-31         347        597    0.0    0.0     0.0    0.0
+    pairs                Lib                   src/Lib.hs:20:1-77         346          1    0.0    8.6     0.0    8.6
+  main.pairProduct       Main                  app/Main.hs:13:7-47        339          1    0.0    0.0     0.0    0.0
+  main.tripletProduct    Main                  app/Main.hs:17:7-68        343          1    0.0    0.0     0.0    0.0
+   main.tripletProduct.\ Main                  app/Main.hs:17:44-52       348          1    0.0    0.0     0.0    0.0
+  loadInput              Lib                   src/Lib.hs:(45,1)-(47,24)  338          0    0.0   20.0     0.0   20.0

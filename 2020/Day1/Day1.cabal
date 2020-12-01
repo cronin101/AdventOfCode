@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 7bc2b8120029508c27d4a68f2c9bcc23c3e6ed598af47d775aa77c667b29c8a9
+-- hash: 604e8603dc13d0d81f77a254fc54d1dd24971fe4c7bada4e3e16b9e47ce18524
 
 name:           Day1
 version:        0.1.0.0
@@ -34,6 +34,7 @@ library
       src
   build-depends:
       base >=4.7 && <5
+    , bytestring
     , containers
   default-language: Haskell2010
 
@@ -47,6 +48,7 @@ executable Day1-exe
   build-depends:
       Day1
     , base >=4.7 && <5
+    , bytestring
     , containers
   default-language: Haskell2010
 
@@ -61,5 +63,6 @@ test-suite Day1-test
   build-depends:
       Day1
     , base >=4.7 && <5
+    , bytestring
     , containers
   default-language: Haskell2010
