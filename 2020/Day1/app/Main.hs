@@ -1,7 +1,6 @@
 module Main where
 
 import           Lib                            ( pairs
-                                                , triplets'
                                                 , findPairWithSum
                                                 , findTripletWithSum
                                                 , loadInput
@@ -14,6 +13,6 @@ main = do
   let pairProduct = uncurry (*) <$> desiredPair
   print pairProduct
 
-  let desiredTriplet = findTripletWithSum 2020 $ triplets' (<= 2020) input
+  let desiredTriplet = findTripletWithSum 2020 input
   let tripletProduct = fmap (\(x, y, z) -> x * y * z) desiredTriplet
   print tripletProduct
