@@ -5,8 +5,12 @@ module Lib
   , findTripletWithSum
   ) where
 
+import qualified Data.ByteString.Char8         as BSC
+import qualified Data.ByteString               as BS
 import           Data.List                      ( tails )
-import           Data.Maybe                     ( listToMaybe )
+import           Data.Maybe                     ( listToMaybe
+                                                , mapMaybe
+                                                )
 import           Data.Foldable                  ( find )
 import           Data.IntSet                    ( IntSet )
 import qualified Data.IntSet                   as IntSet
@@ -39,4 +43,5 @@ findPairWithSum targetSum = find ((== targetSum) . (uncurry (+)))
 
 loadInput :: String -> IO IntSet
 loadInput fileName =
-  IntSet.fromList . map read . lines <$> readFile ("src/" ++ fileName)
+  IntSet.fromList . map fst . mapMaybe BSC.readInt . BSC.lines <$> BS.readFile
+    ("src/" ++ fileName)
