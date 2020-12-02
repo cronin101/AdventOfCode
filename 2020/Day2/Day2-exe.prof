@@ -1,69 +1,71 @@
-	Wed Dec  2 10:25 2020 Time and Allocation Profiling Report  (Final)
+	Wed Dec  2 13:37 2020 Time and Allocation Profiling Report  (Final)
 
 	   Day2-exe +RTS -N -p -RTS
 
-	total time  =        0.00 secs   (2 ticks @ 1000 us, 16 processors)
-	total alloc =   3,281,456 bytes  (excludes profiling overheads)
+	total time  =        0.00 secs   (0 ticks @ 1000 us, 16 processors)
+	total alloc =   2,151,704 bytes  (excludes profiling overheads)
 
-COST CENTRE       MODULE           SRC                        %time %alloc
+COST CENTRE              MODULE           SRC                        %time %alloc
 
-parseLine.indices Lib              src/Lib.hs:(36,3)-(37,74)   50.0   53.0
-parseLine.(...)   Lib              src/Lib.hs:30:3-48          50.0    5.9
-MAIN              MAIN             <built-in>                   0.0    9.1
-CAF               GHC.IO.Handle.FD <entire-module>              0.0    1.1
-parseLine.(...)   Lib              src/Lib.hs:32:3-69           0.0    5.9
-parseLine         Lib              src/Lib.hs:(27,1)-(37,74)    0.0    9.3
-loadInput         Lib              src/Lib.hs:40:1-68           0.0    6.7
-main.count2       Main             app/Main.hs:14:7-61          0.0    3.9
-main.count1       Main             app/Main.hs:12:7-61          0.0    4.2
+MAIN                     MAIN             <built-in>                   0.0   13.9
+CAF                      GHC.IO.Handle.FD <entire-module>              0.0    1.6
+readByteStringNthChar    Lib              src/Lib.hs:(27,1)-(29,67)    0.0    1.5
+parseLine.passwordString Lib              src/Lib.hs:19:3-55           0.0    3.7
+parseLine.(...)          Lib              src/Lib.hs:18:3-68           0.0    1.5
+parseLine.(...)          Lib              src/Lib.hs:16:3-69           0.0    8.9
+parseLine.(...)          Lib              src/Lib.hs:14:3-48           0.0    8.9
+parseLine                Lib              src/Lib.hs:(11,1)-(24,59)    0.0   36.4
+loadInput                Lib              src/Lib.hs:36:1-68           0.0   10.2
+answerTwo                Main             app/Main.hs:12:1-59          0.0    5.6
+answerOne                Main             app/Main.hs:9:1-59           0.0    6.0
 
 
                                                                                                  individual      inherited
 COST CENTRE                  MODULE                SRC                        no.     entries  %time %alloc   %time %alloc
 
-MAIN                         MAIN                  <built-in>                 174          0    0.0    9.1   100.0  100.0
- CAF                         GHC.Conc.Signal       <entire-module>            274          0    0.0    0.0     0.0    0.0
- CAF                         GHC.IO.Encoding       <entire-module>            255          0    0.0    0.1     0.0    0.1
- CAF                         GHC.IO.Encoding.Iconv <entire-module>            253          0    0.0    0.0     0.0    0.0
- CAF                         GHC.IO.FD             <entire-module>            246          0    0.0    0.0     0.0    0.0
- CAF                         GHC.IO.Handle.FD      <entire-module>            244          0    0.0    1.1     0.0    1.1
- CAF                         GHC.IO.Handle.Text    <entire-module>            242          0    0.0    0.0     0.0    0.0
- CAF                         GHC.Event.Poll        <entire-module>            192          0    0.0    0.0     0.0    0.0
- CAF                         GHC.Event.Thread      <entire-module>            191          0    0.0    0.0     0.0    0.0
- CAF:main1                   Main                  <no location info>         346          0    0.0    0.0     0.0    0.0
-  main                       Main                  app/Main.hs:(10,1)-(15,14) 348          1    0.0    0.0     0.0    0.0
- CAF:main3                   Main                  <no location info>         345          0    0.0    0.0     0.0    0.0
-  main                       Main                  app/Main.hs:(10,1)-(15,14) 351          0    0.0    0.0     0.0    0.0
-   loadInput                 Lib                   src/Lib.hs:40:1-68         352          0    0.0    0.0     0.0    0.0
- CAF:main_fileName           Main                  <no location info>         342          0    0.0    0.0     0.0    0.0
- main                        Main                  app/Main.hs:(10,1)-(15,14) 349          0    0.0    0.4   100.0   89.6
-  loadInput                  Lib                   src/Lib.hs:40:1-68         350          1    0.0    6.7     0.0    6.7
-  main.count1                Main                  app/Main.hs:12:7-61        353          1    0.0    4.2    50.0   41.7
-   isValid1                  Lib                   src/Lib.hs:(17,1)-(19,39)  359       1000    0.0    0.0     0.0    0.5
-    isValid1.charCount       Lib                   src/Lib.hs:19:9-39         360       1000    0.0    0.5     0.0    0.5
-   parseLine                 Lib                   src/Lib.hs:(27,1)-(37,74)  356       1000    0.0    4.6    50.0   37.0
-    parseLine.(...)          Lib                   src/Lib.hs:32:3-69         363       1000    0.0    2.9     0.0    2.9
-    parseLine.(...)          Lib                   src/Lib.hs:34:3-68         361       1000    0.0    0.0     0.0    0.0
-    parseLine.(...)          Lib                   src/Lib.hs:30:3-48         358       1000    0.0    2.9     0.0    2.9
-    parseLine.indices        Lib                   src/Lib.hs:(36,3)-(37,74)  368       1000   50.0   26.5    50.0   26.5
-    parseLine.num1           Lib                   src/Lib.hs:30:3-48         357       1000    0.0    0.0     0.0    0.0
-    parseLine.passwordString Lib                   src/Lib.hs:35:3-55         366       1000    0.0    0.0     0.0    0.0
-    parseLine.remainder1     Lib                   src/Lib.hs:30:3-48         364       1000    0.0    0.0     0.0    0.0
-    parseLine.remainder2     Lib                   src/Lib.hs:32:3-69         362       1000    0.0    0.0     0.0    0.0
-    parseLine.remainder3     Lib                   src/Lib.hs:34:3-68         365       1000    0.0    0.0     0.0    0.0
-    parseLine.targetChar     Lib                   src/Lib.hs:34:3-68         367       1000    0.0    0.0     0.0    0.0
-    parseLine.num2           Lib                   src/Lib.hs:32:3-69         369        647    0.0    0.0     0.0    0.0
-  main.count2                Main                  app/Main.hs:14:7-61        370          1    0.0    3.9    50.0   40.9
-   isValid2                  Lib                   src/Lib.hs:(22,1)-(23,74)  379       1000    0.0    0.0     0.0    0.0
-   parseLine                 Lib                   src/Lib.hs:(27,1)-(37,74)  373       1000    0.0    4.6    50.0   37.0
-    parseLine.(...)          Lib                   src/Lib.hs:34:3-68         380       1000    0.0    0.0     0.0    0.0
-    parseLine.(...)          Lib                   src/Lib.hs:32:3-69         377       1000    0.0    2.9     0.0    2.9
-    parseLine.(...)          Lib                   src/Lib.hs:30:3-48         375       1000   50.0    2.9    50.0    2.9
-    parseLine.indices        Lib                   src/Lib.hs:(36,3)-(37,74)  385       1000    0.0   26.5     0.0   26.5
-    parseLine.num1           Lib                   src/Lib.hs:30:3-48         374       1000    0.0    0.0     0.0    0.0
-    parseLine.num2           Lib                   src/Lib.hs:32:3-69         376       1000    0.0    0.0     0.0    0.0
-    parseLine.passwordString Lib                   src/Lib.hs:35:3-55         383       1000    0.0    0.0     0.0    0.0
-    parseLine.remainder1     Lib                   src/Lib.hs:30:3-48         378       1000    0.0    0.0     0.0    0.0
-    parseLine.remainder2     Lib                   src/Lib.hs:32:3-69         381       1000    0.0    0.0     0.0    0.0
-    parseLine.remainder3     Lib                   src/Lib.hs:34:3-68         382       1000    0.0    0.0     0.0    0.0
-    parseLine.targetChar     Lib                   src/Lib.hs:34:3-68         384       1000    0.0    0.0     0.0    0.0
+MAIN                         MAIN                  <built-in>                 168          0    0.0   13.9     0.0  100.0
+ CAF                         GHC.Conc.Signal       <entire-module>            267          0    0.0    0.0     0.0    0.0
+ CAF                         GHC.IO.Encoding       <entire-module>            249          0    0.0    0.1     0.0    0.1
+ CAF                         GHC.IO.Encoding.Iconv <entire-module>            247          0    0.0    0.0     0.0    0.0
+ CAF                         GHC.IO.FD             <entire-module>            240          0    0.0    0.0     0.0    0.0
+ CAF                         GHC.IO.Handle.FD      <entire-module>            238          0    0.0    1.6     0.0    1.6
+ CAF                         GHC.IO.Handle.Text    <entire-module>            236          0    0.0    0.0     0.0    0.0
+ CAF                         GHC.Event.Poll        <entire-module>            186          0    0.0    0.0     0.0    0.0
+ CAF                         GHC.Event.Thread      <entire-module>            185          0    0.0    0.1     0.0    0.1
+ CAF:main1                   Main                  <no location info>         334          0    0.0    0.0     0.0    0.0
+  main                       Main                  app/Main.hs:(15,1)-(18,25) 336          1    0.0    0.0     0.0    0.0
+ CAF:main2                   Main                  <no location info>         333          0    0.0    0.0     0.0    0.0
+  main                       Main                  app/Main.hs:(15,1)-(18,25) 339          0    0.0    0.0     0.0    0.0
+   loadInput                 Lib                   src/Lib.hs:36:1-68         340          0    0.0    0.0     0.0    0.0
+ CAF:main_fileName           Main                  <no location info>         332          0    0.0    0.0     0.0    0.0
+ main                        Main                  app/Main.hs:(15,1)-(18,25) 337          0    0.0    0.6     0.0   84.1
+  answerOne                  Main                  app/Main.hs:9:1-59         341          1    0.0    6.0     0.0   36.5
+   parseLine                 Lib                   src/Lib.hs:(11,1)-(24,59)  342       1000    0.0   18.2     0.0   30.5
+    parseLine.(...)          Lib                   src/Lib.hs:14:3-48         349       1000    0.0    4.5     0.0    4.5
+    parseLine.(...)          Lib                   src/Lib.hs:16:3-69         347       1000    0.0    4.5     0.0    4.5
+    parseLine.(...)          Lib                   src/Lib.hs:18:3-68         345       1000    0.0    0.7     0.0    0.7
+    parseLine.charCount      Lib                   src/Lib.hs:20:3-69         343       1000    0.0    0.7     0.0    0.7
+    parseLine.num1           Lib                   src/Lib.hs:14:3-48         353       1000    0.0    0.0     0.0    0.0
+    parseLine.passwordString Lib                   src/Lib.hs:19:3-55         350       1000    0.0    1.9     0.0    1.9
+    parseLine.remainder1     Lib                   src/Lib.hs:14:3-48         348       1000    0.0    0.0     0.0    0.0
+    parseLine.remainder2     Lib                   src/Lib.hs:16:3-69         346       1000    0.0    0.0     0.0    0.0
+    parseLine.remainder3     Lib                   src/Lib.hs:18:3-68         344       1000    0.0    0.0     0.0    0.0
+    parseLine.targetChar     Lib                   src/Lib.hs:18:3-68         351       1000    0.0    0.0     0.0    0.0
+    parseLine.testOneResult  Lib                   src/Lib.hs:21:3-72         352       1000    0.0    0.0     0.0    0.0
+    parseLine.num2           Lib                   src/Lib.hs:16:3-69         354        647    0.0    0.0     0.0    0.0
+  answerTwo                  Main                  app/Main.hs:12:1-59        355          1    0.0    5.6     0.0   36.9
+   parseLine                 Lib                   src/Lib.hs:(11,1)-(24,59)  356       1000    0.0   18.2     0.0   31.2
+    parseLine.(...)          Lib                   src/Lib.hs:14:3-48         363       1000    0.0    4.5     0.0    4.5
+    parseLine.(...)          Lib                   src/Lib.hs:16:3-69         361       1000    0.0    4.5     0.0    4.5
+    parseLine.(...)          Lib                   src/Lib.hs:18:3-68         359       1000    0.0    0.7     0.0    0.7
+    parseLine.num1           Lib                   src/Lib.hs:14:3-48         365       1000    0.0    0.0     0.0    0.0
+    parseLine.num2           Lib                   src/Lib.hs:16:3-69         369       1000    0.0    0.0     0.0    0.0
+    parseLine.passwordString Lib                   src/Lib.hs:19:3-55         364       1000    0.0    1.9     0.0    1.9
+    parseLine.remainder1     Lib                   src/Lib.hs:14:3-48         362       1000    0.0    0.0     0.0    0.0
+    parseLine.remainder2     Lib                   src/Lib.hs:16:3-69         360       1000    0.0    0.0     0.0    0.0
+    parseLine.remainder3     Lib                   src/Lib.hs:18:3-68         358       1000    0.0    0.0     0.0    0.0
+    parseLine.targetChar     Lib                   src/Lib.hs:18:3-68         368       1000    0.0    0.0     0.0    0.0
+    parseLine.testTwoResult  Lib                   src/Lib.hs:(22,3)-(24,59)  357       1000    0.0    0.0     0.0    1.5
+     targetCharIsNthChar     Lib                   src/Lib.hs:(32,1)-(33,55)  366       2000    0.0    0.0     0.0    1.5
+      readByteStringNthChar  Lib                   src/Lib.hs:(27,1)-(29,67)  367       2000    0.0    1.5     0.0    1.5
+  loadInput                  Lib                   src/Lib.hs:36:1-68         338          1    0.0   10.2     0.0   10.2
