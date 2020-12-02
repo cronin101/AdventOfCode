@@ -1,18 +1,23 @@
 module Main where
 
-import           Lib                            ( pairs
-                                                , findPairWithSum
+import           Lib                            ( findPairWithSum
                                                 , findTripletWithSum
                                                 , loadInput
                                                 )
+import           Data.IntSet                    ( IntSet )
+
+target :: Int
+target = 2020
+
+answerOne :: IntSet -> Maybe Int
+answerOne input = uncurry (*) <$> findPairWithSum target input
+
+
+answerTwo :: IntSet -> Maybe Int
+answerTwo input = (\(x, y, z) -> x * y * z) <$> findTripletWithSum target input
 
 main :: IO ()
 main = do
   input <- loadInput "input1.txt"
-  let desiredPair = findPairWithSum 2020 $ pairs input
-  let pairProduct = uncurry (*) <$> desiredPair
-  print pairProduct
-
-  let desiredTriplet = findTripletWithSum 2020 input
-  let tripletProduct = fmap (\(x, y, z) -> x * y * z) desiredTriplet
-  print tripletProduct
+  print $ answerOne input
+  print $ answerTwo input
