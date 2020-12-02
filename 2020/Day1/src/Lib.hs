@@ -1,17 +1,14 @@
 module Lib
-  ( pairs
-  , loadInput
+  ( loadInput
   , findPairWithSum
   , findTripletWithSum
   ) where
 
 import qualified Data.ByteString.Char8         as BSC
-import qualified Data.ByteString               as BS
 import           Data.List                      ( tails )
 import           Data.Maybe                     ( listToMaybe
                                                 , mapMaybe
                                                 )
-import           Data.Foldable                  ( find )
 import           Data.IntSet                    ( IntSet )
 import qualified Data.IntSet                   as IntSet
 
@@ -19,6 +16,21 @@ import qualified Data.IntSet                   as IntSet
 pairs :: IntSet -> [(Int, Int)]
 pairs intSet = [ (x, y) | (x : ys) <- tails $ IntSet.toList intSet, y <- ys ]
 
+-- Optimised: Only search space that is within limit
+potentialPairs :: Int -> IntSet -> [(Int, Int)]
+potentialPairs targetSum intSet =
+  [ (x, y)
+  | (x : ys) <- tails $ IntSet.toAscList intSet
+  , y        <- takeWhile (<= (targetSum - x)) ys
+  ]
+
+findPairWithSum :: Int -> IntSet -> Maybe (Int, Int)
+findPairWithSum targetSum intSet = listToMaybe
+  [ (x, y)
+  | x <- IntSet.toList intSet
+  , let y = targetSum - x
+  , IntSet.member y intSet
+  ]
 
 -- Naive: Generate all unique triplets from a list input
 triplets :: IntSet -> [(Int, Int, Int)]
@@ -33,15 +45,13 @@ triplets intSet =
 findTripletWithSum :: Int -> IntSet -> Maybe (Int, Int, Int)
 findTripletWithSum targetSum intSet = listToMaybe
   [ (x, y, z)
-  | (x, y) <- pairs intSet
+  | let target = targetSum - IntSet.findMin intSet
+  , (x, y) <- potentialPairs target intSet
   , let z = targetSum - (x + y)
   , IntSet.member z intSet
   ]
 
-findPairWithSum :: (Foldable t, Eq a, Num a) => a -> t (a, a) -> Maybe (a, a)
-findPairWithSum targetSum = find ((== targetSum) . (uncurry (+)))
-
 loadInput :: String -> IO IntSet
 loadInput fileName =
-  IntSet.fromList . map fst . mapMaybe BSC.readInt . BSC.lines <$> BS.readFile
+  IntSet.fromList . map fst . mapMaybe BSC.readInt . BSC.lines <$> BSC.readFile
     ("src/" ++ fileName)
