@@ -1,14 +1,24 @@
 module Lib
   ( loadInput
-  , parseLine
+  , evaluateLine
   ) where
 
 import qualified Data.ByteString.Char8         as BSC
-import           Data.ByteString.Char8          ( ByteString )
+import           Data.ByteString.Char8          ( pack
+                                                , ByteString
+                                                )
+import           Text.Parsec.ByteString         ( Parser )
+import           Text.Parsec                    ( parse
+                                                , letter
+                                                , space
+                                                , char
+                                                , digit
+                                                , many1
+                                                )
 
 -- Example line: "2-5 h: lcwghhkpkxvzkvrmxrv"
-parseLine :: ByteString -> (Bool, Bool)
-parseLine bs = (testOneResult, testTwoResult)
+parseLine :: ByteString -> (Int, Int, Char, ByteString)
+parseLine bs = (num1, num2, targetChar, passwordString)
  where
   -- remainder1: "-5 h: lcwghhkpkxvzkvrmxrv"
   Just (num1      , remainder1) = BSC.readInt bs
@@ -17,8 +27,30 @@ parseLine bs = (testOneResult, testTwoResult)
   -- remainder3: ": lcwghhkpkxvzkvrmxrv"
   Just (targetChar, remainder3) = BSC.uncons $ BSC.drop 1 remainder2
   passwordString                = BSC.drop 2 remainder3
-  charCount                     = BSC.count targetChar passwordString
-  testOneResult                 = charCount >= num1 && charCount <= num2
+
+parseLine' :: ByteString -> (Int, Int, Char, ByteString)
+parseLine' bs = (num1, num2, targetChar, passwordString)
+  where Right (num1, num2, targetChar, passwordString) = parse lineParser "" bs
+
+-- Not as efficient, but far nicer to work with than ByteString juggling
+lineParser :: Parser (Int, Int, Char, ByteString)
+lineParser = do
+  low <- many1 digit
+  char '-'
+  high <- many1 digit
+  space
+  targetChar <- letter
+  char ':'
+  space
+  password <- many1 letter
+  return (read low, read high, targetChar, pack password)
+
+evaluateLine :: ByteString -> (Bool, Bool)
+evaluateLine bs = (testOneResult, testTwoResult)
+ where
+  (num1, num2, targetChar, passwordString) = parseLine bs
+  charCount     = BSC.count targetChar passwordString
+  testOneResult = charCount >= num1 && charCount <= num2
   testTwoResult =
     targetCharIsNthChar passwordString targetChar num1
       /= targetCharIsNthChar passwordString targetChar num2

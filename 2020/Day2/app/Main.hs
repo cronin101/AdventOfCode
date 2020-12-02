@@ -1,15 +1,15 @@
 module Main where
 
 import           Lib                            ( loadInput
-                                                , parseLine
+                                                , evaluateLine
                                                 )
 import           Data.ByteString                ( ByteString )
 
 answerOne :: [ByteString] -> Int
-answerOne input = length . filter fst $ map parseLine input
+answerOne input = length . filter fst $ map evaluateLine input
 
 answerTwo :: [ByteString] -> Int
-answerTwo input = length . filter snd $ map parseLine input
+answerTwo input = length . filter snd $ map evaluateLine input
 
 main :: IO ()
 main = do

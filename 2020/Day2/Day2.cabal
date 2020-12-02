@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: a5e107f97a07a96854017e9f415448ca334d8623462234126a74c9eef1917399
+-- hash: 463fd065b95584ca998f8eba5948fad4f7e6506785ff4640e6ffd35b75824500
 
 name:           Day2
 version:        0.1.0.0
@@ -36,6 +36,7 @@ library
       base >=4.7 && <5
     , bytestring
     , containers
+    , parsec
   default-language: Haskell2010
 
 executable Day2-exe
@@ -50,6 +51,7 @@ executable Day2-exe
     , base >=4.7 && <5
     , bytestring
     , containers
+    , parsec
   default-language: Haskell2010
 
 test-suite Day2-test
@@ -65,4 +67,5 @@ test-suite Day2-test
     , base >=4.7 && <5
     , bytestring
     , containers
+    , parsec
   default-language: Haskell2010
