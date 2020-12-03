@@ -4,21 +4,29 @@ module Lib
   ) where
 
 import qualified Data.ByteString.Char8         as BSC
-import           Data.ByteString.Char8          ( pack
-                                                , ByteString
-                                                )
-import           Text.Parsec.ByteString         ( Parser )
-import           Text.Parsec                    ( parse
-                                                , letter
+import           Data.ByteString.Char8          ( ByteString )
+import qualified Data.Attoparsec.ByteString.Char8
+                                               as P
+                                                ( parse
+                                                , letter_ascii
                                                 , space
                                                 , char
-                                                , digit
-                                                , many1
+                                                , takeByteString
+                                                , takeWhile
+                                                , feed
+                                                , letter_ascii
                                                 )
+import           Data.Attoparsec.ByteString.Char8
+                                                ( isDigit
+                                                , Parser
+                                                , IResult(Done)
+                                                )
+import           Data.Maybe                     ( fromJust )
 
+-- More efficient than parsec but less elegant
 -- Example line: "2-5 h: lcwghhkpkxvzkvrmxrv"
-parseLine :: ByteString -> (Int, Int, Char, ByteString)
-parseLine bs = (num1, num2, targetChar, passwordString)
+parseLine' :: ByteString -> (Int, Int, Char, ByteString)
+parseLine' bs = (num1, num2, targetChar, passwordString)
  where
   -- remainder1: "-5 h: lcwghhkpkxvzkvrmxrv"
   Just (num1      , remainder1) = BSC.readInt bs
@@ -28,22 +36,24 @@ parseLine bs = (num1, num2, targetChar, passwordString)
   Just (targetChar, remainder3) = BSC.uncons $ BSC.drop 1 remainder2
   passwordString                = BSC.drop 2 remainder3
 
-parseLine' :: ByteString -> (Int, Int, Char, ByteString)
-parseLine' bs = (num1, num2, targetChar, passwordString)
-  where Right (num1, num2, targetChar, passwordString) = parse lineParser "" bs
+parseLine :: ByteString -> (Int, Int, Char, ByteString)
+parseLine bs = (num1, num2, targetChar, passwordString)
+ where
+  Done _ (num1, num2, targetChar, passwordString) =
+    P.feed (P.parse lineParser bs) BSC.empty
 
--- Not as efficient, but far nicer to work with than ByteString juggling
 lineParser :: Parser (Int, Int, Char, ByteString)
 lineParser = do
-  low <- many1 digit
-  char '-'
-  high <- many1 digit
-  space
-  targetChar <- letter
-  char ':'
-  space
-  password <- many1 letter
-  return (read low, read high, targetChar, pack password)
+  let intFromBS = fst . fromJust . BSC.readInt
+  low <- intFromBS <$> P.takeWhile isDigit
+  P.char '-'
+  high <- intFromBS <$> P.takeWhile isDigit
+  P.space
+  targetChar <- P.letter_ascii
+  P.char ':'
+  P.space
+  password <- P.takeByteString
+  return (low, high, targetChar, password)
 
 evaluateLine :: ByteString -> (Bool, Bool)
 evaluateLine bs = (testOneResult, testTwoResult)
