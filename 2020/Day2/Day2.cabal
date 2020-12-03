@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 463fd065b95584ca998f8eba5948fad4f7e6506785ff4640e6ffd35b75824500
+-- hash: 1e8f8a19509db4c217c295d7916727a29a497f7979148077e73c6baacdbc8bd3
 
 name:           Day2
 version:        0.1.0.0
@@ -33,10 +33,10 @@ library
   hs-source-dirs:
       src
   build-depends:
-      base >=4.7 && <5
+      attoparsec
+    , base >=4.7 && <5
     , bytestring
     , containers
-    , parsec
   default-language: Haskell2010
 
 executable Day2-exe
@@ -48,10 +48,10 @@ executable Day2-exe
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       Day2
+    , attoparsec
     , base >=4.7 && <5
     , bytestring
     , containers
-    , parsec
   default-language: Haskell2010
 
 test-suite Day2-test
@@ -64,8 +64,8 @@ test-suite Day2-test
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       Day2
+    , attoparsec
     , base >=4.7 && <5
     , bytestring
     , containers
-    , parsec
   default-language: Haskell2010
