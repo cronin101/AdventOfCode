@@ -1,0 +1,71 @@
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.33.0.
+--
+-- see: https://github.com/sol/hpack
+--
+-- hash: 57824299663da5596bbf9f1489675373d98e168bd5d56072aa49a4dd3914586e
+
+name:           Day4
+version:        0.1.0.0
+description:    Please see the README on GitHub at <https://github.com/githubuser/Day4#readme>
+homepage:       https://github.com/githubuser/Day4#readme
+bug-reports:    https://github.com/githubuser/Day4/issues
+author:         Author name here
+maintainer:     example@example.com
+copyright:      2020 Author name here
+license:        BSD3
+license-file:   LICENSE
+build-type:     Simple
+extra-source-files:
+    README.md
+    ChangeLog.md
+
+source-repository head
+  type: git
+  location: https://github.com/githubuser/Day4
+
+library
+  exposed-modules:
+      Lib
+  other-modules:
+      Paths_Day4
+  hs-source-dirs:
+      src
+  build-depends:
+      base >=4.7 && <5
+    , bytestring
+    , containers
+    , parsec
+  default-language: Haskell2010
+
+executable Day4-exe
+  main-is: Main.hs
+  other-modules:
+      Paths_Day4
+  hs-source-dirs:
+      app
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      Day4
+    , base >=4.7 && <5
+    , bytestring
+    , containers
+    , parsec
+  default-language: Haskell2010
+
+test-suite Day4-test
+  type: exitcode-stdio-1.0
+  main-is: Spec.hs
+  other-modules:
+      Paths_Day4
+  hs-source-dirs:
+      test
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      Day4
+    , base >=4.7 && <5
+    , bytestring
+    , containers
+    , parsec
+  default-language: Haskell2010
