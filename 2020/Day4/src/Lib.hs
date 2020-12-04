@@ -2,22 +2,25 @@ module Lib
   ( loadInput
   , hasRequiredCredentials
   , credentialsAreValid
+  , readDigitsFromByteString
   ) where
 
 import qualified Data.Set                      as S
 import qualified Data.Map.Strict               as M
 import           Data.Map.Strict                ( Map )
-import           Text.Parsec.ByteString         ( Parser )
-import           Text.Parsec                    ( hexDigit
-                                                , anyChar
-                                                , alphaNum
-                                                , (<|>)
+import           Data.Attoparsec.ByteString.Char8
+                                                ( inClass
+                                                , IResult(Done)
+                                                , takeByteString
+                                                , Parser
+                                                , choice
                                                 , digit
                                                 , many1
                                                 , string
                                                 , parse
-                                                , letter
                                                 , try
+                                                , feed
+                                                , isDigit
                                                 )
 import qualified Data.ByteString.Char8         as BSC
 import           Data.ByteString.Char8          ( pack
@@ -30,7 +33,7 @@ data CredentialType = BirthYear | IssueYear | ExpirationYear | Height
     deriving (Enum, Ord, Eq, Show)
 
 
-data TColour = NamedColour { colourName :: String } | HexColour { hexCode :: String}
+data TColour = NamedColour { colourName :: ByteString } | HexColour { hexCode :: ByteString}
   deriving (Show, Eq)
 
 newtype TDate = Year
@@ -43,7 +46,7 @@ data THeight =
   UnitlessHeight { amount :: Int }
   deriving (Show, Eq)
 
-data TID = NumericalID { code :: [Int]} | FreeTextID { _id :: String }
+data TID = NumericalID { code :: [Int]} | FreeTextID { _id :: ByteString }
   deriving (Show, Eq)
 
 data CredentialValue =
@@ -70,19 +73,19 @@ toImperialHeight :: Int -> Credential
 toImperialHeight = Credential Height . VHeight . ImperialHeight
 toUnitlessHeight :: Int -> Credential
 toUnitlessHeight = Credential Height . VHeight . UnitlessHeight
-toHexHairColour :: String -> Credential
+toHexHairColour :: ByteString -> Credential
 toHexHairColour = Credential HairColour . VColour . HexColour
-toNamedHairColour :: String -> Credential
+toNamedHairColour :: ByteString -> Credential
 toNamedHairColour = Credential HairColour . VColour . NamedColour
-toNamedEyeColour :: String -> Credential
+toNamedEyeColour :: ByteString -> Credential
 toNamedEyeColour = Credential EyeColour . VColour . NamedColour
-toHexEyeColour :: String -> Credential
+toHexEyeColour :: ByteString -> Credential
 toHexEyeColour = Credential EyeColour . VColour . HexColour
-toFreeTextPassportId :: String -> Credential
+toFreeTextPassportId :: ByteString -> Credential
 toFreeTextPassportId = Credential PassportID . VID . FreeTextID
 toNumericalPassPortId :: [Int] -> Credential
 toNumericalPassPortId = Credential PassportID . VID . NumericalID
-toCountryId :: String -> Credential
+toCountryId :: ByteString -> Credential
 toCountryId = Credential CountryID . VID . FreeTextID
 
 -- After all the type system boilerplate, the real fun can begin
@@ -120,131 +123,128 @@ credentialIsValid credential = case credential of
   (Credential PassportID _                         ) -> False
   (Credential CountryID  _                         ) -> True
  where
-  knownColours = S.fromList ["amb", "blu", "brn", "gry", "grn", "hzl", "oth"]
+  knownColours =
+    S.fromList $ map pack ["amb", "blu", "brn", "gry", "grn", "hzl", "oth"]
 
 -- Creating a bunch of parsers for individual credentials...
 
 birthYearParser :: Parser Credential
 birthYearParser = do
-  string "byr:"
+  string $ pack "byr:"
   year <- many1 digit
   return $ toBirthYear $ read year
 
 issueYearParser :: Parser Credential
 issueYearParser = do
-  string "iyr:"
+  string $ pack "iyr:"
   year <- many1 digit
   return $ toIssueYear $ read year
 
 -- Backtracks as 'e' is ambiguous
 expirationYearParser :: Parser Credential
 expirationYearParser = try $ do
-  string "eyr:"
+  string $ pack "eyr:"
   year <- many1 digit
   return $ toExpirationYear $ read year
 
 -- Backtracks as 'h' is ambiguous
 metricHeightParser :: Parser Credential
 metricHeightParser = try $ do
-  string "hgt:"
+  string $ pack "hgt:"
   centimeters <- many1 digit
-  string "cm"
+  string $ pack "cm"
   return $ toMetricHeight $ read centimeters
 
 -- Backtracks as 'h' is ambiguous
 imperialHeightParser :: Parser Credential
 imperialHeightParser = try $ do
-  string "hgt:"
+  string $ pack "hgt:"
   inches <- many1 digit
-  string "in"
+  string $ pack "in"
   return $ toImperialHeight $ read inches
 
 -- Backtracks as 'h' is ambiguous
 unitlessHeightParser :: Parser Credential
 unitlessHeightParser = try $ do
-  string "hgt:"
+  string $ pack "hgt:"
   height <- many1 digit
   return $ toUnitlessHeight $ read height
 
 heightParser :: Parser Credential
 heightParser = do
-  metricHeightParser <|> imperialHeightParser <|> unitlessHeightParser
+  choice [metricHeightParser, imperialHeightParser, unitlessHeightParser]
 
 -- Backtracks as 'h' is ambiguous
 hexHairColourParser :: Parser Credential
 hexHairColourParser = try $ do
-  string "hcl:#"
-  hexCode <- many1 hexDigit
-  return $ toHexHairColour hexCode
+  string $ pack "hcl:#"
+  hexCode <- takeByteString
+  if validateHexCode hexCode
+    then return $ toHexHairColour hexCode
+    else fail "Not a hex code"
 
 -- Backtracks as 'h' is ambiguous
 namedHairColourParser :: Parser Credential
 namedHairColourParser = try $ do
-  string "hcl:"
-  colour <- many1 alphaNum
-  return $ toNamedHairColour colour
+  string $ pack "hcl:"
+  toNamedHairColour <$> takeByteString
 
 hairColourParser :: Parser Credential
 hairColourParser = do
-  hexHairColourParser <|> namedHairColourParser
+  choice [hexHairColourParser, namedHairColourParser]
 
 -- Backtracks as 'e' is ambiguous
 hexEyeColourParser :: Parser Credential
 hexEyeColourParser = try $ do
-  string "ecl:#"
-  hexCode <- many1 hexDigit
-  return $ toHexEyeColour hexCode
+  string $ pack "ecl:#"
+  hexCode <- takeByteString
+  if validateHexCode hexCode
+    then return $ toHexEyeColour hexCode
+    else fail "Not a hex code"
 
 -- Backtracks as 'e' is ambiguous
 namedEyeColourParser :: Parser Credential
 namedEyeColourParser = try $ do
-  string "ecl:"
-  colour <- many1 letter
-  return $ toNamedEyeColour colour
+  string $ pack "ecl:"
+  toNamedEyeColour <$> takeByteString
 
 eyeColourParser :: Parser Credential
 eyeColourParser = do
-  hexEyeColourParser <|> namedEyeColourParser
+  choice [hexEyeColourParser, namedEyeColourParser]
 
 -- Backtracks as 'p' is ambiguous
-numericalPassportIDParser :: Parser Credential
-numericalPassportIDParser = try $ do
-  string "pid:"
-  digits <- many1 digit
-  return $ toNumericalPassPortId $ map (read . (: [])) digits
-
--- Backtracks as 'p' is ambiguous
-freeTextPassportIDParser :: Parser Credential
-freeTextPassportIDParser = try $ do
-  string "pid:"
-  passportId <- many1 anyChar
-  return $ toFreeTextPassportId passportId
-
 passportIDParser :: Parser Credential
-passportIDParser = do
-  numericalPassportIDParser <|> freeTextPassportIDParser
+passportIDParser = try $ do
+  string $ pack "pid:"
+  passportId <- takeByteString
+  let digits = readDigitsFromByteString passportId
+  return $ if length digits == BSC.length passportId
+    then toNumericalPassPortId digits
+    else toFreeTextPassportId passportId
 
 countryIDParser :: Parser Credential
 countryIDParser = do
-  string "cid:"
-  countryId <- many1 anyChar
-  return $ toCountryId countryId
+  string $ pack "cid:"
+  toCountryId <$> takeByteString
 
 credentialParser :: Parser Credential
 credentialParser = do
-  birthYearParser
-    <|> issueYearParser
-    <|> expirationYearParser
-    <|> heightParser
-    <|> hairColourParser
-    <|> eyeColourParser
-    <|> passportIDParser
-    <|> countryIDParser
+  choice
+    [ birthYearParser
+    , issueYearParser
+    , expirationYearParser
+    , heightParser
+    , hairColourParser
+    , eyeColourParser
+    , passportIDParser
+    , countryIDParser
+    ]
 
 -- All that's left is running the parser on ByteStrings
 
 toCredential :: ByteString -> Credential
-toCredential s = result where Right result = parse credentialParser "" s
+toCredential s = result
+  where Done _ result = feed (parse credentialParser s) BSC.empty
 
 parsePersonCredentials :: ByteString -> Credentials
 parsePersonCredentials singlePersonCredentials = M.fromList
@@ -252,6 +252,13 @@ parsePersonCredentials singlePersonCredentials = M.fromList
   | credential@(Credential t _) <- map toCredential
     $ BSC.splitWith isSpace singlePersonCredentials
   ]
+
+readDigitsFromByteString :: ByteString -> [Int]
+readDigitsFromByteString bs = case BSC.uncons bs of
+  Nothing           -> []
+  Just (char, rest) -> if isDigit char
+    then read [char] : readDigitsFromByteString rest
+    else readDigitsFromByteString rest
 
 breakOnBlankLines :: ByteString -> [ByteString]
 breakOnBlankLines bs
@@ -261,6 +268,9 @@ breakOnBlankLines bs
   afterBlankLine          = BSC.drop (BSC.length blankLine) rest
   (beforeBlankLine, rest) = BSC.breakSubstring blankLine bs
   blankLine               = pack "\n\n"
+
+validateHexCode :: ByteString -> Bool
+validateHexCode = BSC.all (inClass "0-9a-f")
 
 parsePeople :: ByteString -> [Credentials]
 parsePeople inputString =
