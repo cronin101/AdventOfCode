@@ -61,34 +61,6 @@ data Credential = Credential CredentialType CredentialValue
 
 type Credentials = Map CredentialType Credential
 
-toBirthYear :: Int -> Credential
-toBirthYear = Credential BirthYear . VDate . Year
-toIssueYear :: Int -> Credential
-toIssueYear = Credential IssueYear . VDate . Year
-toExpirationYear :: Int -> Credential
-toExpirationYear = Credential ExpirationYear . VDate . Year
-toMetricHeight :: Int -> Credential
-toMetricHeight = Credential Height . VHeight . MetricHeight
-toImperialHeight :: Int -> Credential
-toImperialHeight = Credential Height . VHeight . ImperialHeight
-toUnitlessHeight :: Int -> Credential
-toUnitlessHeight = Credential Height . VHeight . UnitlessHeight
-toHexHairColour :: ByteString -> Credential
-toHexHairColour = Credential HairColour . VColour . HexColour
-toNamedHairColour :: ByteString -> Credential
-toNamedHairColour = Credential HairColour . VColour . NamedColour
-toNamedEyeColour :: ByteString -> Credential
-toNamedEyeColour = Credential EyeColour . VColour . NamedColour
-toHexEyeColour :: ByteString -> Credential
-toHexEyeColour = Credential EyeColour . VColour . HexColour
-toFreeTextPassportId :: ByteString -> Credential
-toFreeTextPassportId = Credential PassportID . VID . FreeTextID
-toNumericalPassPortId :: [Int] -> Credential
-toNumericalPassPortId = Credential PassportID . VID . NumericalID
-toCountryId :: ByteString -> Credential
-toCountryId = Credential CountryID . VID . FreeTextID
-
--- After all the type system boilerplate, the real fun can begin
 -- Validation Criteria....
 
 allCredentialTypes :: [CredentialType]
@@ -132,20 +104,20 @@ birthYearParser :: Parser Credential
 birthYearParser = do
   string $ pack "byr:"
   year <- many1 digit
-  return $ toBirthYear $ read year
+  return $ Credential BirthYear . VDate . Year $ read year
 
 issueYearParser :: Parser Credential
 issueYearParser = do
   string $ pack "iyr:"
   year <- many1 digit
-  return $ toIssueYear $ read year
+  return $ Credential IssueYear . VDate . Year $ read year
 
 -- Backtracks as 'e' is ambiguous
 expirationYearParser :: Parser Credential
 expirationYearParser = try $ do
   string $ pack "eyr:"
   year <- many1 digit
-  return $ toExpirationYear $ read year
+  return $ Credential ExpirationYear . VDate . Year $ read year
 
 -- Backtracks as 'h' is ambiguous
 metricHeightParser :: Parser Credential
@@ -153,7 +125,7 @@ metricHeightParser = try $ do
   string $ pack "hgt:"
   centimeters <- many1 digit
   string $ pack "cm"
-  return $ toMetricHeight $ read centimeters
+  return $ Credential Height . VHeight . MetricHeight $ read centimeters
 
 -- Backtracks as 'h' is ambiguous
 imperialHeightParser :: Parser Credential
@@ -161,14 +133,14 @@ imperialHeightParser = try $ do
   string $ pack "hgt:"
   inches <- many1 digit
   string $ pack "in"
-  return $ toImperialHeight $ read inches
+  return $ Credential Height . VHeight . ImperialHeight $ read inches
 
 -- Backtracks as 'h' is ambiguous
 unitlessHeightParser :: Parser Credential
 unitlessHeightParser = try $ do
   string $ pack "hgt:"
   height <- many1 digit
-  return $ toUnitlessHeight $ read height
+  return $ Credential Height . VHeight . UnitlessHeight $ read height
 
 heightParser :: Parser Credential
 heightParser = do
@@ -180,14 +152,14 @@ hexHairColourParser = try $ do
   string $ pack "hcl:#"
   hexCode <- takeByteString
   if validateHexCode hexCode
-    then return $ toHexHairColour hexCode
+    then return $ Credential HairColour . VColour . HexColour $ hexCode
     else fail "Not a hex code"
 
 -- Backtracks as 'h' is ambiguous
 namedHairColourParser :: Parser Credential
 namedHairColourParser = try $ do
   string $ pack "hcl:"
-  toNamedHairColour <$> takeByteString
+  Credential HairColour . VColour . NamedColour <$> takeByteString
 
 hairColourParser :: Parser Credential
 hairColourParser = do
@@ -199,14 +171,14 @@ hexEyeColourParser = try $ do
   string $ pack "ecl:#"
   hexCode <- takeByteString
   if validateHexCode hexCode
-    then return $ toHexEyeColour hexCode
+    then return $ Credential EyeColour . VColour . HexColour $ hexCode
     else fail "Not a hex code"
 
 -- Backtracks as 'e' is ambiguous
 namedEyeColourParser :: Parser Credential
 namedEyeColourParser = try $ do
   string $ pack "ecl:"
-  toNamedEyeColour <$> takeByteString
+  Credential EyeColour . VColour . NamedColour <$> takeByteString
 
 eyeColourParser :: Parser Credential
 eyeColourParser = do
@@ -219,13 +191,13 @@ passportIDParser = try $ do
   passportId <- takeByteString
   let digits = readDigitsFromByteString passportId
   return $ if length digits == BSC.length passportId
-    then toNumericalPassPortId digits
-    else toFreeTextPassportId passportId
+    then Credential PassportID . VID . NumericalID $ digits
+    else Credential PassportID . VID . FreeTextID $ passportId
 
 countryIDParser :: Parser Credential
 countryIDParser = do
   string $ pack "cid:"
-  toCountryId <$> takeByteString
+  Credential CountryID . VID . FreeTextID <$> takeByteString
 
 credentialParser :: Parser Credential
 credentialParser = do
