@@ -1,0 +1,194 @@
+	Fri Dec  4 15:25 2020 Time and Allocation Profiling Report  (Final)
+
+	   Day4-exe +RTS -N -p -RTS
+
+	total time  =        0.01 secs   (19 ticks @ 1000 us, 16 processors)
+	total alloc =  27,251,880 bytes  (excludes profiling overheads)
+
+COST CENTRE               MODULE    SRC                          %time %alloc
+
+MAIN                      MAIN      <built-in>                    57.9    1.1
+toCredential              Lib       src/Lib.hs:247:1-72            5.3    0.0
+parsePersonCredentials    Lib       src/Lib.hs:(250,1)-(254,3)     5.3    3.1
+numericalPassportIDParser Lib       src/Lib.hs:(211,1)-(214,61)    5.3    9.6
+heightParser              Lib       src/Lib.hs:(170,1)-(171,70)    5.3    0.2
+expirationYearParser      Lib       src/Lib.hs:(141,1)-(144,39)    5.3   12.3
+credentialParser          Lib       src/Lib.hs:(234,1)-(242,23)    5.3    0.4
+countryIDParser           Lib       src/Lib.hs:(228,1)-(231,32)    5.3    2.2
+birthYearParser           Lib       src/Lib.hs:(128,1)-(131,34)    5.3   14.5
+unitlessHeightParser      Lib       src/Lib.hs:(164,1)-(167,41)    0.0    3.9
+namedHairColourParser     Lib       src/Lib.hs:(182,1)-(185,35)    0.0    3.3
+namedEyeColourParser      Lib       src/Lib.hs:(200,1)-(203,34)    0.0    5.6
+metricHeightParser        Lib       src/Lib.hs:(148,1)-(152,44)    0.0   11.0
+issueYearParser           Lib       src/Lib.hs:(134,1)-(137,34)    0.0   13.2
+imperialHeightParser      Lib       src/Lib.hs:(156,1)-(160,41)    0.0    4.6
+hexHairColourParser       Lib       src/Lib.hs:(175,1)-(178,34)    0.0    8.3
+hexEyeColourParser        Lib       src/Lib.hs:(193,1)-(196,33)    0.0    3.5
+
+
+                                                                                                                     individual      inherited
+COST CENTRE                                     MODULE                SRC                         no.     entries  %time %alloc   %time %alloc
+
+MAIN                                            MAIN                  <built-in>                  341          0   57.9    1.1   100.0  100.0
+ CAF                                            GHC.Conc.Signal       <entire-module>             441          0    0.0    0.0     0.0    0.0
+ CAF                                            GHC.IO.Encoding       <entire-module>             422          0    0.0    0.0     0.0    0.0
+ CAF                                            GHC.IO.Encoding.Iconv <entire-module>             420          0    0.0    0.0     0.0    0.0
+ CAF                                            GHC.IO.FD             <entire-module>             413          0    0.0    0.0     0.0    0.0
+ CAF                                            GHC.IO.Handle.FD      <entire-module>             411          0    0.0    0.1     0.0    0.1
+ CAF                                            GHC.IO.Handle.Text    <entire-module>             409          0    0.0    0.0     0.0    0.0
+ CAF                                            Text.Read.Lex         <entire-module>             373          0    0.0    0.0     0.0    0.0
+ CAF                                            GHC.Event.Poll        <entire-module>             359          0    0.0    0.0     0.0    0.0
+ CAF                                            GHC.Event.Thread      <entire-module>             358          0    0.0    0.0     0.0    0.0
+ CAF:$fEnumCredentialType8                      Lib                   <no location info>          578          0    0.0    0.0     0.0    0.0
+  enumFrom                                      Lib                   src/Lib.hs:30:15-18         700          0    0.0    0.0     0.0    0.0
+ CAF:allCredentialTypes                         Lib                   src/Lib.hs:92:1-18          586          0    0.0    0.0     0.0    0.0
+  allCredentialTypes                            Lib                   src/Lib.hs:92:1-40          696          1    0.0    0.0     0.0    0.0
+   enumFrom                                     Lib                   src/Lib.hs:30:15-18         697          1    0.0    0.0     0.0    0.0
+ CAF:birthYearParser2_rdZo                      Lib                   <no location info>          648          0    0.0    0.0     0.0    0.0
+  birthYearParser                               Lib                   src/Lib.hs:(128,1)-(131,34) 708          0    0.0    0.0     0.0    0.0
+ CAF:birthYearParser3_rdZp                      Lib                   <no location info>          649          0    0.0    0.0     0.0    0.0
+  birthYearParser                               Lib                   src/Lib.hs:(128,1)-(131,34) 706          1    0.0    0.0     0.0    0.0
+ CAF:birthYearParser_rdWO                       Lib                   <no location info>          552          0    0.0    0.0     0.0    0.0
+ CAF:blankLine_rdY8                             Lib                   src/Lib.hs:263:3-11         588          0    0.0    0.0     0.0    0.0
+  breakOnBlankLines                             Lib                   src/Lib.hs:(257,1)-(263,39) 691          0    0.0    0.0     0.0    0.0
+   breakOnBlankLines.blankLine                  Lib                   src/Lib.hs:263:3-39         692          1    0.0    0.0     0.0    0.0
+ CAF:countryIDParser2_rdYW                      Lib                   <no location info>          630          0    0.0    0.0     0.0    0.0
+  countryIDParser                               Lib                   src/Lib.hs:(228,1)-(231,32) 766          0    0.0    0.0     0.0    0.0
+ CAF:countryIDParser3_rdYX                      Lib                   <no location info>          631          0    0.0    0.0     0.0    0.0
+  countryIDParser                               Lib                   src/Lib.hs:(228,1)-(231,32) 764          1    0.0    0.0     0.0    0.0
+ CAF:countryIDParser_rdXM                       Lib                   <no location info>          576          0    0.0    0.0     0.0    0.0
+ CAF:credentialParser_rdZq                      Lib                   <no location info>          650          0    0.0    0.0     0.0    0.0
+  credentialParser                              Lib                   src/Lib.hs:(234,1)-(242,23) 704          1    0.0    0.0     0.0    0.0
+ CAF:credentialsAreValid1                       Lib                   <no location info>          628          0    0.0    0.0     0.0    0.0
+  credentialsAreValid                           Lib                   src/Lib.hs:100:1-62         777          1    0.0    0.0     0.0    0.0
+ CAF:expirationYearParser_rdZl                  Lib                   <no location info>          645          0    0.0    0.0     0.0    0.0
+  expirationYearParser                          Lib                   src/Lib.hs:(141,1)-(144,39) 715          1    0.0    0.0     0.0    0.0
+ CAF:eyeColourParser_r2dO                       Lib                   src/Lib.hs:206:1-15         637          0    0.0    0.0     0.0    0.0
+  eyeColourParser                               Lib                   src/Lib.hs:(206,1)-(207,45) 731          1    0.0    0.0     0.0    0.0
+ CAF:freeTextPassportIDParser_rdZ0              Lib                   <no location info>          633          0    0.0    0.0     0.0    0.0
+  freeTextPassportIDParser                      Lib                   src/Lib.hs:(218,1)-(221,42) 742          1    0.0    0.0     0.0    0.0
+ CAF:hairColourParser_r2dL                      Lib                   src/Lib.hs:188:1-16         640          0    0.0    0.0     0.0    0.0
+  hairColourParser                              Lib                   src/Lib.hs:(188,1)-(189,47) 725          1    0.0    0.0     0.0    0.0
+ CAF:hasRequiredCredentials1                    Lib                   <no location info>          587          0    0.0    0.0     0.0    0.0
+  hasRequiredCredentials                        Lib                   src/Lib.hs:(96,1)-(97,76)   695          0    0.0    0.0     0.0    0.0
+ CAF:hasRequiredCredentials2                    Lib                   <no location info>          577          0    0.0    0.0     0.0    0.0
+  allCredentialTypes                            Lib                   src/Lib.hs:92:1-40          698          0    0.0    0.0     0.0    0.0
+   toEnum                                       Lib                   src/Lib.hs:30:15-18         699          1    0.0    0.0     0.0    0.0
+ CAF:heightParser_rdZj                          Lib                   <no location info>          644          0    0.0    0.0     0.0    0.0
+  heightParser                                  Lib                   src/Lib.hs:(170,1)-(171,70) 717          1    0.0    0.0     0.0    0.0
+ CAF:hexEyeColourParser_rdZ2                    Lib                   <no location info>          635          0    0.0    0.0     0.0    0.0
+  hexEyeColourParser                            Lib                   src/Lib.hs:(193,1)-(196,33) 733          1    0.0    0.0     0.0    0.0
+ CAF:hexHairColourParser_rdZ8                   Lib                   <no location info>          639          0    0.0    0.0     0.0    0.0
+  hexHairColourParser                           Lib                   src/Lib.hs:(175,1)-(178,34) 727          1    0.0    0.0     0.0    0.0
+ CAF:imperialHeightParser_rdZe                  Lib                   <no location info>          642          0    0.0    0.0     0.0    0.0
+  imperialHeightParser                          Lib                   src/Lib.hs:(156,1)-(160,41) 721          1    0.0    0.0     0.0    0.0
+ CAF:issueYearParser2_rdZm                      Lib                   <no location info>          646          0    0.0    0.0     0.0    0.0
+  issueYearParser                               Lib                   src/Lib.hs:(134,1)-(137,34) 714          0    0.0    0.0     0.0    0.0
+ CAF:issueYearParser3_rdZn                      Lib                   <no location info>          647          0    0.0    0.0     0.0    0.0
+  issueYearParser                               Lib                   src/Lib.hs:(134,1)-(137,34) 712          1    0.0    0.0     0.0    0.0
+ CAF:issueYearParser_rdWT                       Lib                   <no location info>          554          0    0.0    0.0     0.0    0.0
+ CAF:lvl32_rdX0                                 Lib                   <no location info>          557          0    0.0    0.0     0.0    0.0
+ CAF:lvl36_rdX7                                 Lib                   <no location info>          560          0    0.0    0.0     0.0    0.0
+ CAF:lvl53_rdXG                                 Lib                   <no location info>          574          0    0.0    0.0     0.0    0.0
+ CAF:lvl75_rdYx                                 Lib                   <no location info>          619          0    0.0    0.0     0.0    0.0
+ CAF:lvl77_rdYz                                 Lib                   <no location info>          620          0    0.0    0.0     0.0    0.0
+ CAF:lvl79_rdYB                                 Lib                   <no location info>          621          0    0.0    0.0     0.0    0.0
+ CAF:lvl81_rdYD                                 Lib                   <no location info>          622          0    0.0    0.0     0.0    0.0
+ CAF:lvl83_rdYF                                 Lib                   <no location info>          623          0    0.0    0.0     0.0    0.0
+ CAF:lvl85_rdYH                                 Lib                   <no location info>          624          0    0.0    0.0     0.0    0.0
+ CAF:lvl87_rdYJ                                 Lib                   <no location info>          625          0    0.0    0.0     0.0    0.0
+ CAF:lvl95_rdYR                                 Lib                   <no location info>          626          0    0.0    0.0     0.0    0.0
+  credentialsAreValid                           Lib                   src/Lib.hs:100:1-62         781          0    0.0    0.0     0.0    0.0
+   credentialIsValid                            Lib                   src/Lib.hs:(104,1)-(123,77) 782          0    0.0    0.0     0.0    0.0
+    credentialIsValid.knownColours              Lib                   src/Lib.hs:123:3-77         783          0    0.0    0.0     0.0    0.0
+ CAF:main1                                      Main                  <no location info>          680          0    0.0    0.0     0.0    0.0
+  main                                          Main                  app/Main.hs:(9,1)-(17,47)   682          1    0.0    0.0     0.0    0.0
+ CAF:main2                                      Main                  <no location info>          679          0    0.0    0.0     0.0    0.0
+  main                                          Main                  app/Main.hs:(9,1)-(17,47)   685          0    0.0    0.0     0.0    0.0
+   loadInput                                    Lib                   src/Lib.hs:270:1-70         686          0    0.0    0.0     0.0    0.0
+ CAF:main_fileName                              Main                  <no location info>          678          0    0.0    0.0     0.0    0.0
+ CAF:metricHeightParser_rdZi                    Lib                   <no location info>          643          0    0.0    0.0     0.0    0.0
+  metricHeightParser                            Lib                   src/Lib.hs:(148,1)-(152,44) 719          1    0.0    0.0     0.0    0.0
+ CAF:namedEyeColourParser_rdZ4                  Lib                   <no location info>          636          0    0.0    0.0     0.0    0.0
+  namedEyeColourParser                          Lib                   src/Lib.hs:(200,1)-(203,34) 735          1    0.0    0.0     0.0    0.0
+ CAF:namedHairColourParser_rdZ6                 Lib                   <no location info>          638          0    0.0    0.0     0.0    0.0
+  namedHairColourParser                         Lib                   src/Lib.hs:(182,1)-(185,35) 729          1    0.0    0.0     0.0    0.0
+ CAF:numericalPassportIDParser_rdYZ             Lib                   <no location info>          632          0    0.0    0.0     0.0    0.0
+  numericalPassportIDParser                     Lib                   src/Lib.hs:(211,1)-(214,61) 739          1    0.0    0.0     0.0    0.0
+ CAF:p1_rdX5                                    Lib                   <no location info>          559          0    0.0    0.0     0.0    0.0
+ CAF:p2_rdXj                                    Lib                   <no location info>          564          0    0.0    0.0     0.0    0.0
+ CAF:p3_rdXp                                    Lib                   <no location info>          566          0    0.0    0.0     0.0    0.0
+ CAF:p4_rdXv                                    Lib                   <no location info>          568          0    0.0    0.0     0.0    0.0
+ CAF:p5_rdXA                                    Lib                   <no location info>          570          0    0.0    0.0     0.0    0.0
+ CAF:p6_rdXD                                    Lib                   <no location info>          571          0    0.0    0.0     0.0    0.0
+ CAF:p_rdWY                                     Lib                   <no location info>          556          0    0.0    0.0     0.0    0.0
+ CAF:passportIDParser_r2dR                      Lib                   src/Lib.hs:224:1-16         634          0    0.0    0.0     0.0    0.0
+  passportIDParser                              Lib                   src/Lib.hs:(224,1)-(225,56) 737          1    0.0    0.0     0.0    0.0
+ CAF:toBirthYear_r2aF                           Lib                   src/Lib.hs:62:1-11          602          0    0.0    0.0     0.0    0.0
+  toBirthYear                                   Lib                   src/Lib.hs:62:1-49          710          1    0.0    0.0     0.0    0.0
+ CAF:toCountryId_r2dA                           Lib                   src/Lib.hs:86:1-11          590          0    0.0    0.0     0.0    0.0
+  toCountryId                                   Lib                   src/Lib.hs:86:1-53          767          1    0.0    0.0     0.0    0.0
+ CAF:toExpirationYear_r2dq                      Lib                   src/Lib.hs:66:1-16          600          0    0.0    0.0     0.0    0.0
+  toExpirationYear                              Lib                   src/Lib.hs:66:1-59          748          1    0.0    0.0     0.0    0.0
+ CAF:toFreeTextPassportId_r2dy                  Lib                   src/Lib.hs:82:1-20          592          0    0.0    0.0     0.0    0.0
+  toFreeTextPassportId                          Lib                   src/Lib.hs:82:1-63          744          1    0.0    0.0     0.0    0.0
+ CAF:toHexEyeColour_r2dx                        Lib                   src/Lib.hs:80:1-14          593          0    0.0    0.0     0.0    0.0
+  toHexEyeColour                                Lib                   src/Lib.hs:80:1-59          775          1    0.0    0.0     0.0    0.0
+ CAF:toHexHairColour_r2du                       Lib                   src/Lib.hs:74:1-15          596          0    0.0    0.0     0.0    0.0
+  toHexHairColour                               Lib                   src/Lib.hs:74:1-61          763          1    0.0    0.0     0.0    0.0
+ CAF:toImperialHeight_r2ds                      Lib                   src/Lib.hs:70:1-16          598          0    0.0    0.0     0.0    0.0
+  toImperialHeight                              Lib                   src/Lib.hs:70:1-63          769          1    0.0    0.0     0.0    0.0
+ CAF:toIssueYear_r2dp                           Lib                   src/Lib.hs:64:1-11          601          0    0.0    0.0     0.0    0.0
+  toIssueYear                                   Lib                   src/Lib.hs:64:1-49          753          1    0.0    0.0     0.0    0.0
+ CAF:toMetricHeight_r2dr                        Lib                   src/Lib.hs:68:1-14          599          0    0.0    0.0     0.0    0.0
+  toMetricHeight                                Lib                   src/Lib.hs:68:1-59          751          1    0.0    0.0     0.0    0.0
+ CAF:toNamedEyeColour_r2dw                      Lib                   src/Lib.hs:78:1-16          594          0    0.0    0.0     0.0    0.0
+  toNamedEyeColour                              Lib                   src/Lib.hs:78:1-63          755          1    0.0    0.0     0.0    0.0
+ CAF:toNamedHairColour_r2dv                     Lib                   src/Lib.hs:76:1-17          595          0    0.0    0.0     0.0    0.0
+  toNamedHairColour                             Lib                   src/Lib.hs:76:1-65          771          1    0.0    0.0     0.0    0.0
+ CAF:toNumericalPassPortId_r2dz                 Lib                   src/Lib.hs:84:1-21          591          0    0.0    0.0     0.0    0.0
+  toNumericalPassPortId                         Lib                   src/Lib.hs:84:1-65          761          1    0.0    0.0     0.0    0.0
+ CAF:toUnitlessHeight_r2dt                      Lib                   src/Lib.hs:72:1-16          597          0    0.0    0.0     0.0    0.0
+  toUnitlessHeight                              Lib                   src/Lib.hs:72:1-63          773          1    0.0    0.0     0.0    0.0
+ CAF:unitlessHeightParser_rdZa                  Lib                   <no location info>          641          0    0.0    0.0     0.0    0.0
+  unitlessHeightParser                          Lib                   src/Lib.hs:(164,1)-(167,41) 723          1    0.0    0.0     0.0    0.0
+ main                                           Main                  app/Main.hs:(9,1)-(17,47)   683          0    0.0    0.0    42.1   98.7
+  loadInput                                     Lib                   src/Lib.hs:270:1-70         684          1    0.0    0.2    42.1   98.3
+   parsePeople                                  Lib                   src/Lib.hs:(266,1)-(267,60) 687          1    0.0    0.1    42.1   98.2
+    breakOnBlankLines                           Lib                   src/Lib.hs:(257,1)-(263,39) 688        280    0.0    0.1     0.0    0.4
+     breakOnBlankLines.(...)                    Lib                   src/Lib.hs:262:3-59         690        280    0.0    0.3     0.0    0.3
+     breakOnBlankLines.beforeBlankLine          Lib                   src/Lib.hs:262:3-59         689        280    0.0    0.0     0.0    0.0
+     breakOnBlankLines.afterBlankLine           Lib                   src/Lib.hs:261:3-64         758        279    0.0    0.0     0.0    0.0
+     breakOnBlankLines.rest                     Lib                   src/Lib.hs:262:3-59         757        279    0.0    0.0     0.0    0.0
+    parsePersonCredentials                      Lib                   src/Lib.hs:(250,1)-(254,3)  701        279    5.3    3.1    42.1   97.7
+     compare                                    Lib                   src/Lib.hs:30:21-23         749       3568    0.0    0.0     0.0    0.0
+     toCredential                               Lib                   src/Lib.hs:247:1-72         702       2017    5.3    0.0    36.8   94.6
+      toCredential.(...)                        Lib                   src/Lib.hs:247:31-72        703       2017    0.0    0.7    31.6   94.6
+       credentialParser                         Lib                   src/Lib.hs:(234,1)-(242,23) 705          0    5.3    0.4    31.6   93.9
+        birthYearParser                         Lib                   src/Lib.hs:(128,1)-(131,34) 707          0    5.3   14.5    26.3   93.5
+         issueYearParser                        Lib                   src/Lib.hs:(134,1)-(137,34) 713          0    0.0   13.2    21.1   79.0
+          expirationYearParser                  Lib                   src/Lib.hs:(141,1)-(144,39) 716          0    5.3   12.3    21.1   65.8
+           heightParser                         Lib                   src/Lib.hs:(170,1)-(171,70) 718          0    5.3    0.2    15.8   53.5
+            metricHeightParser                  Lib                   src/Lib.hs:(148,1)-(152,44) 720          0    0.0   11.0    10.5   53.3
+             imperialHeightParser               Lib                   src/Lib.hs:(156,1)-(160,41) 722          0    0.0    4.6    10.5   42.3
+              unitlessHeightParser              Lib                   src/Lib.hs:(164,1)-(167,41) 724          0    0.0    3.9    10.5   37.6
+               hairColourParser                 Lib                   src/Lib.hs:(188,1)-(189,47) 726          0    0.0    0.2    10.5   33.8
+                hexHairColourParser             Lib                   src/Lib.hs:(175,1)-(178,34) 728          0    0.0    8.3    10.5   33.6
+                 namedHairColourParser          Lib                   src/Lib.hs:(182,1)-(185,35) 730          0    0.0    3.3    10.5   25.3
+                  eyeColourParser               Lib                   src/Lib.hs:(206,1)-(207,45) 732          0    0.0    0.1    10.5   22.0
+                   hexEyeColourParser           Lib                   src/Lib.hs:(193,1)-(196,33) 734          0    0.0    3.5    10.5   21.9
+                    namedEyeColourParser        Lib                   src/Lib.hs:(200,1)-(203,34) 736          0    0.0    5.6    10.5   18.4
+                     passportIDParser           Lib                   src/Lib.hs:(224,1)-(225,56) 738          0    0.0    0.1    10.5   12.7
+                      numericalPassportIDParser Lib                   src/Lib.hs:(211,1)-(214,61) 740          0    5.3    9.6    10.5   12.7
+                       freeTextPassportIDParser Lib                   src/Lib.hs:(218,1)-(221,42) 743          0    0.0    0.8     5.3    3.0
+                        countryIDParser         Lib                   src/Lib.hs:(228,1)-(231,32) 765          0    5.3    2.2     5.3    2.2
+      toCredential.result                       Lib                   src/Lib.hs:247:31-72        711       2017    0.0    0.0     0.0    0.0
+     >=                                         Lib                   src/Lib.hs:30:21-23         745        471    0.0    0.0     0.0    0.0
+      <                                         Lib                   src/Lib.hs:30:21-23         746        471    0.0    0.0     0.0    0.0
+  main.passengersWithRequiredCredentials        Main                  app/Main.hs:(11,7)-(12,48)  693          1    0.0    0.0     0.0    0.1
+   hasRequiredCredentials                       Lib                   src/Lib.hs:(96,1)-(97,76)   694        279    0.0    0.1     0.0    0.1
+    compare                                     Lib                   src/Lib.hs:30:21-23         756        829    0.0    0.0     0.0    0.0
+  main.passengersWithValidCredentials           Main                  app/Main.hs:(15,7)-(16,68)  776          1    0.0    0.0     0.0    0.2
+   credentialsAreValid                          Lib                   src/Lib.hs:100:1-62         778          0    0.0    0.2     0.0    0.2
+    credentialIsValid                           Lib                   src/Lib.hs:(104,1)-(123,77) 779       1266    0.0    0.0     0.0    0.0
+     credentialIsValid.knownColours             Lib                   src/Lib.hs:123:3-77         780        152    0.0    0.0     0.0    0.0
