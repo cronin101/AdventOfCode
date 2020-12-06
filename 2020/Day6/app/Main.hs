@@ -1,7 +1,7 @@
 module Main where
 
 import           Lib                            ( loadInput )
-import           Data.Set                       ( size
+import           Data.IntSet                    ( size
                                                 , unions
                                                 , intersection
                                                 )
