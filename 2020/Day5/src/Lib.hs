@@ -62,7 +62,5 @@ missingId ids = S.findMin $ S.intersection left right S.\\ idSet
   left  = S.map (+ (-1)) idSet
   right = S.map (+ 1) idSet
 
-
 loadInput :: String -> IO [ByteString]
 loadInput fileName = BSC.lines <$> BSC.readFile ("src/" ++ fileName)
-

@@ -27,7 +27,7 @@ import           Data.ByteString.Char8          ( pack
                                                 , ByteString
                                                 )
 import           Data.Char                      ( isSpace )
-
+import           AoCUtils                       ( breakOnBlankLines )
 data CredentialType = BirthYear | IssueYear | ExpirationYear | Height
     | HairColour | EyeColour | PassportID | CountryID
     deriving (Enum, Ord, Eq, Show)
@@ -231,15 +231,6 @@ readDigitsFromByteString bs = case BSC.uncons bs of
   Just (char, rest) -> if isDigit char
     then read [char] : readDigitsFromByteString rest
     else readDigitsFromByteString rest
-
-breakOnBlankLines :: ByteString -> [ByteString]
-breakOnBlankLines bs
-  | BSC.null beforeBlankLine = []
-  | otherwise = beforeBlankLine : breakOnBlankLines afterBlankLine
- where
-  afterBlankLine          = BSC.drop (BSC.length blankLine) rest
-  (beforeBlankLine, rest) = BSC.breakSubstring blankLine bs
-  blankLine               = pack "\n\n"
 
 validateHexCode :: ByteString -> Bool
 validateHexCode = BSC.all (inClass "0-9a-f")

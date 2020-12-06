@@ -4,17 +4,17 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: d5f9545ecbe09d88b9d1d2905c193b71bda91d2cf16ff18bf9d144daea649247
+-- hash: cadd6492ccc165cd495c6eb7449dab86b4a81cc2b5a63e51d9aa2e2ef0bed990
 
 name:           Day5
 version:        0.1.0.0
 description:    Please see the README on GitHub at <https://github.com/githubuser/Day5#readme>
-homepage:       https://github.com/githubuser/Day5#readme
-bug-reports:    https://github.com/githubuser/Day5/issues
-author:         Author name here
-maintainer:     example@example.com
-copyright:      2020 Author name here
-license:        BSD3
+homepage:       https://github.com/cronin101/AdventOfCode#readme
+bug-reports:    https://github.com/cronin101/AdventOfCode/issues
+author:         Aaron Cronin
+maintainer:     cronin@include.cat
+copyright:      2020 Aaron Cronin
+license:        MIT
 license-file:   LICENSE
 build-type:     Simple
 extra-source-files:
@@ -23,7 +23,7 @@ extra-source-files:
 
 source-repository head
   type: git
-  location: https://github.com/githubuser/Day5
+  location: https://github.com/cronin101/AdventOfCode
 
 library
   exposed-modules:

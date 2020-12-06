@@ -1,10 +1,10 @@
 name:                Day2
 version:             0.1.0.0
-github:              "githubuser/Day2"
-license:             BSD3
-author:              "Author name here"
-maintainer:          "example@example.com"
-copyright:           "2020 Author name here"
+github:              "cronin101/AdventOfCode"
+license:             MIT
+author:              "Aaron Cronin"
+maintainer:          "cronin@include.cat"
+copyright:           "2020 Aaron Cronin"
 
 extra-source-files:
 - README.md
