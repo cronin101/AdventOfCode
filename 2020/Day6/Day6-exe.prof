@@ -1,0 +1,55 @@
+	Sun Dec  6 14:26 2020 Time and Allocation Profiling Report  (Final)
+
+	   Day6-exe +RTS -N -p -RTS
+
+	total time  =        0.00 secs   (1 ticks @ 1000 us, 16 processors)
+	total alloc =   5,354,240 bytes  (excludes profiling overheads)
+
+COST CENTRE                   MODULE    SRC                         %time %alloc
+
+main.unionDeclarations        Main      app/Main.hs:13:7-56         100.0   14.4
+MAIN                          MAIN      <built-in>                    0.0    5.6
+breakOnBlankLines.(...)       AoCUtils  src/AoCUtils.hs:14:3-59       0.0    2.3
+parsePersonDeclaration        Lib       src/Lib.hs:14:1-44            0.0   53.9
+parseGroupDeclarations        Lib       src/Lib.hs:17:1-63            0.0    7.4
+loadInput                     Lib       src/Lib.hs:(20,1)-(22,24)     0.0    1.5
+main.intersectionDeclarations Main      app/Main.hs:16:7-78           0.0    9.6
+main                          Main      app/Main.hs:(11,1)-(17,49)    0.0    3.3
+
+
+                                                                                                             individual      inherited
+COST CENTRE                           MODULE                SRC                           no.     entries  %time %alloc   %time %alloc
+
+MAIN                                  MAIN                  <built-in>                    173          0    0.0    5.6   100.0  100.0
+ CAF                                  GHC.Conc.Signal       <entire-module>               273          0    0.0    0.0     0.0    0.0
+ CAF                                  GHC.IO.Encoding       <entire-module>               254          0    0.0    0.1     0.0    0.1
+ CAF                                  GHC.IO.Encoding.Iconv <entire-module>               252          0    0.0    0.0     0.0    0.0
+ CAF                                  GHC.IO.FD             <entire-module>               245          0    0.0    0.0     0.0    0.0
+ CAF                                  GHC.IO.Handle.FD      <entire-module>               243          0    0.0    0.7     0.0    0.7
+ CAF                                  GHC.IO.Handle.Text    <entire-module>               241          0    0.0    0.0     0.0    0.0
+ CAF                                  GHC.Event.Poll        <entire-module>               191          0    0.0    0.0     0.0    0.0
+ CAF                                  GHC.Event.Thread      <entire-module>               190          0    0.0    0.0     0.0    0.0
+ CAF:blankLine_r2Nh                   AoCUtils              src/AoCUtils.hs:15:3-11       309          0    0.0    0.0     0.0    0.0
+  breakOnBlankLines                   AoCUtils              src/AoCUtils.hs:(9,1)-(15,43) 355          0    0.0    0.0     0.0    0.0
+   breakOnBlankLines.blankLine        AoCUtils              src/AoCUtils.hs:15:3-43       356          1    0.0    0.0     0.0    0.0
+ CAF:main1                            Main                  <no location info>            344          0    0.0    0.0     0.0    0.0
+  main                                Main                  app/Main.hs:(11,1)-(17,49)    346          1    0.0    0.0     0.0    0.0
+ CAF:main6                            Main                  <no location info>            342          0    0.0    0.0     0.0    0.0
+  main                                Main                  app/Main.hs:(11,1)-(17,49)    349          0    0.0    0.0     0.0    0.0
+   loadInput                          Lib                   src/Lib.hs:(20,1)-(22,24)     350          0    0.0    0.0     0.0    0.0
+ CAF:main_fileName                    Main                  <no location info>            341          0    0.0    0.0     0.0    0.0
+ CAF:parseGroupDeclarations           Lib                   src/Lib.hs:17:1-22            314          0    0.0    0.0     0.0    0.0
+  parseGroupDeclarations              Lib                   src/Lib.hs:17:1-63            361          1    0.0    0.0     0.0    0.0
+ CAF:parsePersonDeclaration           Lib                   src/Lib.hs:14:1-22            313          0    0.0    0.0     0.0    0.0
+  parsePersonDeclaration              Lib                   src/Lib.hs:14:1-44            365          1    0.0    0.0     0.0    0.0
+ main                                 Main                  app/Main.hs:(11,1)-(17,49)    347          0    0.0    3.3   100.0   93.6
+  loadInput                           Lib                   src/Lib.hs:(20,1)-(22,24)     348          1    0.0    1.5     0.0   66.4
+   breakOnBlankLines                  AoCUtils              src/AoCUtils.hs:(9,1)-(15,43) 352        487    0.0    0.8     0.0    3.5
+    breakOnBlankLines.(...)           AoCUtils              src/AoCUtils.hs:14:3-59       354        487    0.0    2.3     0.0    2.3
+    breakOnBlankLines.beforeBlankLine AoCUtils              src/AoCUtils.hs:14:3-59       353        487    0.0    0.0     0.0    0.0
+    breakOnBlankLines.afterBlankLine  AoCUtils              src/AoCUtils.hs:13:3-64       358        486    0.0    0.4     0.0    0.4
+    breakOnBlankLines.rest            AoCUtils              src/AoCUtils.hs:14:3-59       357        486    0.0    0.0     0.0    0.0
+   parseGroupDeclarations             Lib                   src/Lib.hs:17:1-63            362          0    0.0    7.4     0.0   61.4
+    parsePersonDeclaration            Lib                   src/Lib.hs:14:1-44            366          0    0.0   53.9     0.0   53.9
+  main.intersectionDeclarations       Main                  app/Main.hs:16:7-78           367          1    0.0    9.6     0.0    9.6
+  main.unionDeclarations              Main                  app/Main.hs:13:7-56           351          1  100.0   14.4   100.0   14.4
