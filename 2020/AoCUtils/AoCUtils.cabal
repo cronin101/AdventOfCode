@@ -4,11 +4,11 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: afc8ed7c4cb396aeb06d3d1f8c87252626bed2441e3e3c29782e8905747c18b7
+-- hash: 5a0001a72ab08935db0f640a77a0531c13c0e266178a92a3ab27b5b828b9cc9b
 
-name:           Day1
+name:           AoCUtils
 version:        0.1.0.0
-description:    Please see the README on GitHub at <https://github.com/githubuser/Day1#readme>
+description:    Please see the README on GitHub at <https://github.com/githubuser/aoc2020-utils#readme>
 homepage:       https://github.com/cronin101/AdventOfCode#readme
 bug-reports:    https://github.com/cronin101/AdventOfCode/issues
 author:         Aaron Cronin
@@ -27,45 +27,26 @@ source-repository head
 
 library
   exposed-modules:
-      Lib
+      AoCUtils
   other-modules:
-      Paths_Day1
+      Paths_AoCUtils
   hs-source-dirs:
       src
   build-depends:
-      aoc2020-utils
-    , base >=4.7 && <5
+      base >=4.7 && <5
     , bytestring
-    , containers
   default-language: Haskell2010
 
-executable Day1-exe
-  main-is: Main.hs
-  other-modules:
-      Paths_Day1
-  hs-source-dirs:
-      app
-  ghc-options: -threaded -rtsopts -with-rtsopts=-N
-  build-depends:
-      Day1
-    , aoc2020-utils
-    , base >=4.7 && <5
-    , bytestring
-    , containers
-  default-language: Haskell2010
-
-test-suite Day1-test
+test-suite aoc2020-utils-test
   type: exitcode-stdio-1.0
   main-is: Spec.hs
   other-modules:
-      Paths_Day1
+      Paths_AoCUtils
   hs-source-dirs:
       test
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
-      Day1
-    , aoc2020-utils
+      aoc2020-utils
     , base >=4.7 && <5
     , bytestring
-    , containers
   default-language: Haskell2010

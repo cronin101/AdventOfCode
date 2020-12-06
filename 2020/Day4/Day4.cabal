@@ -4,17 +4,17 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 1e6d847867ec64022beb7d8d029a926e0802f86c3468145cb7a5810e4dae0146
+-- hash: 7b1e68ef8f36858442b32e5b9b807a561f4ad3f1deb888e1186bc9c2c2f32491
 
 name:           Day4
 version:        0.1.0.0
 description:    Please see the README on GitHub at <https://github.com/githubuser/Day4#readme>
-homepage:       https://github.com/githubuser/Day4#readme
-bug-reports:    https://github.com/githubuser/Day4/issues
-author:         Author name here
-maintainer:     example@example.com
-copyright:      2020 Author name here
-license:        BSD3
+homepage:       https://github.com/cronin101/AdventOfCode#readme
+bug-reports:    https://github.com/cronin101/AdventOfCode/issues
+author:         Aaron Cronin
+maintainer:     cronin@include.cat
+copyright:      2020 Aaron Cronin
+license:        MIT
 license-file:   LICENSE
 build-type:     Simple
 extra-source-files:
@@ -23,7 +23,7 @@ extra-source-files:
 
 source-repository head
   type: git
-  location: https://github.com/githubuser/Day4
+  location: https://github.com/cronin101/AdventOfCode
 
 library
   exposed-modules:
@@ -33,7 +33,8 @@ library
   hs-source-dirs:
       src
   build-depends:
-      attoparsec
+      AoCUtils
+    , attoparsec
     , base >=4.7 && <5
     , bytestring
     , containers
@@ -47,7 +48,8 @@ executable Day4-exe
       app
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
-      Day4
+      AoCUtils
+    , Day4
     , attoparsec
     , base >=4.7 && <5
     , bytestring
@@ -63,7 +65,8 @@ test-suite Day4-test
       test
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
-      Day4
+      AoCUtils
+    , Day4
     , attoparsec
     , base >=4.7 && <5
     , bytestring
