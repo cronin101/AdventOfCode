@@ -4,19 +4,20 @@ module Lib
 
 import           AoCUtils                       ( breakOnBlankLines )
 import qualified Data.ByteString.Char8         as BSC
-import           Data.ByteString.Char8          ( unpack
+import           Data.ByteString                ( unpack
                                                 , ByteString
                                                 )
-import qualified Data.Set                      as S
-import           Data.Set                       ( Set )
+import qualified Data.IntSet                   as S
+import           Data.IntSet                    ( IntSet )
 
-parsePersonDeclaration :: ByteString -> Set Char
-parsePersonDeclaration = S.fromList . unpack
+-- Storing (ord char) allows the use of IntSet which is superior to Set
+parsePersonDeclaration :: ByteString -> IntSet
+parsePersonDeclaration = S.fromList . map fromIntegral . unpack
 
-parseGroupDeclarations :: ByteString -> [Set Char]
+parseGroupDeclarations :: ByteString -> [IntSet]
 parseGroupDeclarations = map parsePersonDeclaration . BSC.lines
 
-loadInput :: [Char] -> IO [[Set Char]]
+loadInput :: [Char] -> IO [[IntSet]]
 loadInput fileName =
   map parseGroupDeclarations . breakOnBlankLines <$> BSC.readFile
     ("src/" ++ fileName)
