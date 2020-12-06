@@ -23,7 +23,8 @@ import           Data.Attoparsec.ByteString.Char8
                                                 , isDigit
                                                 )
 import qualified Data.ByteString.Char8         as BSC
-import           Data.ByteString.Char8          ( pack
+import           Data.ByteString.Char8          ( unpack
+                                                , pack
                                                 , ByteString
                                                 )
 import           Data.Char                      ( isSpace )
@@ -100,24 +101,34 @@ credentialIsValid credential = case credential of
 
 -- Creating a bunch of parsers for individual credentials...
 
+byteStringWithPrefixParser
+  :: String
+  -> (ByteString -> Bool)
+  -> (ByteString -> Credential)
+  -> Parser Credential
+byteStringWithPrefixParser prefix predicate f = do
+  string $ pack prefix
+  byteString <- takeByteString
+  if predicate byteString then return $ f byteString else fail "Predicate"
+
 birthYearParser :: Parser Credential
-birthYearParser = do
-  string $ pack "byr:"
-  year <- many1 digit
-  return $ Credential BirthYear . VDate . Year $ read year
+birthYearParser = byteStringWithPrefixParser
+  "byr:"
+  (BSC.all isDigit)
+  (Credential BirthYear . VDate . Year . read . unpack)
 
 issueYearParser :: Parser Credential
-issueYearParser = do
-  string $ pack "iyr:"
-  year <- many1 digit
-  return $ Credential IssueYear . VDate . Year $ read year
+issueYearParser = byteStringWithPrefixParser
+  "iyr:"
+  (BSC.all isDigit)
+  (Credential IssueYear . VDate . Year . read . unpack)
 
 -- Backtracks as 'e' is ambiguous
 expirationYearParser :: Parser Credential
-expirationYearParser = try $ do
-  string $ pack "eyr:"
-  year <- many1 digit
-  return $ Credential ExpirationYear . VDate . Year $ read year
+expirationYearParser = try $ byteStringWithPrefixParser
+  "eyr:"
+  (BSC.all isDigit)
+  (Credential ExpirationYear . VDate . Year . read . unpack)
 
 -- Backtracks as 'h' is ambiguous
 metricHeightParser :: Parser Credential
@@ -137,10 +148,10 @@ imperialHeightParser = try $ do
 
 -- Backtracks as 'h' is ambiguous
 unitlessHeightParser :: Parser Credential
-unitlessHeightParser = try $ do
-  string $ pack "hgt:"
-  height <- many1 digit
-  return $ Credential Height . VHeight . UnitlessHeight $ read height
+unitlessHeightParser = try $ byteStringWithPrefixParser
+  "hgt:"
+  (BSC.all isDigit)
+  (Credential Height . VHeight . UnitlessHeight . read . unpack)
 
 heightParser :: Parser Credential
 heightParser = do
@@ -148,18 +159,17 @@ heightParser = do
 
 -- Backtracks as 'h' is ambiguous
 hexHairColourParser :: Parser Credential
-hexHairColourParser = try $ do
-  string $ pack "hcl:#"
-  hexCode <- takeByteString
-  if validateHexCode hexCode
-    then return $ Credential HairColour . VColour . HexColour $ hexCode
-    else fail "Not a hex code"
+hexHairColourParser = try $ byteStringWithPrefixParser
+  "hcl:#"
+  validateHexCode
+  (Credential HairColour . VColour . HexColour)
 
 -- Backtracks as 'h' is ambiguous
 namedHairColourParser :: Parser Credential
-namedHairColourParser = try $ do
-  string $ pack "hcl:"
-  Credential HairColour . VColour . NamedColour <$> takeByteString
+namedHairColourParser = try $ byteStringWithPrefixParser
+  "hcl:"
+  (const True)
+  (Credential HairColour . VColour . NamedColour)
 
 hairColourParser :: Parser Credential
 hairColourParser = do
@@ -167,18 +177,17 @@ hairColourParser = do
 
 -- Backtracks as 'e' is ambiguous
 hexEyeColourParser :: Parser Credential
-hexEyeColourParser = try $ do
-  string $ pack "ecl:#"
-  hexCode <- takeByteString
-  if validateHexCode hexCode
-    then return $ Credential EyeColour . VColour . HexColour $ hexCode
-    else fail "Not a hex code"
+hexEyeColourParser = try $ byteStringWithPrefixParser
+  "ecl:#"
+  validateHexCode
+  (Credential EyeColour . VColour . HexColour)
 
 -- Backtracks as 'e' is ambiguous
 namedEyeColourParser :: Parser Credential
-namedEyeColourParser = try $ do
-  string $ pack "ecl:"
-  Credential EyeColour . VColour . NamedColour <$> takeByteString
+namedEyeColourParser = try $ byteStringWithPrefixParser
+  "ecl:"
+  (const True)
+  (Credential EyeColour . VColour . NamedColour)
 
 eyeColourParser :: Parser Credential
 eyeColourParser = do
@@ -195,9 +204,10 @@ passportIDParser = try $ do
     else Credential PassportID . VID . FreeTextID $ passportId
 
 countryIDParser :: Parser Credential
-countryIDParser = do
-  string $ pack "cid:"
-  Credential CountryID . VID . FreeTextID <$> takeByteString
+countryIDParser = byteStringWithPrefixParser
+  "cid:"
+  (const True)
+  (Credential CountryID . VID . FreeTextID)
 
 credentialParser :: Parser Credential
 credentialParser = do
