@@ -7,6 +7,7 @@ module Lib
 import qualified Data.IntSet                   as S
 import           Data.ByteString.Char8          ( ByteString )
 import qualified Data.ByteString.Char8         as BSC
+import           Control.Arrow                  ( Arrow((***)) )
 
 -- Represents a position among a single dimension
 data Position = Specific Int | Range (Int, Int)
@@ -47,6 +48,16 @@ locateSeat = BSC.foldl' updatePosition possibleSeatLocation
     'R' -> (bisect xPosition High, yPosition)
     'F' -> (xPosition, bisect yPosition Low)
     'B' -> (xPosition, bisect yPosition High)
+
+-- Alternatively, using some mathematics we can just read the bytestring as (uint7, uint 3)
+locateSeat' :: ByteString -> SeatLocation
+locateSeat' boardingPassBytestring = (Specific column, Specific row)
+ where
+  (row, column) = toInt 'B' *** toInt 'R' $ bits
+  toInt highChar bits =
+    sum $ map ((2 ^) . ((BSC.length bits - 1) -)) $ BSC.elemIndices highChar
+                                                                    bits
+  bits = BSC.splitAt 7 boardingPassBytestring
 
 idForLocation :: SeatLocation -> Int
 idForLocation (Specific x, Specific y) = (8 * y) + x
