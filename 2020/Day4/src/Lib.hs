@@ -28,7 +28,9 @@ import           Data.ByteString.Char8          ( unpack
                                                 , ByteString
                                                 )
 import           Data.Char                      ( isSpace )
-import           AoCUtils                       ( breakOnBlankLines )
+import           AoCUtils                       ( breakOnBlankLines
+                                                , byteStringWithPrefixParser
+                                                )
 data CredentialType = BirthYear | IssueYear | ExpirationYear | Height
     | HairColour | EyeColour | PassportID | CountryID
     deriving (Enum, Ord, Eq, Show)
@@ -101,15 +103,7 @@ credentialIsValid credential = case credential of
 
 -- Creating a bunch of parsers for individual credentials...
 
-byteStringWithPrefixParser
-  :: String
-  -> (ByteString -> Bool)
-  -> (ByteString -> Credential)
-  -> Parser Credential
-byteStringWithPrefixParser prefix predicate f = do
-  string $ pack prefix
-  byteString <- takeByteString
-  if predicate byteString then return $ f byteString else fail "Predicate"
+
 
 birthYearParser :: Parser Credential
 birthYearParser = byteStringWithPrefixParser
