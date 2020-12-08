@@ -9,17 +9,15 @@ import qualified Data.Set                      as S
 import qualified Data.Map.Strict               as M
 import           Data.Map.Strict                ( Map )
 import           Data.Attoparsec.ByteString.Char8
-                                                ( inClass
-                                                , IResult(Done)
+                                                ( parseOnly
+                                                , inClass
                                                 , takeByteString
                                                 , Parser
                                                 , choice
                                                 , digit
                                                 , many1
                                                 , string
-                                                , parse
                                                 , try
-                                                , feed
                                                 , isDigit
                                                 )
 import qualified Data.ByteString.Char8         as BSC
@@ -31,6 +29,7 @@ import           Data.Char                      ( isSpace )
 import           AoCUtils                       ( breakOnBlankLines
                                                 , byteStringWithPrefixParser
                                                 )
+import           Data.Either                    ( rights )
 data CredentialType = BirthYear | IssueYear | ExpirationYear | Height
     | HairColour | EyeColour | PassportID | CountryID
     deriving (Enum, Ord, Eq, Show)
@@ -148,7 +147,7 @@ unitlessHeightParser = try $ byteStringWithPrefixParser
   (Credential Height . VHeight . UnitlessHeight . read . unpack)
 
 heightParser :: Parser Credential
-heightParser = do
+heightParser =
   choice [metricHeightParser, imperialHeightParser, unitlessHeightParser]
 
 -- Backtracks as 'h' is ambiguous
@@ -166,8 +165,7 @@ namedHairColourParser = try $ byteStringWithPrefixParser
   (Credential HairColour . VColour . NamedColour)
 
 hairColourParser :: Parser Credential
-hairColourParser = do
-  choice [hexHairColourParser, namedHairColourParser]
+hairColourParser = choice [hexHairColourParser, namedHairColourParser]
 
 -- Backtracks as 'e' is ambiguous
 hexEyeColourParser :: Parser Credential
@@ -184,8 +182,7 @@ namedEyeColourParser = try $ byteStringWithPrefixParser
   (Credential EyeColour . VColour . NamedColour)
 
 eyeColourParser :: Parser Credential
-eyeColourParser = do
-  choice [hexEyeColourParser, namedEyeColourParser]
+eyeColourParser = choice [hexEyeColourParser, namedEyeColourParser]
 
 -- Backtracks as 'p' is ambiguous
 passportIDParser :: Parser Credential
@@ -204,23 +201,22 @@ countryIDParser = byteStringWithPrefixParser
   (Credential CountryID . VID . FreeTextID)
 
 credentialParser :: Parser Credential
-credentialParser = do
-  choice
-    [ birthYearParser
-    , issueYearParser
-    , expirationYearParser
-    , heightParser
-    , hairColourParser
-    , eyeColourParser
-    , passportIDParser
-    , countryIDParser
-    ]
+credentialParser = choice
+  [ birthYearParser
+  , issueYearParser
+  , expirationYearParser
+  , heightParser
+  , hairColourParser
+  , eyeColourParser
+  , passportIDParser
+  , countryIDParser
+  ]
 
 -- All that's left is running the parser on ByteStrings
 
 toCredential :: ByteString -> Credential
-toCredential s = result
-  where Done _ result = feed (parse credentialParser s) BSC.empty
+toCredential s = getCredential $ parseOnly credentialParser s
+  where getCredential (Right credential) = credential
 
 parsePersonCredentials :: ByteString -> Credentials
 parsePersonCredentials singlePersonCredentials = M.fromList

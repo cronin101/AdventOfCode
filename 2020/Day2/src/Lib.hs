@@ -5,21 +5,18 @@ module Lib
 
 import qualified Data.ByteString.Char8         as BSC
 import           Data.ByteString.Char8          ( ByteString )
-import qualified Data.Attoparsec.ByteString.Char8
+import           Data.Attoparsec.ByteString.Char8
+                                                ( Parser )
+import           Data.Attoparsec.ByteString.Char8
                                                as P
-                                                ( parse
+                                                ( parseOnly
                                                 , letter_ascii
                                                 , space
                                                 , char
                                                 , takeByteString
                                                 , takeWhile
-                                                , feed
                                                 , letter_ascii
-                                                )
-import           Data.Attoparsec.ByteString.Char8
-                                                ( isDigit
-                                                , Parser
-                                                , IResult(Done)
+                                                , isDigit
                                                 )
 import           Data.Maybe                     ( fromJust )
 
@@ -37,17 +34,15 @@ parseLine' bs = (num1, num2, targetChar, passwordString)
   passwordString                = BSC.drop 2 remainder3
 
 parseLine :: ByteString -> (Int, Int, Char, ByteString)
-parseLine bs = (num1, num2, targetChar, passwordString)
- where
-  Done _ (num1, num2, targetChar, passwordString) =
-    P.feed (P.parse lineParser bs) BSC.empty
+parseLine bs = getLine $ parseOnly lineParser bs
+  where getLine (Right line) = line
 
 lineParser :: Parser (Int, Int, Char, ByteString)
 lineParser = do
   let intFromBS = fst . fromJust . BSC.readInt
-  low <- intFromBS <$> P.takeWhile isDigit
+  low <- intFromBS <$> P.takeWhile P.isDigit
   P.char '-'
-  high <- intFromBS <$> P.takeWhile isDigit
+  high <- intFromBS <$> P.takeWhile P.isDigit
   P.space
   targetChar <- P.letter_ascii
   P.char ':'
