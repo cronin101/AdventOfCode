@@ -8,19 +8,17 @@ module Lib
 import           Data.ByteString.Char8          ( ByteString )
 import qualified Data.ByteString.Char8         as BSC
 import           Data.Attoparsec.ByteString.Char8
-                                                ( choice
+                                                ( parseOnly
+                                                , choice
                                                 , string
                                                 , sepBy1
                                                 , takeTill
                                                 , space
                                                 , Parser
                                                 , digit
-                                                , parse
-                                                , feed
                                                 , manyTill
                                                 , anyChar
                                                 , endOfLine
-                                                , IResult(Done)
                                                 )
 import           Data.Char                      ( digitToInt
                                                 , isPunctuation
@@ -66,8 +64,7 @@ parseNonEmptyBagCount = do
   return $ Just (colour, count)
 
 parseBagCount :: Parser (Maybe BagColourWithCount)
-parseBagCount = do
-  choice [parseNoOtherBags, parseNonEmptyBagCount]
+parseBagCount = choice [parseNoOtherBags, parseNonEmptyBagCount]
 
 -- "6 cherry red bags, 1 golden yellow bag."
 parseBagCounts :: Parser [BagColourWithCount]
@@ -133,8 +130,7 @@ countContainedBags containsMap colour = case M.lookup colour containsMap of
 
 loadInput :: String -> IO [Rule]
 loadInput fileName = do
-  rulesRaw <- BSC.readFile ("src/" ++ fileName)
-  return $ getParsedRules $ runParserOrRules rulesRaw
- where
-  runParserOrRules rulesRaw = feed (parse parseRules rulesRaw) BSC.empty
-  getParsedRules (Done _ rules) = rules
+  parsed <- parseOnly parseRules <$> BSC.readFile ("src/" ++ fileName)
+  return $ case parsed of
+    Left  error -> fail error
+    Right rules -> rules
