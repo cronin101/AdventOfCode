@@ -1,0 +1,57 @@
+	Thu Dec 10 14:28 2020 Time and Allocation Profiling Report  (Final)
+
+	   Day10-exe +RTS -N -p -RTS
+
+	total time  =        0.00 secs   (0 ticks @ 1000 us, 16 processors)
+	total alloc =     554,640 bytes  (excludes profiling overheads)
+
+COST CENTRE                                              MODULE           SRC                         %time %alloc
+
+MAIN                                                     MAIN             <built-in>                    0.0   53.8
+CAF                                                      GHC.IO.Handle.FD <entire-module>               0.0    6.3
+validArrangementsCount.validArrangementsCount'.frontier' Lib              src/Lib.hs:37:5-31            0.0    9.3
+validArrangementsCount.validArrangementsCount'           Lib              src/Lib.hs:(33,3)-(39,27)     0.0    7.1
+loadInput                                                Lib              src/Lib.hs:(42,1)-(44,24)     0.0   11.8
+intervals.adaptorPairs                                   Lib              src/Lib.hs:25:3-70            0.0    1.3
+intervals                                                Lib              src/Lib.hs:(23,1)-(26,43)     0.0    1.7
+countOccurrences.\                                       Lib              src/Lib.hs:20:35-57           0.0    2.3
+main                                                     Main             app/Main.hs:(13,1)-(18,38)    0.0    2.9
+
+
+                                                                                                                                 individual      inherited
+COST CENTRE                                                  MODULE                SRC                        no.     entries  %time %alloc   %time %alloc
+
+MAIN                                                         MAIN                  <built-in>                 174          0    0.0   53.8     0.0  100.0
+ CAF                                                         GHC.Conc.Signal       <entire-module>            274          0    0.0    0.1     0.0    0.1
+ CAF                                                         GHC.IO.Encoding       <entire-module>            255          0    0.0    0.6     0.0    0.6
+ CAF                                                         GHC.IO.Encoding.Iconv <entire-module>            253          0    0.0    0.0     0.0    0.0
+ CAF                                                         GHC.IO.FD             <entire-module>            246          0    0.0    0.0     0.0    0.0
+ CAF                                                         GHC.IO.Handle.FD      <entire-module>            244          0    0.0    6.3     0.0    6.3
+ CAF                                                         GHC.IO.Handle.Text    <entire-module>            242          0    0.0    0.0     0.0    0.0
+ CAF                                                         GHC.Show              <entire-module>            225          0    0.0    0.1     0.0    0.1
+ CAF                                                         GHC.Event.Poll        <entire-module>            192          0    0.0    0.0     0.0    0.0
+ CAF                                                         GHC.Event.Thread      <entire-module>            191          0    0.0    0.2     0.0    0.2
+ CAF:countOccurrences                                        Lib                   src/Lib.hs:20:1-16         317          0    0.0    0.0     0.0    0.0
+  countOccurrences                                           Lib                   src/Lib.hs:20:1-67         354          1    0.0    0.0     0.0    0.0
+ CAF:main1                                                   Main                  <no location info>         346          0    0.0    0.0     0.0    0.0
+  main                                                       Main                  app/Main.hs:(13,1)-(18,38) 348          1    0.0    0.0     0.0    0.0
+ CAF:main2                                                   Main                  <no location info>         345          0    0.0    0.0     0.0    0.0
+  main                                                       Main                  app/Main.hs:(13,1)-(18,38) 350          0    0.0    0.0     0.0    0.0
+   loadInput                                                 Lib                   src/Lib.hs:(42,1)-(44,24)  351          1    0.0    0.0     0.0    0.0
+ CAF:main3                                                   Main                  <no location info>         344          0    0.0    0.1     0.0    0.1
+ main                                                        Main                  app/Main.hs:(13,1)-(18,38) 349          0    0.0    2.9     0.0   38.7
+  main.intervalCounts                                        Main                  app/Main.hs:15:7-76        353          1    0.0    0.0     0.0    6.8
+   includeTerminals                                          Lib                   src/Lib.hs:17:1-77         360          1    0.0    0.0     0.0    0.1
+    includeTerminals.\                                       Lib                   src/Lib.hs:17:41-63        361          2    0.0    0.1     0.0    0.1
+   intervals                                                 Lib                   src/Lib.hs:(23,1)-(26,43)  356          1    0.0    1.7     0.0    3.7
+    intervals.adaptorPairs                                   Lib                   src/Lib.hs:25:3-70         358          1    0.0    1.3     0.0    1.3
+    intervals.ascendingAdaptors                              Lib                   src/Lib.hs:26:3-43         357          1    0.0    0.7     0.0    0.7
+   countOccurrences                                          Lib                   src/Lib.hs:20:1-67         355          0    0.0    0.7     0.0    3.0
+    countOccurrences.\                                       Lib                   src/Lib.hs:20:35-57        359         92    0.0    2.3     0.0    2.3
+  validArrangementsCount                                     Lib                   src/Lib.hs:(29,1)-(39,27)  362          1    0.0    0.0     0.0   17.2
+   validArrangementsCount.validArrangementsCount'            Lib                   src/Lib.hs:(33,3)-(39,27)  364        447    0.0    7.1     0.0   17.2
+    validArrangementsCount.validArrangementsCount'.frontier' Lib                   src/Lib.hs:37:5-31         367        444    0.0    9.3     0.0    9.3
+    validArrangementsCount.validArrangementsCount'.n'        Lib                   src/Lib.hs:38:5-68         366        444    0.0    0.8     0.0    0.8
+    validArrangementsCount.validArrangementsCount'.next      Lib                   src/Lib.hs:39:5-27         365        444    0.0    0.0     0.0    0.0
+   validArrangementsCount.target                             Lib                   src/Lib.hs:32:3-34         363          1    0.0    0.0     0.0    0.0
+  loadInput                                                  Lib                   src/Lib.hs:(42,1)-(44,24)  352          0    0.0   11.8     0.0   11.8
