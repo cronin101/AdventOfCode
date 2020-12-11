@@ -4,6 +4,8 @@ module Lib
   , stableState
   , passengerCount
   , nextState
+  , PassengerTolerance(PassengerTolerance)
+  , AdjacencyType(Immediate, NearestVisible)
   ) where
 
 import           Data.Map.Strict                ( Map )
@@ -16,19 +18,28 @@ import qualified Data.IntSet                   as S
 import           Data.IntSet                    ( IntSet )
 import           Data.List                      ( intercalate
                                                 , foldl'
+                                                , find
                                                 )
 import           Data.Tuple                     ( swap )
+import           Data.Maybe                     ( mapMaybe )
 
 data SeatStatus = Free | Taken
     deriving (Show, Eq)
 
+data AdjacencyType = Immediate | NearestVisible
+    deriving (Show, Eq)
+
+data PassengerTolerance = PassengerTolerance AdjacencyType Int
+  deriving (Show, Eq)
+
 data Ferry = Ferry
 
-  { seats                  :: Map (Int, Int) SeatStatus
-  , adjacentPassengerCount :: IntMap Int
-  , activeSeats            :: IntSet
-  , adjacentSeatsMap       :: IntMap IntSet
-  , dimensions             :: (Int, Int)
+  { seats                   :: Map (Int, Int) SeatStatus
+  , adjacentPassengerCount  :: IntMap Int
+  , activeSeats             :: IntSet
+  , adjacentSeatsMap        :: IntMap IntSet
+  , dimensions              :: (Int, Int)
+  , neighbourToleranceLimit :: Int
   }
 instance Show Ferry  where
   show f = intercalate
@@ -55,13 +66,26 @@ adjacentCoordinates :: (Int, Int) -> [(Int, Int)]
 adjacentCoordinates (x, y) =
   [ (x + x', y + y') | x' <- [-1 .. 1], y' <- [-1 .. 1], (x', y') /= (0, 0) ]
 
+visibleCoordinates
+  :: (Int, Int) -> (Int, Int) -> Map (Int, Int) SeatStatus -> [(Int, Int)]
+visibleCoordinates seat (width, height) seats = mapMaybe
+  (\(x'', y'') ->
+    find (`M.member` seats)
+      $ takeWhile (\(x, y) -> x >= 0 && y >= 0 && x < width && y < height)
+      $ drop 1
+      $ iterate (\(x', y') -> (x' + x'', y' + y'')) seat
+  )
+  vectors
+  where vectors = adjacentCoordinates (0, 0)
+
 updateSeatState :: Ferry -> (Int, Int) -> Ferry
-updateSeatState (Ferry seats previousAdjacentPassengerCount activeSeats adjacentSeatsMap dimensions@(width, _)) seat
+updateSeatState (Ferry seats previousAdjacentPassengerCount activeSeats adjacentSeatsMap dimensions@(width, _) tolerance) seat
   = Ferry seats'
           previousAdjacentPassengerCount
           activeSeats'
           adjacentSeatsMap
           dimensions
+          tolerance
  where
   activeSeats' = if seatChanged
     then S.union activeSeats (adjacentSeatsMap IM.! toSeatId seat width)
@@ -71,13 +95,18 @@ updateSeatState (Ferry seats previousAdjacentPassengerCount activeSeats adjacent
   previousAdjacentCount =
     IM.findWithDefault 0 (toSeatId seat width) previousAdjacentPassengerCount
   previousSeatState = seats M.! seat
-  nextSeatState | previousAdjacentCount == 0 = Taken
-                | previousAdjacentCount >= 4 = Free
-                | otherwise                  = previousSeatState
+  nextSeatState | previousAdjacentCount == 0        = Taken
+                | previousAdjacentCount > tolerance = Free
+                | otherwise                         = previousSeatState
 
 updateAdjacentPassengers :: Ferry -> Ferry
-updateAdjacentPassengers (Ferry seats adjacentPassengerCount activeSeats adjacentSeatsMap dimensions@(width, _))
-  = Ferry seats adjacentPassengerCount' activeSeats adjacentSeatsMap dimensions
+updateAdjacentPassengers (Ferry seats adjacentPassengerCount activeSeats adjacentSeatsMap dimensions@(width, _) tolerance)
+  = Ferry seats
+          adjacentPassengerCount'
+          activeSeats
+          adjacentSeatsMap
+          dimensions
+          tolerance
  where
   adjacentPassengerCount' = IM.union
     (IM.fromList
@@ -93,11 +122,17 @@ updateAdjacentPassengers (Ferry seats adjacentPassengerCount activeSeats adjacen
     adjacentPassengerCount
 
 nextState :: Ferry -> Ferry
-nextState (Ferry seats adjacentPassengerCount activeSeats adjacentSeatsMap dimensions@(width, _))
+nextState (Ferry seats adjacentPassengerCount activeSeats adjacentSeatsMap dimensions@(width, _) tolerance)
   = updateAdjacentPassengers
     . foldl'
         updateSeatState
-        (Ferry seats adjacentPassengerCount S.empty adjacentSeatsMap dimensions)
+        (Ferry seats
+               adjacentPassengerCount
+               S.empty
+               adjacentSeatsMap
+               dimensions
+               tolerance
+        )
     $ map (`fromSeatId` width)
     $ S.toList activeSeats
 
@@ -107,16 +142,17 @@ stableState ferry =
                                                                    ferry
 
 passengerCount :: Ferry -> Int
-passengerCount (Ferry seats _ _ _ _) =
+passengerCount (Ferry seats _ _ _ _ _) =
   length $ filter ((== Taken) . snd) $ M.toList seats
 
-loadRows :: [ByteString] -> Ferry
-loadRows rows@(firstRow : _) = Ferry
-  seats
-  (IM.fromList $ [ (toSeatId seat width, 0) | seat <- M.keys seats ])
-  (S.fromList $ map (`toSeatId` width) $ M.keys seats)
-  adjacents
-  (width, height)
+loadRows :: [ByteString] -> PassengerTolerance -> Ferry
+loadRows rows@(firstRow : _) (PassengerTolerance adjacencyType tolerance) =
+  Ferry seats
+        (IM.fromList $ [ (toSeatId seat width, 0) | seat <- M.keys seats ])
+        (S.fromList $ map (`toSeatId` width) $ M.keys seats)
+        adjacents
+        (width, height)
+        tolerance
  where
   seats =
     M.unions [ seatsInRow y bytestring | (y, bytestring) <- zip [0 ..] rows ]
@@ -125,12 +161,18 @@ loadRows rows@(firstRow : _) = Ferry
       , S.fromList
       $ map (`toSeatId` width)
       $ filter (`M.member` seats)
-      $ adjacentCoordinates seat
+      $ (case adjacencyType of
+          Immediate -> adjacentCoordinates
+          NearestVisible ->
+            (\seat -> visibleCoordinates seat (width, height) seats)
+        )
+          seat
       )
     | seat <- M.keys seats
     ]
   width  = BSC.length firstRow
   height = length rows
 
-loadInput :: String -> IO Ferry
-loadInput fileName = loadRows . BSC.lines <$> BSC.readFile ("src/" ++ fileName)
+loadInput :: String -> PassengerTolerance -> IO Ferry
+loadInput fileName params =
+  (`loadRows` params) . BSC.lines <$> BSC.readFile ("src/" ++ fileName)
