@@ -1,89 +1,82 @@
-	Fri Dec 11 19:33 2020 Time and Allocation Profiling Report  (Final)
+	Sun Dec 13 02:19 2020 Time and Allocation Profiling Report  (Final)
 
 	   Day11-exe +RTS -N -p -RTS
 
-	total time  =        0.51 secs   (1601 ticks @ 1000 us, 16 processors)
-	total alloc = 1,633,463,096 bytes  (excludes profiling overheads)
+	total time  =        0.43 secs   (1353 ticks @ 1000 us, 16 processors)
+	total alloc = 1,458,860,936 bytes  (excludes profiling overheads)
 
-COST CENTRE                                      MODULE    SRC                          %time %alloc
+COST CENTRE                                      MODULE SRC                          %time %alloc
 
-updateAdjacentPassengers.adjacentPassengerCount' Lib       src/Lib.hs:(111,3)-(122,26)   47.8   38.6
-updateSeatState.seats'                           Lib       src/Lib.hs:93:3-80            16.9   19.3
-updateSeatState.activeSeats'                     Lib       src/Lib.hs:(90,3)-(92,20)      9.1   14.0
-updateSeatState.previousSeatState                Lib       src/Lib.hs:97:3-36             7.1    0.0
-updateSeatState                                  Lib       src/Lib.hs:(82,1)-(100,71)     2.9   10.4
-fromSeatId                                       Lib       src/Lib.hs:63:1-47             2.5    4.1
-updateSeatState.previousAdjacentCount            Lib       src/Lib.hs:(95,3)-(96,77)      2.4    0.0
-nextState                                        Lib       src/Lib.hs:(125,1)-(137,26)    2.4    6.3
-loadRows.adjacents                               Lib       src/Lib.hs:(159,3)-(172,5)     1.7    1.8
-updateSeatState.seatChanged                      Lib       src/Lib.hs:94:3-50             1.6    0.0
-visibleCoordinates.\                             Lib       src/Lib.hs:(73,5)-(76,56)      1.6    1.3
-toSeatId                                         Lib       src/Lib.hs:60:1-39             1.4    1.3
+updateAdjacentPassengers.adjacentPassengerCount' Lib    src/Lib.hs:(113,3)-(124,26)   56.7   45.5
+updateSeatState.seats'                           Lib    src/Lib.hs:95:3-80            11.2   22.5
+updateSeatState.activeSeats'                     Lib    src/Lib.hs:(92,3)-(94,20)      9.3   15.6
+updateSeatState.previousSeatState                Lib    src/Lib.hs:99:3-36             6.7    0.0
+updateSeatState                                  Lib    src/Lib.hs:(84,1)-(102,71)     3.5    2.3
+updateSeatState.previousAdjacentCount            Lib    src/Lib.hs:(97,3)-(98,77)      3.4    0.0
+fromSeatId                                       Lib    src/Lib.hs:65:1-47             2.1    0.0
+nextState                                        Lib    src/Lib.hs:(127,1)-(139,26)    1.7    7.0
+loadRows.adjacents                               Lib    src/Lib.hs:(161,3)-(174,5)     1.7    2.0
+visibleCoordinates.\                             Lib    src/Lib.hs:(75,5)-(78,56)      0.9    1.5
+loadRows                                         Lib    src/Lib.hs:(151,1)-(176,22)    0.4    1.1
 
 
                                                                                                                            individual      inherited
 COST CENTRE                                           MODULE                SRC                         no.     entries  %time %alloc   %time %alloc
 
-MAIN                                                  MAIN                  <built-in>                  195          0    0.0    0.0   100.0  100.0
- CAF                                                  GHC.Conc.Signal       <entire-module>             295          0    0.0    0.0     0.0    0.0
- CAF                                                  GHC.IO.Encoding       <entire-module>             276          0    0.0    0.0     0.0    0.0
- CAF                                                  GHC.IO.Encoding.Iconv <entire-module>             274          0    0.0    0.0     0.0    0.0
- CAF                                                  GHC.IO.FD             <entire-module>             267          0    0.0    0.0     0.0    0.0
- CAF                                                  GHC.IO.Handle.FD      <entire-module>             265          0    0.0    0.0     0.0    0.0
- CAF                                                  GHC.IO.Handle.Text    <entire-module>             263          0    0.0    0.0     0.0    0.0
- CAF                                                  GHC.Event.Poll        <entire-module>             213          0    0.0    0.0     0.0    0.0
- CAF                                                  GHC.Event.Thread      <entire-module>             212          0    0.0    0.0     0.0    0.0
- CAF:lvl2_ra3d                                        Lib                   <no location info>          343          0    0.0    0.0     0.0    0.0
-  loadInput                                           Lib                   src/Lib.hs:(177,1)-(178,71) 429          0    0.0    0.0     0.0    0.0
-   loadRows                                           Lib                   src/Lib.hs:(149,1)-(174,22) 430          0    0.0    0.0     0.0    0.0
-    loadRows.adjacents                                Lib                   src/Lib.hs:(159,3)-(172,5)  431          0    0.0    0.0     0.0    0.0
-     loadRows.adjacents.\                             Lib                   src/Lib.hs:167:23-67        432          0    0.0    0.0     0.0    0.0
-      visibleCoordinates                              Lib                   src/Lib.hs:(71,1)-(79,44)   433          0    0.0    0.0     0.0    0.0
-       visibleCoordinates.vectors                     Lib                   src/Lib.hs:79:9-44          434          0    0.0    0.0     0.0    0.0
-        adjacentCoordinates                           Lib                   src/Lib.hs:(66,1)-(67,77)   435          1    0.0    0.0     0.0    0.0
- CAF:main1                                            Main                  <no location info>          388          0    0.0    0.0     0.0    0.0
-  main                                                Main                  app/Main.hs:(16,1)-(21,50)  390          1    0.0    0.0     0.0    0.0
- CAF:main2                                            Main                  <no location info>          386          0    0.0    0.0     0.0    0.0
-  main                                                Main                  app/Main.hs:(16,1)-(21,50)  424          0    0.0    0.0     0.0    0.0
-   loadInput                                          Lib                   src/Lib.hs:(177,1)-(178,71) 425          1    0.0    0.0     0.0    0.0
- CAF:main5                                            Main                  <no location info>          385          0    0.0    0.0     0.0    0.0
- CAF:main7                                            Main                  <no location info>          387          0    0.0    0.0     0.0    0.0
-  main                                                Main                  app/Main.hs:(16,1)-(21,50)  392          0    0.0    0.0     0.0    0.0
-   loadInput                                          Lib                   src/Lib.hs:(177,1)-(178,71) 393          1    0.0    0.0     0.0    0.0
- main                                                 Main                  app/Main.hs:(16,1)-(21,50)  391          0    0.0    0.0   100.0  100.0
-  passengerCount                                      Lib                   src/Lib.hs:(145,1)-(146,53) 422          2    0.0    0.1     0.0    0.1
-   ==                                                 Lib                   src/Lib.hs:27:21-22         423      15502    0.0    0.0     0.0    0.0
-  stableState                                         Lib                   src/Lib.hs:(140,1)-(142,72) 395          2    0.0    0.0    94.5   93.7
-   activeSeats                                        Lib                   src/Lib.hs:39:5-15          396        201    0.0    0.0     0.0    0.0
-   nextState                                          Lib                   src/Lib.hs:(125,1)-(137,26) 398        201    2.4    6.3    94.5   93.7
-    fromSeatId                                        Lib                   src/Lib.hs:63:1-47          410     604034    0.7    2.1     0.7    2.1
-    updateSeatState                                   Lib                   src/Lib.hs:(82,1)-(100,71)  403     604034    2.9   10.4    40.7   44.2
-     updateSeatState.activeSeats'                     Lib                   src/Lib.hs:(90,3)-(92,20)   405     604034    9.1   14.0     9.4   14.5
-      toSeatId                                        Lib                   src/Lib.hs:60:1-39          414     530248    0.3    0.5     0.3    0.5
-     updateSeatState.nextSeatState                    Lib                   src/Lib.hs:(98,3)-(100,71)  411     604034    0.4    0.0     0.4    0.0
-     updateSeatState.previousAdjacentCount            Lib                   src/Lib.hs:(95,3)-(96,77)   408     604034    2.4    0.0     2.4    0.0
-      toSeatId                                        Lib                   src/Lib.hs:60:1-39          409     604034    0.0    0.0     0.0    0.0
-     updateSeatState.previousSeatState                Lib                   src/Lib.hs:97:3-36          412     604034    7.1    0.0     7.1    0.0
-     updateSeatState.seatChanged                      Lib                   src/Lib.hs:94:3-50          406     604034    1.6    0.0     1.6    0.0
-      ==                                              Lib                   src/Lib.hs:27:21-22         407     604034    0.0    0.0     0.0    0.0
-     updateSeatState.seats'                           Lib                   src/Lib.hs:93:3-80          413     604034   16.9   19.3    16.9   19.3
-    updateAdjacentPassengers                          Lib                   src/Lib.hs:(103,1)-(122,26) 404        201    0.0    0.0    50.7   41.2
-     updateAdjacentPassengers.adjacentPassengerCount' Lib                   src/Lib.hs:(111,3)-(122,26) 418        199   47.8   38.6    50.7   41.2
-      fromSeatId                                      Lib                   src/Lib.hs:63:1-47          420    4993908    1.7    2.0     1.7    2.0
-      ==                                              Lib                   src/Lib.hs:27:21-22         421    4405376    0.2    0.0     0.2    0.0
-      toSeatId                                        Lib                   src/Lib.hs:60:1-39          419    1177064    0.9    0.6     0.9    0.6
-  loadInput                                           Lib                   src/Lib.hs:(177,1)-(178,71) 394          0    0.0    0.0     5.5    6.2
-   loadRows                                           Lib                   src/Lib.hs:(149,1)-(174,22) 397          2    0.3    1.0     5.5    6.2
-    toSeatId                                          Lib                   src/Lib.hs:60:1-39          401      31004    0.1    0.0     0.1    0.0
-    loadRows.adjacents                                Lib                   src/Lib.hs:(159,3)-(172,5)  415          2    1.7    1.8     4.5    4.4
-     toSeatId                                         Lib                   src/Lib.hs:60:1-39          416     127268    0.1    0.1     0.1    0.1
-     adjacentCoordinates                              Lib                   src/Lib.hs:(66,1)-(67,77)   417       7751    0.3    0.7     0.3    0.7
-     loadRows.adjacents.\                             Lib                   src/Lib.hs:167:23-67        426       7751    0.2    0.0     2.3    1.7
-      visibleCoordinates                              Lib                   src/Lib.hs:(71,1)-(79,44)   427       7751    0.2    0.2     2.1    1.7
-       visibleCoordinates.\                           Lib                   src/Lib.hs:(73,5)-(76,56)   436      62008    1.6    1.3     1.9    1.5
-        visibleCoordinates.\.\                        Lib                   src/Lib.hs:74:31-72         438      76203    0.0    0.0     0.0    0.0
-        visibleCoordinates.\.\                        Lib                   src/Lib.hs:76:31-50         437      76203    0.4    0.1     0.4    0.1
-       visibleCoordinates.vectors                     Lib                   src/Lib.hs:79:9-44          428       7751    0.0    0.0     0.0    0.0
-    loadRows.seats                                    Lib                   src/Lib.hs:(157,3)-(158,77) 399          2    0.4    0.6     0.6    0.9
-     seatsInRow                                       Lib                   src/Lib.hs:(56,1)-(57,69)   400        190    0.1    0.3     0.1    0.3
-    loadRows.width                                    Lib                   src/Lib.hs:173:3-30         402          2    0.0    0.0     0.0    0.0
+MAIN                                                  MAIN                  <built-in>                  192          0    0.1    0.0   100.0  100.0
+ CAF                                                  GHC.Conc.Signal       <entire-module>             292          0    0.0    0.0     0.0    0.0
+ CAF                                                  GHC.IO.Encoding       <entire-module>             273          0    0.0    0.0     0.0    0.0
+ CAF                                                  GHC.IO.Encoding.Iconv <entire-module>             271          0    0.0    0.0     0.0    0.0
+ CAF                                                  GHC.IO.FD             <entire-module>             264          0    0.0    0.0     0.0    0.0
+ CAF                                                  GHC.IO.Handle.FD      <entire-module>             262          0    0.0    0.0     0.0    0.0
+ CAF                                                  GHC.IO.Handle.Text    <entire-module>             260          0    0.0    0.0     0.0    0.0
+ CAF                                                  GHC.Event.Poll        <entire-module>             210          0    0.0    0.0     0.0    0.0
+ CAF                                                  GHC.Event.Thread      <entire-module>             209          0    0.0    0.0     0.0    0.0
+ CAF:lvl2_raqA                                        Lib                   <no location info>          340          0    0.0    0.0     0.0    0.0
+  loadInput                                           Lib                   src/Lib.hs:(179,1)-(180,71) 420          0    0.0    0.0     0.0    0.0
+   loadRows                                           Lib                   src/Lib.hs:(151,1)-(176,22) 421          0    0.0    0.0     0.0    0.0
+    loadRows.adjacents                                Lib                   src/Lib.hs:(161,3)-(174,5)  422          0    0.0    0.0     0.0    0.0
+     loadRows.adjacents.\                             Lib                   src/Lib.hs:169:23-67        423          0    0.0    0.0     0.0    0.0
+      visibleCoordinates                              Lib                   src/Lib.hs:(73,1)-(81,44)   424          0    0.0    0.0     0.0    0.0
+       visibleCoordinates.vectors                     Lib                   src/Lib.hs:81:9-44          425          0    0.0    0.0     0.0    0.0
+        adjacentCoordinates                           Lib                   src/Lib.hs:(68,1)-(69,77)   426          1    0.0    0.0     0.0    0.0
+ CAF:main1                                            Main                  <no location info>          382          0    0.0    0.0     0.0    0.0
+  main                                                Main                  app/Main.hs:(16,1)-(21,50)  384          1    0.0    0.0     0.0    0.0
+ main                                                 Main                  app/Main.hs:(16,1)-(21,50)  385          0    0.0    0.0    99.9  100.0
+  loadInput                                           Lib                   src/Lib.hs:(179,1)-(180,71) 386          2    0.0    0.0     4.4    6.9
+   loadRows                                           Lib                   src/Lib.hs:(151,1)-(176,22) 387          2    0.4    1.1     4.4    6.9
+    toSeatId                                          Lib                   src/Lib.hs:62:1-39          395      31004    0.0    0.0     0.0    0.0
+    loadRows.adjacents                                Lib                   src/Lib.hs:(161,3)-(174,5)  392          2    1.7    2.0     3.5    4.9
+     toSeatId                                         Lib                   src/Lib.hs:62:1-39          393     127268    0.2    0.1     0.2    0.1
+     adjacentCoordinates                              Lib                   src/Lib.hs:(68,1)-(69,77)   394       7751    0.1    0.8     0.1    0.8
+     loadRows.adjacents.\                             Lib                   src/Lib.hs:169:23-67        417       7751    0.1    0.0     1.5    1.9
+      visibleCoordinates                              Lib                   src/Lib.hs:(73,1)-(81,44)   418       7751    0.2    0.2     1.4    1.9
+       visibleCoordinates.\                           Lib                   src/Lib.hs:(75,5)-(78,56)   427      62008    0.9    1.5     1.2    1.6
+        visibleCoordinates.\.\                        Lib                   src/Lib.hs:76:31-73         429      75039    0.0    0.0     0.0    0.0
+        visibleCoordinates.\.\                        Lib                   src/Lib.hs:78:31-50         428      75039    0.3    0.2     0.3    0.2
+       visibleCoordinates.vectors                     Lib                   src/Lib.hs:81:9-44          419       7751    0.0    0.0     0.0    0.0
+    loadRows.height                                   Lib                   src/Lib.hs:176:3-22         388          2    0.0    0.0     0.0    0.0
+    loadRows.seats                                    Lib                   src/Lib.hs:(159,3)-(160,77) 390          2    0.4    0.6     0.5    1.0
+     seatsInRow                                       Lib                   src/Lib.hs:(58,1)-(59,69)   391        190    0.1    0.3     0.1    0.3
+    loadRows.width                                    Lib                   src/Lib.hs:175:3-30         389          2    0.0    0.0     0.0    0.0
+  passengerCount                                      Lib                   src/Lib.hs:(147,1)-(148,53) 415          2    0.1    0.1     0.1    0.1
+   ==                                                 Lib                   src/Lib.hs:29:21-22         416      15502    0.0    0.0     0.0    0.0
+  stableState                                         Lib                   src/Lib.hs:(142,1)-(144,73) 396          2    0.0    0.0    95.3   92.9
+   nextState                                          Lib                   src/Lib.hs:(127,1)-(139,26) 397        203    1.7    7.0    95.3   92.9
+    fromSeatId                                        Lib                   src/Lib.hs:65:1-47          398     604034    0.2    0.0     0.2    0.0
+    updateSeatState                                   Lib                   src/Lib.hs:(84,1)-(102,71)  399     604034    3.5    2.3    34.5   40.5
+     updateSeatState.activeSeats'                     Lib                   src/Lib.hs:(92,3)-(94,20)   407     604034    9.3   15.6     9.3   15.6
+      toSeatId                                        Lib                   src/Lib.hs:62:1-39          408     530248    0.0    0.0     0.0    0.0
+     updateSeatState.nextSeatState                    Lib                   src/Lib.hs:(100,3)-(102,71) 403     604034    0.0    0.0     0.0    0.0
+     updateSeatState.previousAdjacentCount            Lib                   src/Lib.hs:(97,3)-(98,77)   400     604034    3.4    0.0     3.5    0.0
+      toSeatId                                        Lib                   src/Lib.hs:62:1-39          401     604034    0.1    0.0     0.1    0.0
+     updateSeatState.previousSeatState                Lib                   src/Lib.hs:99:3-36          402     604034    6.7    0.0     6.7    0.0
+     updateSeatState.seatChanged                      Lib                   src/Lib.hs:96:3-50          404     604034    0.3    0.0     0.3    0.0
+      ==                                              Lib                   src/Lib.hs:29:21-22         405     604034    0.0    0.0     0.0    0.0
+     updateSeatState.seats'                           Lib                   src/Lib.hs:95:3-80          406     604034   11.2   22.5    11.2   22.5
+    updateAdjacentPassengers                          Lib                   src/Lib.hs:(105,1)-(124,26) 409        203    0.0    0.0    58.9   45.5
+     updateAdjacentPassengers.adjacentPassengerCount' Lib                   src/Lib.hs:(113,3)-(124,26) 410        203   56.7   45.5    58.9   45.5
+      fromSeatId                                      Lib                   src/Lib.hs:65:1-47          411    4993908    1.9    0.0     1.9    0.0
+      ==                                              Lib                   src/Lib.hs:29:21-22         413    4405376    0.1    0.0     0.1    0.0
+      toSeatId                                        Lib                   src/Lib.hs:62:1-39          412    1177064    0.1    0.0     0.1    0.0
+   activeSeats                                        Lib                   src/Lib.hs:41:5-15          414        201    0.0    0.0     0.0    0.0

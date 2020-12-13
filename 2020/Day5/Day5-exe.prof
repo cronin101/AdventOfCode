@@ -1,65 +1,65 @@
-	Sat Dec  5 19:36 2020 Time and Allocation Profiling Report  (Final)
+	Sun Dec 13 12:36 2020 Time and Allocation Profiling Report  (Final)
 
 	   Day5-exe +RTS -N -p -RTS
 
-	total time  =        0.00 secs   (0 ticks @ 1000 us, 16 processors)
-	total alloc =   2,407,704 bytes  (excludes profiling overheads)
+	total time  =        0.00 secs   (1 ticks @ 1000 us, 16 processors)
+	total alloc =   2,218,320 bytes  (excludes profiling overheads)
 
 COST CENTRE               MODULE           SRC                        %time %alloc
 
-MAIN                      MAIN             <built-in>                   0.0   12.5
-CAF                       GHC.IO.Handle.FD <entire-module>              0.0    1.5
-missingId.right           Lib              src/Lib.hs:63:3-27           0.0    6.8
-missingId.left            Lib              src/Lib.hs:62:3-30           0.0    6.8
-missingId.idSet           Lib              src/Lib.hs:61:3-24           0.0    5.7
-locateSeat.updatePosition Lib              src/Lib.hs:(45,3)-(49,45)    0.0   15.2
-locateSeat                Lib              src/Lib.hs:(43,1)-(49,45)    0.0   12.6
-loadInput                 Lib              src/Lib.hs:67:1-68           0.0    6.8
-bisect.mid                Lib              src/Lib.hs:38:3-31           0.0    1.9
-bisect                    Lib              src/Lib.hs:(29,1)-(40,32)    0.0   26.1
-main.seatIds              Main             app/Main.hs:11:7-50          0.0    2.8
+bisect                    Lib              src/Lib.hs:(32,1)-(43,32)  100.0   16.5
+MAIN                      MAIN             <built-in>                   0.0   13.5
+CAF                       GHC.IO.Handle.FD <entire-module>              0.0    1.6
+missingId.right           Lib              src/Lib.hs:76:3-27           0.0    7.4
+missingId.left            Lib              src/Lib.hs:75:3-30           0.0    7.4
+missingId.idSet           Lib              src/Lib.hs:74:3-24           0.0    6.2
+locateSeat.updatePosition Lib              src/Lib.hs:(48,3)-(52,45)    0.0   16.5
+locateSeat                Lib              src/Lib.hs:(46,1)-(52,45)    0.0   13.7
+loadInput                 Lib              src/Lib.hs:79:1-68           0.0    7.4
+bisect.rangeLength        Lib              src/Lib.hs:43:3-32           0.0    5.5
+main.seatIds              Main             app/Main.hs:11:7-50          0.0    3.0
 
 
                                                                                                   individual      inherited
 COST CENTRE                    MODULE                SRC                       no.     entries  %time %alloc   %time %alloc
 
-MAIN                           MAIN                  <built-in>                176          0    0.0   12.5     0.0  100.0
+MAIN                           MAIN                  <built-in>                176          0    0.0   13.5   100.0  100.0
  CAF                           GHC.Conc.Signal       <entire-module>           276          0    0.0    0.0     0.0    0.0
  CAF                           GHC.IO.Encoding       <entire-module>           257          0    0.0    0.1     0.0    0.1
  CAF                           GHC.IO.Encoding.Iconv <entire-module>           255          0    0.0    0.0     0.0    0.0
  CAF                           GHC.IO.FD             <entire-module>           248          0    0.0    0.0     0.0    0.0
- CAF                           GHC.IO.Handle.FD      <entire-module>           246          0    0.0    1.5     0.0    1.5
+ CAF                           GHC.IO.Handle.FD      <entire-module>           246          0    0.0    1.6     0.0    1.6
  CAF                           GHC.IO.Handle.Text    <entire-module>           244          0    0.0    0.0     0.0    0.0
  CAF                           GHC.Event.Poll        <entire-module>           194          0    0.0    0.0     0.0    0.0
  CAF                           GHC.Event.Thread      <entire-module>           193          0    0.0    0.1     0.0    0.1
- CAF:calculateSeatId           Lib                   src/Lib.hs:55:1-15        321          0    0.0    0.0     0.0    0.0
-  calculateSeatId              Lib                   src/Lib.hs:55:1-44        358          1    0.0    0.0     0.0    0.0
- CAF:locateSeat                Lib                   src/Lib.hs:43:1-10        319          0    0.0    0.0     0.0    0.0
-  locateSeat                   Lib                   src/Lib.hs:(43,1)-(49,45) 360          1    0.0    0.0     0.0    0.0
+ CAF:calculateSeatId           Lib                   src/Lib.hs:68:1-15        321          0    0.0    0.0     0.0    0.0
+  calculateSeatId              Lib                   src/Lib.hs:68:1-44        358          1    0.0    0.0     0.0    0.0
+ CAF:locateSeat                Lib                   src/Lib.hs:46:1-10        319          0    0.0    0.0     0.0    0.0
+  locateSeat                   Lib                   src/Lib.hs:(46,1)-(52,45) 360          1    0.0    0.0     0.0    0.0
  CAF:main1                     Main                  <no location info>        350          0    0.0    0.0     0.0    0.0
   main                         Main                  app/Main.hs:(9,1)-(14,27) 352          1    0.0    0.0     0.0    0.0
- CAF:main2                     Main                  <no location info>        349          0    0.0    0.0     0.0    0.0
+ CAF:main3                     Main                  <no location info>        349          0    0.0    0.0     0.0    0.0
   main                         Main                  app/Main.hs:(9,1)-(14,27) 355          0    0.0    0.0     0.0    0.0
-   loadInput                   Lib                   src/Lib.hs:67:1-68        356          0    0.0    0.0     0.0    0.0
+   loadInput                   Lib                   src/Lib.hs:79:1-68        356          0    0.0    0.0     0.0    0.0
  CAF:main_fileName             Main                  <no location info>        348          0    0.0    0.0     0.0    0.0
- CAF:maxColumn                 Lib                   src/Lib.hs:23:1-9         316          0    0.0    0.0     0.0    0.0
-  maxColumn                    Lib                   src/Lib.hs:23:1-13        367          1    0.0    0.0     0.0    0.0
- CAF:maxRow                    Lib                   src/Lib.hs:21:1-6         315          0    0.0    0.0     0.0    0.0
-  maxRow                       Lib                   src/Lib.hs:21:1-12        370          1    0.0    0.0     0.0    0.0
- CAF:possibleSeatLocation      Lib                   src/Lib.hs:26:1-20        317          0    0.0    0.0     0.0    0.0
-  possibleSeatLocation         Lib                   src/Lib.hs:26:1-64        362          1    0.0    0.0     0.0    0.0
- main                          Main                  app/Main.hs:(9,1)-(14,27) 353          0    0.0    0.5     0.0   85.8
-  loadInput                    Lib                   src/Lib.hs:67:1-68        354          1    0.0    6.8     0.0    6.8
-  main.seatIds                 Main                  app/Main.hs:11:7-50       357          1    0.0    2.8     0.0   59.1
-   calculateSeatId             Lib                   src/Lib.hs:55:1-44        359          0    0.0    0.0     0.0   56.3
-    idForLocation              Lib                   src/Lib.hs:52:1-52        364        761    0.0    0.5     0.0    0.5
-    locateSeat                 Lib                   src/Lib.hs:(43,1)-(49,45) 361          0    0.0   12.6     0.0   55.8
-     locateSeat.updatePosition Lib                   src/Lib.hs:(45,3)-(49,45) 363       7610    0.0   15.2     0.0   43.2
-      bisect                   Lib                   src/Lib.hs:(29,1)-(40,32) 365       7610    0.0   26.1     0.0   28.0
-       bisect.rangeLength      Lib                   src/Lib.hs:40:3-32        366       7610    0.0    0.0     0.0    0.0
-       bisect.mid              Lib                   src/Lib.hs:38:3-31        369       6088    0.0    1.9     0.0    1.9
-       bisect.newLength        Lib                   src/Lib.hs:39:3-35        368       6088    0.0    0.0     0.0    0.0
-  missingId                    Lib                   src/Lib.hs:(59,1)-(63,27) 371          1    0.0    0.0     0.0   19.3
-   missingId.idSet             Lib                   src/Lib.hs:61:3-24        372          1    0.0    5.7     0.0    5.7
-   missingId.left              Lib                   src/Lib.hs:62:3-30        373          1    0.0    6.8     0.0    6.8
-   missingId.right             Lib                   src/Lib.hs:63:3-27        374          1    0.0    6.8     0.0    6.8
+ CAF:maxColumn                 Lib                   src/Lib.hs:26:1-9         316          0    0.0    0.0     0.0    0.0
+  maxColumn                    Lib                   src/Lib.hs:26:1-13        367          1    0.0    0.0     0.0    0.0
+ CAF:maxRow                    Lib                   src/Lib.hs:24:1-6         315          0    0.0    0.0     0.0    0.0
+  maxRow                       Lib                   src/Lib.hs:24:1-12        370          1    0.0    0.0     0.0    0.0
+ CAF:possibleSeatLocation      Lib                   src/Lib.hs:29:1-20        317          0    0.0    0.0     0.0    0.0
+  possibleSeatLocation         Lib                   src/Lib.hs:29:1-64        362          1    0.0    0.0     0.0    0.0
+ main                          Main                  app/Main.hs:(9,1)-(14,27) 353          0    0.0    0.5   100.0   84.6
+  loadInput                    Lib                   src/Lib.hs:79:1-68        354          1    0.0    7.4     0.0    7.4
+  main.seatIds                 Main                  app/Main.hs:11:7-50       357          1    0.0    3.0   100.0   55.7
+   calculateSeatId             Lib                   src/Lib.hs:68:1-44        359          0    0.0    0.0   100.0   52.7
+    idForLocation              Lib                   src/Lib.hs:65:1-52        364        761    0.0    0.5     0.0    0.5
+    locateSeat                 Lib                   src/Lib.hs:(46,1)-(52,45) 361          0    0.0   13.7   100.0   52.1
+     locateSeat.updatePosition Lib                   src/Lib.hs:(48,3)-(52,45) 363       7610    0.0   16.5   100.0   38.4
+      bisect                   Lib                   src/Lib.hs:(32,1)-(43,32) 365       7610  100.0   16.5   100.0   22.0
+       bisect.mid              Lib                   src/Lib.hs:41:3-31        369       7610    0.0    0.0     0.0    0.0
+       bisect.newLength        Lib                   src/Lib.hs:42:3-35        368       7610    0.0    0.0     0.0    0.0
+       bisect.rangeLength      Lib                   src/Lib.hs:43:3-32        366       7610    0.0    5.5     0.0    5.5
+  missingId                    Lib                   src/Lib.hs:(72,1)-(76,27) 371          1    0.0    0.0     0.0   21.0
+   missingId.idSet             Lib                   src/Lib.hs:74:3-24        372          1    0.0    6.2     0.0    6.2
+   missingId.left              Lib                   src/Lib.hs:75:3-30        374          1    0.0    7.4     0.0    7.4
+   missingId.right             Lib                   src/Lib.hs:76:3-27        373          1    0.0    7.4     0.0    7.4

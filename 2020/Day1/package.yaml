@@ -23,7 +23,7 @@ dependencies:
 - base >= 4.7 && < 5
 - containers
 - bytestring
-- aoc2020-utils
+- AoCUtils
 
 library:
   source-dirs: src

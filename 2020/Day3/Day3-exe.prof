@@ -1,58 +1,54 @@
-	Thu Dec  3 13:47 2020 Time and Allocation Profiling Report  (Final)
+	Sun Dec 13 12:39 2020 Time and Allocation Profiling Report  (Final)
 
 	   Day3-exe +RTS -N -p -RTS
 
-	total time  =        0.00 secs   (2 ticks @ 1000 us, 16 processors)
-	total alloc =   2,972,136 bytes  (excludes profiling overheads)
+	total time  =        0.00 secs   (0 ticks @ 1000 us, 16 processors)
+	total alloc =   2,983,784 bytes  (excludes profiling overheads)
 
 COST CENTRE            MODULE           SRC                        %time %alloc
 
-MAIN                   MAIN             <built-in>                  50.0   10.1
-loadRows.treePositions Lib              src/Lib.hs:(30,3)-(31,79)   50.0   49.8
+MAIN                   MAIN             <built-in>                   0.0    9.9
 CAF                    GHC.IO.Handle.FD <entire-module>              0.0    1.2
-treesInRow             Lib              src/Lib.hs:(20,1)-(21,74)    0.0   22.8
-loadInput              Lib              src/Lib.hs:51:1-79           0.0    3.0
-hasTree                Lib              src/Lib.hs:42:1-74           0.0    2.9
-generatePath           Lib              src/Lib.hs:(36,1)-(39,52)    0.0    8.6
+treesInRow             Lib              src/Lib.hs:(23,1)-(24,74)    0.0   22.7
+loadRows.treePositions Lib              src/Lib.hs:(33,3)-(34,79)    0.0   49.6
+loadInput              Lib              src/Lib.hs:55:1-79           0.0    3.0
+hasTree                Lib              src/Lib.hs:46:1-74           0.0    2.9
+generatePath           Lib              src/Lib.hs:(39,1)-(43,52)    0.0    9.1
 
 
                                                                                                individual      inherited
 COST CENTRE                 MODULE                SRC                       no.     entries  %time %alloc   %time %alloc
 
-MAIN                        MAIN                  <built-in>                176          0   50.0   10.1   100.0  100.0
- CAF                        GHC.Conc.Signal       <entire-module>           276          0    0.0    0.0     0.0    0.0
- CAF                        GHC.IO.Encoding       <entire-module>           257          0    0.0    0.1     0.0    0.1
- CAF                        GHC.IO.Encoding.Iconv <entire-module>           255          0    0.0    0.0     0.0    0.0
- CAF                        GHC.IO.FD             <entire-module>           248          0    0.0    0.0     0.0    0.0
- CAF                        GHC.IO.Handle.FD      <entire-module>           246          0    0.0    1.2     0.0    1.2
- CAF                        GHC.IO.Handle.Text    <entire-module>           244          0    0.0    0.0     0.0    0.0
- CAF                        GHC.Event.Poll        <entire-module>           194          0    0.0    0.0     0.0    0.0
- CAF                        GHC.Event.Thread      <entire-module>           193          0    0.0    0.0     0.0    0.0
- CAF:main1                  Main                  <no location info>        350          0    0.0    0.0     0.0    0.0
-  main                      Main                  app/Main.hs:(8,1)-(16,56) 352          1    0.0    0.0     0.0    0.0
- CAF:main16                 Main                  <no location info>        349          0    0.0    0.0     0.0    0.0
-  main                      Main                  app/Main.hs:(8,1)-(16,56) 354          0    0.0    0.0     0.0    0.0
-   loadInput                Lib                   src/Lib.hs:51:1-79        355          1    0.0    0.0     0.0    0.0
- CAF:main17                 Main                  <no location info>        348          0    0.0    0.0     0.0    0.0
- CAF:main_firstSlope        Main                  app/Main.hs:12:7-16       347          0    0.0    0.0     0.0    0.0
-  main                      Main                  app/Main.hs:(8,1)-(16,56) 373          0    0.0    0.0     0.0    0.0
-   main.firstSlope          Main                  app/Main.hs:12:7-33       374          1    0.0    0.0     0.0    0.0
- main                       Main                  app/Main.hs:(8,1)-(16,56) 353          0    0.0    0.4    50.0   88.5
-  main.slopesToCheck        Main                  app/Main.hs:15:7-66       375          1    0.0    0.0     0.0    0.0
-  main.treeCountForSlope'   Main                  app/Main.hs:10:7-53       357          1    0.0    0.0     0.0   12.5
-   height                   Lib                   src/Lib.hs:15:5-10        364          1    0.0    0.0     0.0    0.0
-   treeCountForSlope        Lib                   src/Lib.hs:48:1-63        358          1    0.0    0.0     0.0   12.5
-    generatePath            Lib                   src/Lib.hs:(36,1)-(39,52) 360          6    0.0    8.6     0.0    9.6
-     generatePath.addTuples Lib                   src/Lib.hs:39:9-52        372       1777    0.0    1.0     0.0    1.0
-     startPosition          Lib                   src/Lib.hs:12:5-17        361          6    0.0    0.0     0.0    0.0
-    treeCountForPath        Lib                   src/Lib.hs:45:1-52        359          1    0.0    0.0     0.0    2.9
-     hasTree                Lib                   src/Lib.hs:42:1-74        366       1777    0.0    2.9     0.0    2.9
-      treePositions         Lib                   src/Lib.hs:13:5-17        367       1777    0.0    0.0     0.0    0.0
-      width                 Lib                   src/Lib.hs:14:5-9         370       1777    0.0    0.0     0.0    0.0
-  loadInput                 Lib                   src/Lib.hs:51:1-79        356          0    0.0    3.0    50.0   75.7
-   loadRows                 Lib                   src/Lib.hs:(24,1)-(33,22) 362          1    0.0    0.0    50.0   72.6
-    loadRows.height         Lib                   src/Lib.hs:33:3-22        365          1    0.0    0.0     0.0    0.0
-    loadRows.startPosition  Lib                   src/Lib.hs:29:3-24        363          1    0.0    0.0     0.0    0.0
-    loadRows.treePositions  Lib                   src/Lib.hs:(30,3)-(31,79) 368          1   50.0   49.8    50.0   72.6
-     treesInRow             Lib                   src/Lib.hs:(20,1)-(21,74) 369        323    0.0   22.8     0.0   22.8
-    loadRows.width          Lib                   src/Lib.hs:32:3-30        371          1    0.0    0.0     0.0    0.0
+MAIN                        MAIN                  <built-in>                174          0    0.0    9.9     0.0  100.0
+ CAF                        GHC.Conc.Signal       <entire-module>           274          0    0.0    0.0     0.0    0.0
+ CAF                        GHC.IO.Encoding       <entire-module>           255          0    0.0    0.1     0.0    0.1
+ CAF                        GHC.IO.Encoding.Iconv <entire-module>           253          0    0.0    0.0     0.0    0.0
+ CAF                        GHC.IO.FD             <entire-module>           246          0    0.0    0.0     0.0    0.0
+ CAF                        GHC.IO.Handle.FD      <entire-module>           244          0    0.0    1.2     0.0    1.2
+ CAF                        GHC.IO.Handle.Text    <entire-module>           242          0    0.0    0.0     0.0    0.0
+ CAF                        GHC.Event.Poll        <entire-module>           192          0    0.0    0.0     0.0    0.0
+ CAF                        GHC.Event.Thread      <entire-module>           191          0    0.0    0.0     0.0    0.0
+ CAF:main1                  Main                  <no location info>        346          0    0.0    0.0     0.0    0.0
+  main                      Main                  app/Main.hs:(8,1)-(16,56) 348          1    0.0    0.0     0.0    0.0
+ CAF:main_firstSlope        Main                  app/Main.hs:12:7-16       345          0    0.0    0.0     0.0    0.0
+  main                      Main                  app/Main.hs:(8,1)-(16,56) 361          0    0.0    0.0     0.0    0.0
+   main.firstSlope          Main                  app/Main.hs:12:7-33       362          1    0.0    0.0     0.0    0.0
+ main                       Main                  app/Main.hs:(8,1)-(16,56) 349          0    0.0    0.4     0.0   88.7
+  loadInput                 Lib                   src/Lib.hs:55:1-79        350          1    0.0    3.0     0.0   75.4
+   loadRows                 Lib                   src/Lib.hs:(27,1)-(36,22) 352          1    0.0    0.0     0.0   72.4
+    loadRows.height         Lib                   src/Lib.hs:36:3-22        353          1    0.0    0.0     0.0    0.0
+    loadRows.startPosition  Lib                   src/Lib.hs:32:3-24        357          1    0.0    0.0     0.0    0.0
+    loadRows.treePositions  Lib                   src/Lib.hs:(33,3)-(34,79) 355          1    0.0   49.6     0.0   72.4
+     treesInRow             Lib                   src/Lib.hs:(23,1)-(24,74) 356        323    0.0   22.7     0.0   22.7
+    loadRows.width          Lib                   src/Lib.hs:35:3-30        354          1    0.0    0.0     0.0    0.0
+  main.slopesToCheck        Main                  app/Main.hs:15:7-66       369          1    0.0    0.0     0.0    0.0
+  main.treeCountForSlope'   Main                  app/Main.hs:10:7-53       351          1    0.0    0.0     0.0   12.9
+   treeCountForSlope        Lib                   src/Lib.hs:52:1-63        358          1    0.0    0.0     0.0   12.9
+    generatePath            Lib                   src/Lib.hs:(39,1)-(43,52) 360          6    0.0    9.1     0.0   10.0
+     generatePath.addTuples Lib                   src/Lib.hs:43:9-52        364       1783    0.0    0.9     0.0    0.9
+     startPosition          Lib                   src/Lib.hs:15:5-17        363          6    0.0    0.0     0.0    0.0
+    height                  Lib                   src/Lib.hs:18:5-10        365          1    0.0    0.0     0.0    0.0
+    treeCountForPath        Lib                   src/Lib.hs:49:1-52        359          1    0.0    0.0     0.0    2.9
+     hasTree                Lib                   src/Lib.hs:46:1-74        366       1777    0.0    2.9     0.0    2.9
+      treePositions         Lib                   src/Lib.hs:16:5-17        367       1777    0.0    0.0     0.0    0.0
+      width                 Lib                   src/Lib.hs:17:5-9         368       1777    0.0    0.0     0.0    0.0

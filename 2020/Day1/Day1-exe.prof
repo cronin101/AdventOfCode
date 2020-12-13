@@ -1,47 +1,43 @@
-	Wed Dec  2 02:27 2020 Time and Allocation Profiling Report  (Final)
+	Sun Dec 13 12:43 2020 Time and Allocation Profiling Report  (Final)
 
 	   Day1-exe +RTS -N -p -RTS
 
-	total time  =        0.00 secs   (0 ticks @ 1000 us, 16 processors)
-	total alloc =     500,096 bytes  (excludes profiling overheads)
+	total time  =        0.00 secs   (15 ticks @ 1000 us, 16 processors)
+	total alloc =     500,904 bytes  (excludes profiling overheads)
 
 COST CENTRE    MODULE           SRC                         %time %alloc
 
-MAIN           MAIN             <built-in>                    0.0   59.7
+MAIN           MAIN             <built-in>                  100.0   59.4
 CAF            GHC.IO.Handle.FD <entire-module>               0.0    6.9
-potentialPairs Lib              src/Lib.hs:(21,1)-(25,3)      0.0    2.7
-loadInput      Lib              src/Lib.hs:(55,1)-(57,24)     0.0   26.5
-main           Main             app/Main.hs:(20,1)-(23,25)    0.0    2.6
+potentialPairs Lib              src/Lib.hs:(23,1)-(27,3)      0.0    2.7
+loadInput      Lib              src/Lib.hs:(57,1)-(59,24)     0.0   26.5
+main           Main             app/Main.hs:(20,1)-(23,25)    0.0    2.7
 
 
                                                                                                   individual      inherited
 COST CENTRE                   MODULE                SRC                        no.     entries  %time %alloc   %time %alloc
 
-MAIN                          MAIN                  <built-in>                 168          0    0.0   59.7     0.0  100.0
- CAF                          GHC.Conc.Signal       <entire-module>            268          0    0.0    0.1     0.0    0.1
- CAF                          GHC.IO.Encoding       <entire-module>            249          0    0.0    0.6     0.0    0.6
- CAF                          GHC.IO.Encoding.Iconv <entire-module>            247          0    0.0    0.0     0.0    0.0
- CAF                          GHC.IO.FD             <entire-module>            240          0    0.0    0.0     0.0    0.0
- CAF                          GHC.IO.Handle.FD      <entire-module>            238          0    0.0    6.9     0.0    6.9
- CAF                          GHC.IO.Handle.Text    <entire-module>            236          0    0.0    0.0     0.0    0.0
- CAF                          GHC.Show              <entire-module>            219          0    0.0    0.1     0.0    0.1
- CAF                          GHC.Event.Thread      <entire-module>            185          0    0.0    0.3     0.0    0.3
- CAF:main1                    Main                  <no location info>         334          0    0.0    0.0     0.0    0.0
-  main                        Main                  app/Main.hs:(20,1)-(23,25) 336          1    0.0    0.0     0.0    0.0
- CAF:main2                    Main                  <no location info>         333          0    0.0    0.0     0.0    0.0
-  main                        Main                  app/Main.hs:(20,1)-(23,25) 338          0    0.0    0.0     0.0    0.0
-   loadInput                  Lib                   src/Lib.hs:(55,1)-(57,24)  339          1    0.0    0.0     0.0    0.0
- CAF:main3                    Main                  <no location info>         332          0    0.0    0.1     0.0    0.1
- CAF:target                   Main                  app/Main.hs:10:1-6         331          0    0.0    0.0     0.0    0.0
-  target                      Main                  app/Main.hs:10:1-13        344          1    0.0    0.0     0.0    0.0
- main                         Main                  app/Main.hs:(20,1)-(23,25) 337          0    0.0    2.6     0.0   32.0
-  answerOne                   Main                  app/Main.hs:13:1-62        341          1    0.0    0.0     0.0    0.2
-   findPairWithSum            Lib                   src/Lib.hs:(28,1)-(33,3)   342          1    0.0    0.2     0.0    0.2
-    findPairWithSum.y         Lib                   src/Lib.hs:31:9-25         343          8    0.0    0.0     0.0    0.0
-  answerTwo                   Main                  app/Main.hs:17:1-79        345          1    0.0    0.0     0.0    2.7
-   answerTwo.\                Main                  app/Main.hs:17:34-42       350          1    0.0    0.0     0.0    0.0
-   findTripletWithSum         Lib                   src/Lib.hs:(46,1)-(52,3)   346          1    0.0    0.0     0.0    2.7
-    findTripletWithSum.z      Lib                   src/Lib.hs:50:9-31         349        131    0.0    0.0     0.0    0.0
-    findTripletWithSum.target Lib                   src/Lib.hs:48:9-50         348          1    0.0    0.0     0.0    0.0
-    potentialPairs            Lib                   src/Lib.hs:(21,1)-(25,3)   347          1    0.0    2.7     0.0    2.7
-  loadInput                   Lib                   src/Lib.hs:(55,1)-(57,24)  340          0    0.0   26.5     0.0   26.5
+MAIN                          MAIN                  <built-in>                 166          0  100.0   59.4   100.0  100.0
+ CAF                          GHC.Conc.Signal       <entire-module>            266          0    0.0    0.1     0.0    0.1
+ CAF                          GHC.IO.Encoding       <entire-module>            247          0    0.0    0.6     0.0    0.6
+ CAF                          GHC.IO.Encoding.Iconv <entire-module>            245          0    0.0    0.0     0.0    0.0
+ CAF                          GHC.IO.FD             <entire-module>            238          0    0.0    0.0     0.0    0.0
+ CAF                          GHC.IO.Handle.FD      <entire-module>            236          0    0.0    6.9     0.0    6.9
+ CAF                          GHC.IO.Handle.Text    <entire-module>            234          0    0.0    0.0     0.0    0.0
+ CAF                          GHC.Show              <entire-module>            217          0    0.0    0.1     0.0    0.1
+ CAF                          GHC.Event.Thread      <entire-module>            183          0    0.0    0.3     0.0    0.3
+ CAF:main1                    Main                  <no location info>         330          0    0.0    0.0     0.0    0.0
+  main                        Main                  app/Main.hs:(20,1)-(23,25) 332          1    0.0    0.0     0.0    0.0
+ CAF:target                   Main                  app/Main.hs:10:1-6         329          0    0.0    0.0     0.0    0.0
+  target                      Main                  app/Main.hs:10:1-13        336          1    0.0    0.0     0.0    0.0
+ main                         Main                  app/Main.hs:(20,1)-(23,25) 333          0    0.0    2.7     0.0   32.5
+  answerOne                   Main                  app/Main.hs:13:1-62        335          1    0.0    0.0     0.0    0.2
+   findPairWithSum            Lib                   src/Lib.hs:(30,1)-(35,3)   337          1    0.0    0.2     0.0    0.2
+    findPairWithSum.y         Lib                   src/Lib.hs:33:9-25         338          8    0.0    0.0     0.0    0.0
+  answerTwo                   Main                  app/Main.hs:17:1-79        339          1    0.0    0.0     0.0    3.1
+   answerTwo.\                Main                  app/Main.hs:17:34-42       344          1    0.0    0.0     0.0    0.0
+   findTripletWithSum         Lib                   src/Lib.hs:(48,1)-(54,3)   340          1    0.0    0.0     0.0    3.1
+    findTripletWithSum.z      Lib                   src/Lib.hs:52:9-31         343        131    0.0    0.4     0.0    0.4
+    findTripletWithSum.target Lib                   src/Lib.hs:50:9-50         341          1    0.0    0.0     0.0    0.0
+    potentialPairs            Lib                   src/Lib.hs:(23,1)-(27,3)   342          1    0.0    2.7     0.0    2.7
+  loadInput                   Lib                   src/Lib.hs:(57,1)-(59,24)  334          1    0.0   26.5     0.0   26.5

@@ -1,3 +1,5 @@
+{-# LANGUAGE Strict #-}
+
 module Lib
   ( loadInput
   , intervals
@@ -12,12 +14,13 @@ import qualified Data.ByteString.Char8         as BSC
 import qualified Data.IntMap                   as IM
 import           Data.IntMap                    ( IntMap )
 import           Data.Maybe                     ( mapMaybe )
+import           Data.List                      ( foldl' )
 
 includeTerminals :: IntMap Int -> IntMap Int
-includeTerminals count = foldl (\m v -> IM.insertWith (+) v 1 m) count [1, 3]
+includeTerminals count = foldl' (\m v -> IM.insertWith (+) v 1 m) count [1, 3]
 
 countOccurrences :: [Int] -> IntMap Int
-countOccurrences = foldl (\m v -> IM.insertWith (+) v 1 m) IM.empty
+countOccurrences = foldl' (\m v -> IM.insertWith (+) v 1 m) IM.empty
 
 intervals :: IntSet -> [Int]
 intervals adaptors = map (uncurry (-)) adaptorPairs

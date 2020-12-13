@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: afc8ed7c4cb396aeb06d3d1f8c87252626bed2441e3e3c29782e8905747c18b7
+-- hash: 6a1668349b32af76c5b220261392c30e2775e9505e6d85126539800093468ee0
 
 name:           Day1
 version:        0.1.0.0
@@ -33,7 +33,7 @@ library
   hs-source-dirs:
       src
   build-depends:
-      aoc2020-utils
+      AoCUtils
     , base >=4.7 && <5
     , bytestring
     , containers
@@ -47,8 +47,8 @@ executable Day1-exe
       app
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
-      Day1
-    , aoc2020-utils
+      AoCUtils
+    , Day1
     , base >=4.7 && <5
     , bytestring
     , containers
@@ -63,8 +63,8 @@ test-suite Day1-test
       test
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
-      Day1
-    , aoc2020-utils
+      AoCUtils
+    , Day1
     , base >=4.7 && <5
     , bytestring
     , containers

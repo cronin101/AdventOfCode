@@ -1,3 +1,5 @@
+{-# LANGUAGE Strict #-}
+
 module Lib
   ( loadInput
   , treeCountForSlope
@@ -7,6 +9,7 @@ import           Data.Set                       ( Set )
 import qualified Data.Set                      as Set
 import qualified Data.ByteString.Char8         as BSC
 import           Data.ByteString.Char8          ( ByteString )
+import           Data.List                      ( iterate' )
 
 data WorldMap = WorldMap
   { startPosition :: (Int, Int)
@@ -34,8 +37,9 @@ loadRows rows@(firstRow : _) = WorldMap startPosition
 
 generatePath :: WorldMap -> (Int, Int) -> [(Int, Int)]
 generatePath map slope =
-  takeWhile ((< height map) . snd) $ iterate (`addTuples` slope) $ startPosition
-    map
+  takeWhile ((< height map) . snd)
+    $ iterate' (`addTuples` slope)
+    $ startPosition map
   where addTuples (x, y) (x', y') = (x + x', y + y')
 
 hasTree :: WorldMap -> (Int, Int) -> Bool

@@ -1,4 +1,4 @@
-{-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE OverloadedStrings, Strict #-}
 
 module Lib
   ( loadInput
@@ -28,6 +28,7 @@ import qualified Data.Array                    as A
 import           Data.Array                     ( Array )
 import           Data.List                      ( find
                                                 , findIndices
+                                                , iterate'
                                                 )
 
 data Instruction = NOP Int | Jump Int | Accumulate Int
@@ -83,7 +84,7 @@ step program (Running (index, accumulator)) = case program A.! index of
                              | otherwise              = Running (index, value)
 
 scanProgramFrom :: Program -> ProgramState -> [ProgramState]
-scanProgramFrom program state = drop 1 $ iterate (step program) state
+scanProgramFrom program state = drop 1 $ iterate' (step program) state
 
 scanProgram :: Program -> [ProgramState]
 scanProgram program = scanProgramFrom program $ Running (0, 0)
