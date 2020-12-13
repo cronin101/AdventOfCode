@@ -1,3 +1,5 @@
+{-# LANGUAGE Strict #-}
+
 module Lib
   ( loadInput
   , initialiseStream
@@ -17,7 +19,10 @@ import           Data.IntMap.Strict             ( IntMap )
 import qualified Data.IntMap.Strict            as IM
 import           Data.Set                       ( Set )
 import qualified Data.Set                      as S
-import           Data.List                      ( tails )
+import           Data.List                      ( tails
+                                                , foldl'
+                                                , iterate'
+                                                )
 import           Data.Bifunctor                 ( Bifunctor(second) )
 
 data XMASStream = XMASStream
@@ -63,7 +68,7 @@ pruneSums
   :: IntMap (Set (Int, Int)) -> Int -> Int -> [Int] -> IntMap (Set (Int, Int))
 pruneSums sums evicted incoming = if evicted == incoming
   then const sums
-  else foldl
+  else foldl'
     (\m v -> IM.update (prunePair $ normalizePair (v, evicted)) (v + evicted) m)
     sums
  where
@@ -75,7 +80,7 @@ expandSums
   :: IntMap (Set (Int, Int)) -> Int -> Int -> [Int] -> IntMap (Set (Int, Int))
 expandSums sums evicted incoming = if evicted == incoming
   then const sums
-  else foldl
+  else foldl'
     (\m v -> IM.insertWith S.union
                            (v + incoming)
                            (S.singleton $ normalizePair (v, incoming))
@@ -105,7 +110,7 @@ step (XMASStream preamble counts sumsToPairs (value : remaining)) = XMASStream
     else prunedSumsToPairs
 
 playStream :: XMASStream -> [XMASStream]
-playStream = takeWhile ((not . null) . remaining) . iterate step
+playStream = takeWhile ((not . null) . remaining) . iterate' step
 
 checkHead :: XMASStream -> Maybe (Int, Bool)
 checkHead (XMASStream _ _ _ []) = Nothing

@@ -1,3 +1,4 @@
+{-# LANGUAGE Strict #-}
 
 module Lib
   ( loadInput
@@ -19,6 +20,7 @@ import           Data.IntSet                    ( IntSet )
 import           Data.List                      ( intercalate
                                                 , foldl'
                                                 , find
+                                                , iterate'
                                                 )
 import           Data.Tuple                     ( swap )
 import           Data.Maybe                     ( mapMaybe )
@@ -138,8 +140,8 @@ nextState (Ferry seats adjacentPassengerCount activeSeats adjacentSeatsMap dimen
 
 stableState :: Ferry -> Ferry
 stableState ferry =
-  head . dropWhile (not . S.null . activeSeats) $ drop 1 $ iterate nextState
-                                                                   ferry
+  head . dropWhile (not . S.null . activeSeats) $ drop 1 $ iterate' nextState
+                                                                    ferry
 
 passengerCount :: Ferry -> Int
 passengerCount (Ferry seats _ _ _ _ _) =

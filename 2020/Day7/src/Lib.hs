@@ -1,3 +1,5 @@
+{-# LANGUAGE StrictData #-}
+
 module Lib
   ( loadInput
   , countContainerBags
@@ -32,6 +34,7 @@ import qualified Data.Dequeue                  as D
 import           Data.Maybe                     ( catMaybes
                                                 , fromMaybe
                                                 )
+import           Data.List                      ( foldl' )
 
 type BagColour = ByteString
 type BagColourWithCount = (BagColour, Int)
@@ -115,7 +118,10 @@ findContainerBagsRec containedMap seenColours frontier
   containers = fromMaybe S.empty (M.lookup colour containedMap)
   seenColours' = S.union seenColours containers
   frontier' =
-    foldl D.pushFront remainingFrontier $ S.toList $ containers S.\\ seenColours
+    foldl' D.pushFront remainingFrontier
+      $    S.toList
+      $    containers
+      S.\\ seenColours
 
 countContainerBags :: CanBeContainedWithinMap -> BagColour -> Int
 countContainerBags containedMap colour =

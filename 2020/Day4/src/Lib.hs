@@ -1,3 +1,5 @@
+{-# LANGUAGE Strict #-}
+
 module Lib
   ( loadInput
   , hasRequiredCredentials
@@ -29,7 +31,7 @@ import           Data.Char                      ( isSpace )
 import           AoCUtils                       ( breakOnBlankLines
                                                 , byteStringWithPrefixParser
                                                 )
-import           Data.Either                    ( rights )
+
 data CredentialType = BirthYear | IssueYear | ExpirationYear | Height
     | HairColour | EyeColour | PassportID | CountryID
     deriving (Enum, Ord, Eq, Show)
