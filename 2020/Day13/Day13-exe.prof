@@ -1,0 +1,64 @@
+	Sun Dec 13 17:45 2020 Time and Allocation Profiling Report  (Final)
+
+	   Day13-exe +RTS -N -p -RTS
+
+	total time  =        0.00 secs   (0 ticks @ 1000 us, 16 processors)
+	total alloc =     406,520 bytes  (excludes profiling overheads)
+
+COST CENTRE      MODULE           SRC                         %time %alloc
+
+MAIN             MAIN             <built-in>                    0.0   73.5
+CAF              GHC.IO.Handle.FD <entire-module>               0.0    8.5
+parseBusses      Lib              src/Lib.hs:(28,1)-(31,10)     0.0    1.7
+loadInput.busses Lib              src/Lib.hs:47:7-79            0.0    3.6
+loadInput        Lib              src/Lib.hs:(43,1)-(48,66)     0.0    5.6
+main             Main             app/Main.hs:(16,1)-(29,10)    0.0    3.7
+
+
+                                                                                                                       individual      inherited
+COST CENTRE                         MODULE                SRC                                       no.     entries  %time %alloc   %time %alloc
+
+MAIN                                MAIN                  <built-in>                                172          0    0.0   73.5     0.0  100.0
+ CAF                                GHC.Conc.Signal       <entire-module>                           271          0    0.0    0.2     0.0    0.2
+ CAF                                GHC.IO.Encoding       <entire-module>                           253          0    0.0    0.8     0.0    0.8
+ CAF                                GHC.IO.Encoding.Iconv <entire-module>                           251          0    0.0    0.0     0.0    0.0
+ CAF                                GHC.IO.FD             <entire-module>                           244          0    0.0    0.0     0.0    0.0
+ CAF                                GHC.IO.Handle.FD      <entire-module>                           242          0    0.0    8.5     0.0    8.5
+ CAF                                GHC.IO.Handle.Text    <entire-module>                           240          0    0.0    0.0     0.0    0.0
+ CAF                                GHC.Event.Thread      <entire-module>                           189          0    0.0    0.3     0.0    0.3
+ CAF:loadInput1                     Lib                   <no location info>                        313          0    0.0    0.0     0.0    1.2
+  loadInput                         Lib                   src/Lib.hs:(43,1)-(48,66)                 353          0    0.0    0.0     0.0    1.2
+   loadInput.busses                 Lib                   src/Lib.hs:47:7-79                        354          0    0.0    0.0     0.0    1.2
+    parseBusses                     Lib                   src/Lib.hs:(28,1)-(31,10)                 355          0    0.0    1.2     0.0    1.2
+ CAF:main1                          Main                  <no location info>                        342          0    0.0    0.0     0.0    0.0
+  main                              Main                  app/Main.hs:(16,1)-(29,10)                344          1    0.0    0.0     0.0    0.0
+ main                               Main                  app/Main.hs:(16,1)-(29,10)                345          0    0.0    3.7     0.0   15.4
+  combineCycles                     Lib                   src/Lib.hs:(35,1)-(40,44)                 366          8    0.0    0.0     0.0    1.4
+   combineCycles.(...)              Lib                   src/Lib.hs:40:3-44                        367          8    0.0    0.1     0.0    1.1
+    extendedGCD                     Math.NumberTheory.GCD Math/NumberTheory/GCD.hs:(128,1)-(138,70) 368          8    0.0    0.3     0.0    1.0
+     extendedGCD.(...)              Math.NumberTheory.GCD Math/NumberTheory/GCD.hs:130:5-44         372          8    0.0    0.1     0.0    0.7
+      extendedGCD.eGCD              Math.NumberTheory.GCD Math/NumberTheory/GCD.hs:(135,5)-(138,70) 373         45    0.0    0.6     0.0    0.6
+     extendedGCD.d                  Math.NumberTheory.GCD Math/NumberTheory/GCD.hs:130:5-44         371          8    0.0    0.0     0.0    0.0
+     extendedGCD.u                  Math.NumberTheory.GCD Math/NumberTheory/GCD.hs:(131,5)-(132,21) 378          8    0.0    0.0     0.0    0.0
+     extendedGCD.x                  Math.NumberTheory.GCD Math/NumberTheory/GCD.hs:130:5-44         377          8    0.0    0.0     0.0    0.0
+   combineCycles.delta              Lib                   src/Lib.hs:39:3-46                        370          8    0.0    0.0     0.0    0.0
+   combineCycles.gcd                Lib                   src/Lib.hs:40:3-44                        369          8    0.0    0.0     0.0    0.0
+   combineCycles.kA                 Lib                   src/Lib.hs:40:3-44                        376          8    0.0    0.0     0.0    0.0
+   combineCycles.offset             Lib                   src/Lib.hs:37:3-64                        375          8    0.0    0.2     0.0    0.2
+   combineCycles.period             Lib                   src/Lib.hs:38:3-44                        374          8    0.0    0.0     0.0    0.0
+  loadInput                         Lib                   src/Lib.hs:(43,1)-(48,66)                 346          1    0.0    5.6     0.0    9.7
+   loadInput.(...)                  Lib                   src/Lib.hs:46:7-74                        349          1    0.0    0.0     0.0    0.0
+   loadInput.(...)                  Lib                   src/Lib.hs:45:7-55                        347          1    0.0    0.1     0.0    0.1
+   loadInput.busIdsRaw              Lib                   src/Lib.hs:45:7-55                        350          1    0.0    0.0     0.0    0.0
+   loadInput.busses                 Lib                   src/Lib.hs:47:7-79                        351          1    0.0    3.6     0.0    4.0
+    parseBusses                     Lib                   src/Lib.hs:(28,1)-(31,10)                 352          1    0.0    0.4     0.0    0.4
+   loadInput.earliestDeparture      Lib                   src/Lib.hs:46:7-74                        356          1    0.0    0.0     0.0    0.0
+   loadInput.earliestDepartureRaw   Lib                   src/Lib.hs:45:7-55                        348          1    0.0    0.0     0.0    0.0
+  main.(...)                        Main                  app/Main.hs:(22,7)-(23,72)                360          1    0.0    0.0     0.0    0.0
+  main.busId                        Main                  app/Main.hs:(22,7)-(23,72)                359          1    0.0    0.0     0.0    0.0
+  main.busIds                       Main                  app/Main.hs:18:7-29                       357          1    0.0    0.2     0.0    0.2
+  main.delay                        Main                  app/Main.hs:(22,7)-(23,72)                365          1    0.0    0.0     0.0    0.0
+  main.earliestDeparture            Main                  app/Main.hs:21:7-69                       361          1    0.0    0.0     0.0    0.0
+  main.nextBusDepartures            Main                  app/Main.hs:(19,7)-(20,76)                362          1    0.0    0.4     0.0    0.4
+   nextDeparture                    Lib                   src/Lib.hs:(24,1)-(25,59)                 363          9    0.0    0.0     0.0    0.0
+    nextDeparture.previousDeparture Lib                   src/Lib.hs:25:9-59                        364          9    0.0    0.0     0.0    0.0
