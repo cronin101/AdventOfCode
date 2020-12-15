@@ -1,45 +1,43 @@
-	Tue Dec 15 13:44 2020 Time and Allocation Profiling Report  (Final)
+	Tue Dec 15 22:26 2020 Time and Allocation Profiling Report  (Final)
 
 	   Day15-exe +RTS -N -p -RTS
 
-	total time  =        8.66 secs   (26972 ticks @ 1000 us, 16 processors)
-	total alloc = 34,263,978,592 bytes  (excludes profiling overheads)
+	total time  =        0.67 secs   (2093 ticks @ 1000 us, 16 processors)
+	total alloc = 4,742,588,016 bytes  (excludes profiling overheads)
 
-COST CENTRE           MODULE SRC                        %time %alloc
+COST CENTRE    MODULE    SRC                        %time %alloc
 
-step.lastOccurrences' Lib    src/Lib.hs:26:3-60          71.6   84.2
-step.nextSaid         Lib    src/Lib.hs:(23,3)-(25,27)   14.0    1.2
-playGame              Lib    src/Lib.hs:(29,1)-(35,51)   10.4   10.3
-step                  Lib    src/Lib.hs:(20,1)-(26,60)    1.8    0.0
-spokenNumbers         Lib    src/Lib.hs:38:1-73           1.7    4.2
+step           Lib       src/Lib.hs:(25,1)-(29,28)   59.2   29.1
+advanceToRound Lib       src/Lib.hs:(32,1)-(36,40)   29.4   35.4
+updateState    Lib       src/Lib.hs:(20,1)-(22,43)    7.9   30.4
+initialState   Lib       src/Lib.hs:(39,1)-(42,55)    2.9    5.1
 
 
-                                                                                                  individual      inherited
-COST CENTRE                    MODULE                SRC                       no.     entries  %time %alloc   %time %alloc
+                                                                                       individual      inherited
+COST CENTRE        MODULE                SRC                        no.     entries  %time %alloc   %time %alloc
 
-MAIN                           MAIN                  <built-in>                179          0    0.0    0.0   100.0  100.0
- CAF                           GHC.Conc.Signal       <entire-module>           279          0    0.0    0.0     0.0    0.0
- CAF                           GHC.IO.Encoding       <entire-module>           260          0    0.0    0.0     0.0    0.0
- CAF                           GHC.IO.Encoding.Iconv <entire-module>           258          0    0.0    0.0     0.0    0.0
- CAF                           GHC.IO.FD             <entire-module>           251          0    0.0    0.0     0.0    0.0
- CAF                           GHC.IO.Handle.FD      <entire-module>           249          0    0.0    0.0     0.0    0.0
- CAF                           GHC.IO.Handle.Text    <entire-module>           247          0    0.0    0.0     0.0    0.0
- CAF                           GHC.Event.Poll        <entire-module>           197          0    0.0    0.0     0.0    0.0
- CAF                           GHC.Event.Thread      <entire-module>           196          0    0.0    0.0     0.0    0.0
- CAF:main1                     Main                  <no location info>        356          0    0.0    0.0     0.0    0.0
-  main                         Main                  app/Main.hs:(8,1)-(14,47) 358          1    0.0    0.0     0.0    0.0
- CAF:playGame5                 Lib                   <no location info>        323          0    0.0    0.0     0.0    0.0
-  playGame                     Lib                   src/Lib.hs:(29,1)-(35,51) 364          0    0.0    0.0     0.0    0.0
-   playGame.(...)              Lib                   src/Lib.hs:35:3-51        365          0    0.0    0.0     0.0    0.0
- main                          Main                  app/Main.hs:(8,1)-(14,47) 359          0    0.4    0.0   100.0  100.0
-  spokenNumbers                Lib                   src/Lib.hs:38:1-73        361          2    1.7    4.2    99.6  100.0
-   playGame                    Lib                   src/Lib.hs:(29,1)-(35,51) 362          2   10.4   10.3    97.9   95.8
-    step                       Lib                   src/Lib.hs:(20,1)-(26,60) 369   30002008    1.8    0.0    87.5   85.5
-     step.lastOccurrences'     Lib                   src/Lib.hs:26:3-60        370   30002008   71.6   84.2    71.6   84.2
-     step.nextSaid             Lib                   src/Lib.hs:(23,3)-(25,27) 372   30002008   14.0    1.2    14.0    1.2
-    playGame.(...)             Lib                   src/Lib.hs:35:3-51        363          2    0.0    0.0     0.0    0.0
-    playGame.first             Lib                   src/Lib.hs:35:3-51        371          2    0.0    0.0     0.0    0.0
-    playGame.preambleStates    Lib                   src/Lib.hs:(31,3)-(34,6)  366          2    0.0    0.0     0.0    0.0
-     playGame.preambleStates.\ Lib                   src/Lib.hs:32:40-77       368         12    0.0    0.0     0.0    0.0
-    playGame.xs                Lib                   src/Lib.hs:35:3-51        367          2    0.0    0.0     0.0    0.0
-  loadInput                    Lib                   src/Lib.hs:(41,1)-(43,24) 360          1    0.0    0.0     0.0    0.0
+MAIN               MAIN                  <built-in>                 178          0    0.2    0.0   100.0  100.0
+ CAF               GHC.Conc.Signal       <entire-module>            279          0    0.0    0.0     0.0    0.0
+ CAF               GHC.IO.Encoding       <entire-module>            261          0    0.0    0.0     0.0    0.0
+ CAF               GHC.IO.Encoding.Iconv <entire-module>            259          0    0.0    0.0     0.0    0.0
+ CAF               GHC.IO.FD             <entire-module>            252          0    0.0    0.0     0.0    0.0
+ CAF               GHC.IO.Handle.FD      <entire-module>            250          0    0.0    0.0     0.0    0.0
+ CAF               GHC.IO.Handle.Text    <entire-module>            248          0    0.0    0.0     0.0    0.0
+ CAF               GHC.Event.Poll        <entire-module>            196          0    0.0    0.0     0.0    0.0
+ CAF               GHC.Event.Thread      <entire-module>            195          0    0.0    0.0     0.0    0.0
+ CAF:initialState2 Lib                   <no location info>         319          0    0.0    0.0     0.0    0.0
+  initialState     Lib                   src/Lib.hs:(39,1)-(42,55)  362          0    0.0    0.0     0.0    0.0
+ CAF:main1         Main                  <no location info>         354          0    0.0    0.0     0.0    0.0
+  main             Main                  app/Main.hs:(10,1)-(19,26) 356          1    0.0    0.0     0.0    0.0
+ CAF:main_limit    Main                  app/Main.hs:12:7-11        353          0    0.0    0.0     0.0    0.0
+  main             Main                  app/Main.hs:(10,1)-(19,26) 359          0    0.0    0.0     0.0    0.0
+   main.limit      Main                  app/Main.hs:12:7-22        360          1    0.0    0.0     0.0    0.0
+ main              Main                  app/Main.hs:(10,1)-(19,26) 357          0    0.0    0.0    99.8  100.0
+  advanceToRound   Lib                   src/Lib.hs:(32,1)-(36,40)  363   29999995   29.4   35.4    96.9   94.9
+   step            Lib                   src/Lib.hs:(25,1)-(29,28)  364   29999993   59.2   29.1    67.5   59.5
+    step.lastRound Lib                   src/Lib.hs:26:7-27         365   29999993    0.1    0.0     0.1    0.0
+    step.nextSaid  Lib                   src/Lib.hs:28:7-79         366   29999993    0.2    0.0     0.2    0.0
+    updateState    Lib                   src/Lib.hs:(20,1)-(22,43)  367   29999993    7.9   30.4     7.9   30.4
+  lastSeen         Lib                   src/Lib.hs:17:1-28         368          2    0.0    0.0     0.0    0.0
+  initialState     Lib                   src/Lib.hs:(39,1)-(42,55)  361          1    2.9    5.1     2.9    5.1
+  loadInput        Lib                   src/Lib.hs:(45,1)-(47,24)  358          1    0.0    0.0     0.0    0.0

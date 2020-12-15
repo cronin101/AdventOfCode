@@ -1,16 +1,19 @@
 module Main where
 
 import           Lib                            ( loadInput
-                                                , spokenNumbers
+                                                , initialState
+                                                , advanceToRound
+                                                , lastSeen
                                                 )
 
 main :: IO ()
 main = do
   input <- loadInput "input15.txt"
-  print input
+  let limit = 30000000
+  initialState <- initialState limit input
 
-  print $ spokenNumbers input !! (2020 - 1)
-  -- tenth of the work
-  print $ spokenNumbers input !! (30000000 - 1)
+  partOne      <- advanceToRound 2021 initialState
+  print $ lastSeen partOne
 
-
+  partTwo <- advanceToRound (limit + 1) partOne
+  print $ lastSeen partTwo
