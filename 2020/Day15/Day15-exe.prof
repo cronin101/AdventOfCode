@@ -1,0 +1,45 @@
+	Tue Dec 15 13:44 2020 Time and Allocation Profiling Report  (Final)
+
+	   Day15-exe +RTS -N -p -RTS
+
+	total time  =        8.66 secs   (26972 ticks @ 1000 us, 16 processors)
+	total alloc = 34,263,978,592 bytes  (excludes profiling overheads)
+
+COST CENTRE           MODULE SRC                        %time %alloc
+
+step.lastOccurrences' Lib    src/Lib.hs:26:3-60          71.6   84.2
+step.nextSaid         Lib    src/Lib.hs:(23,3)-(25,27)   14.0    1.2
+playGame              Lib    src/Lib.hs:(29,1)-(35,51)   10.4   10.3
+step                  Lib    src/Lib.hs:(20,1)-(26,60)    1.8    0.0
+spokenNumbers         Lib    src/Lib.hs:38:1-73           1.7    4.2
+
+
+                                                                                                  individual      inherited
+COST CENTRE                    MODULE                SRC                       no.     entries  %time %alloc   %time %alloc
+
+MAIN                           MAIN                  <built-in>                179          0    0.0    0.0   100.0  100.0
+ CAF                           GHC.Conc.Signal       <entire-module>           279          0    0.0    0.0     0.0    0.0
+ CAF                           GHC.IO.Encoding       <entire-module>           260          0    0.0    0.0     0.0    0.0
+ CAF                           GHC.IO.Encoding.Iconv <entire-module>           258          0    0.0    0.0     0.0    0.0
+ CAF                           GHC.IO.FD             <entire-module>           251          0    0.0    0.0     0.0    0.0
+ CAF                           GHC.IO.Handle.FD      <entire-module>           249          0    0.0    0.0     0.0    0.0
+ CAF                           GHC.IO.Handle.Text    <entire-module>           247          0    0.0    0.0     0.0    0.0
+ CAF                           GHC.Event.Poll        <entire-module>           197          0    0.0    0.0     0.0    0.0
+ CAF                           GHC.Event.Thread      <entire-module>           196          0    0.0    0.0     0.0    0.0
+ CAF:main1                     Main                  <no location info>        356          0    0.0    0.0     0.0    0.0
+  main                         Main                  app/Main.hs:(8,1)-(14,47) 358          1    0.0    0.0     0.0    0.0
+ CAF:playGame5                 Lib                   <no location info>        323          0    0.0    0.0     0.0    0.0
+  playGame                     Lib                   src/Lib.hs:(29,1)-(35,51) 364          0    0.0    0.0     0.0    0.0
+   playGame.(...)              Lib                   src/Lib.hs:35:3-51        365          0    0.0    0.0     0.0    0.0
+ main                          Main                  app/Main.hs:(8,1)-(14,47) 359          0    0.4    0.0   100.0  100.0
+  spokenNumbers                Lib                   src/Lib.hs:38:1-73        361          2    1.7    4.2    99.6  100.0
+   playGame                    Lib                   src/Lib.hs:(29,1)-(35,51) 362          2   10.4   10.3    97.9   95.8
+    step                       Lib                   src/Lib.hs:(20,1)-(26,60) 369   30002008    1.8    0.0    87.5   85.5
+     step.lastOccurrences'     Lib                   src/Lib.hs:26:3-60        370   30002008   71.6   84.2    71.6   84.2
+     step.nextSaid             Lib                   src/Lib.hs:(23,3)-(25,27) 372   30002008   14.0    1.2    14.0    1.2
+    playGame.(...)             Lib                   src/Lib.hs:35:3-51        363          2    0.0    0.0     0.0    0.0
+    playGame.first             Lib                   src/Lib.hs:35:3-51        371          2    0.0    0.0     0.0    0.0
+    playGame.preambleStates    Lib                   src/Lib.hs:(31,3)-(34,6)  366          2    0.0    0.0     0.0    0.0
+     playGame.preambleStates.\ Lib                   src/Lib.hs:32:40-77       368         12    0.0    0.0     0.0    0.0
+    playGame.xs                Lib                   src/Lib.hs:35:3-51        367          2    0.0    0.0     0.0    0.0
+  loadInput                    Lib                   src/Lib.hs:(41,1)-(43,24) 360          1    0.0    0.0     0.0    0.0
