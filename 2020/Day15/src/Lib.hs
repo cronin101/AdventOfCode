@@ -1,41 +1,45 @@
-{-# LANGUAGE Strict, UnboxedTuples #-}
+{-# LANGUAGE Strict #-}
 
 module Lib
   ( loadInput
-  , playGame
-  , spokenNumbers
+  , initialState
+  , advanceToRound
+  , lastSeen
   ) where
 
 import qualified Data.ByteString.Char8         as BSC
 import           Data.Maybe                     ( fromJust )
-import qualified Data.IntMap.Strict            as M
-import           Data.List                      ( iterate'
-                                                , scanl'
-                                                )
+import qualified Data.Array.IO                 as IA
 
--- (Round, LastSaid, LastOccurrences)
-type GameState = (Int, Int, M.IntMap Int)
+type GameState = (Int, Int, IA.IOUArray Int Int)
 
-step :: GameState -> GameState
-step (round, lastSaid, lastOccurrences) =
-  (round + 1, nextSaid, lastOccurrences')
- where
-  nextSaid = case M.lookup lastSaid lastOccurrences of
-    Just previousRound -> round - previousRound
-    _                  -> 0
-  lastOccurrences' = M.insert lastSaid round lastOccurrences
+lastSeen :: (a, b, c) -> b
+lastSeen (_, last, _) = last
 
-playGame :: [Int] -> [GameState]
-playGame preamble = init preambleStates ++ iterate' step (last preambleStates)
- where
-  preambleStates = scanl'
-    (\(_, _, occurrences) (seen, r) -> (r, seen, M.insert seen r occurrences))
-    (firstSaid, 1, M.fromList [first])
-    xs
-  (first@(firstSaid, 1) : xs) = zip preamble [1 ..]
+updateState :: GameState -> Int -> IO GameState
+updateState (round, lastSeen, occurrences) nextSeen = do
+  IA.writeArray occurrences lastSeen (round - 1)
+  return (round + 1, nextSeen, occurrences)
 
-spokenNumbers :: [Int] -> [Int]
-spokenNumbers preamble = [ spoken | (_, spoken, _) <- playGame preamble ]
+step :: GameState -> IO GameState
+step state@(round, lastSaid, occurrences) = do
+  let lastRound = round - 1
+  lastOccurrence <- IA.readArray occurrences lastSaid
+  let nextSaid = if lastOccurrence == -1 then 0 else lastRound - lastOccurrence
+  updateState state nextSaid
+
+advanceToRound :: Int -> GameState -> IO GameState
+advanceToRound targetRound state@(currentRound, _, _)
+  | currentRound >= targetRound = return state
+  | otherwise = do
+    nextState <- step state
+    advanceToRound targetRound nextState
+
+initialState :: Int -> [Int] -> IO GameState
+initialState upperBound preamble = do
+  newArray <- IA.newArray (0, upperBound) (-1)
+  mapM_ (uncurry (IA.writeArray newArray)) (zip (init preamble) [1 ..])
+  return (length preamble + 1, last preamble, newArray)
 
 loadInput :: String -> IO [Int]
 loadInput fileName =
