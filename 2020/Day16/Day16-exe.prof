@@ -1,0 +1,484 @@
+	Wed Dec 16 17:51 2020 Time and Allocation Profiling Report  (Final)
+
+	   Day16-exe +RTS -N -p -RTS
+
+	total time  =        0.00 secs   (9 ticks @ 1000 us, 16 processors)
+	total alloc =   6,555,552 bytes  (excludes profiling overheads)
+
+COST CENTRE                         MODULE                           SRC                                                 %time %alloc
+
+>>=.\.succ'                         Data.Attoparsec.Internal.Types   Data/Attoparsec/Internal/Types.hs:148:13-76          22.2    3.9
+possibleFields.possibleFields.\     Lib                              src/Lib.hs:109:23-63                                 22.2    0.0
+pure                                Data.Attoparsec.Internal.Types   Data/Attoparsec/Internal/Types.hs:185:5-66           11.1    0.0
+fmap.\.succ'                        Data.Attoparsec.Internal.Types   Data/Attoparsec/Internal/Types.hs:173:11-58          11.1   11.1
+>>=                                 Data.Attoparsec.Internal.Types   Data/Attoparsec/Internal/Types.hs:(147,5)-(149,44)   11.1    0.0
+decimal.step                        Data.Attoparsec.ByteString.Char8 Data/Attoparsec/ByteString/Char8.hs:448:9-49         11.1   35.3
+validTicket                         Lib                              src/Lib.hs:(82,1)-(83,50)                            11.1    0.0
+MAIN                                MAIN                             <built-in>                                            0.0    4.6
+plus.\                              Data.Attoparsec.Internal.Types   Data/Attoparsec/Internal/Types.hs:(163,3)-(164,38)    0.0    2.7
+fmap.\                              Data.Attoparsec.Internal.Types   Data/Attoparsec/Internal/Types.hs:(173,7)-(174,42)    0.0    9.2
+>>=.\                               Data.Attoparsec.Internal.Types   Data/Attoparsec/Internal/Types.hs:(148,9)-(149,44)    0.0   15.3
++                                   Data.Attoparsec.Internal.Types   Data/Attoparsec/Internal/Types.hs:47:38-40            0.0    2.5
+*>                                  Data.Attoparsec.Internal.Types   Data/Attoparsec/Internal/Types.hs:189:5-26            0.0    3.1
+solveTicket.columnPossibilities     Lib                              src/Lib.hs:(135,3)-(136,60)                           0.0    5.6
+solveColumns'.filterImpossibilities Lib                              src/Lib.hs:(127,3)-(128,79)                           0.0    1.7
+
+
+                                                                                                                                                                   individual      inherited
+COST CENTRE                                        MODULE                              SRC                                                     no.      entries  %time %alloc   %time %alloc
+
+MAIN                                               MAIN                                <built-in>                                              1094          0    0.0    4.6   100.0  100.0
+ CAF                                               GHC.Conc.Signal                     <entire-module>                                         1198          0    0.0    0.0     0.0    0.0
+ CAF                                               GHC.IO.Encoding                     <entire-module>                                         1179          0    0.0    0.0     0.0    0.0
+ CAF                                               GHC.IO.Encoding.Iconv               <entire-module>                                         1177          0    0.0    0.0     0.0    0.0
+ CAF                                               GHC.IO.FD                           <entire-module>                                         1170          0    0.0    0.0     0.0    0.0
+ CAF                                               GHC.IO.Handle.FD                    <entire-module>                                         1168          0    0.0    0.5     0.0    0.5
+ CAF                                               GHC.IO.Handle.Text                  <entire-module>                                         1166          0    0.0    0.0     0.0    0.0
+ CAF                                               GHC.Event.Poll                      <entire-module>                                         1112          0    0.0    0.0     0.0    0.0
+ CAF                                               GHC.Event.Thread                    <entire-module>                                         1111          0    0.0    0.0     0.0    0.0
+ CAF:$fNumPos7                                     Data.Attoparsec.Internal.Types      <no location info>                                      1745          0    0.0    0.0     0.0    0.0
+  +                                                Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:47:38-40              2242          1    0.0    0.0     0.0    0.0
+ CAF:columns_r2jc                                  Lib                                 src/Lib.hs:101:1-7                                      2156          0    0.0    0.0     0.0    0.0
+  columns                                          Lib                                 src/Lib.hs:101:1-19                                     2566          1    0.0    0.0     0.0    0.0
+ CAF:decimal38                                     Data.Attoparsec.ByteString.Char8    <no location info>                                      2046          0    0.0    0.0     0.0    0.0
+  decimal                                          Data.Attoparsec.ByteString.Char8    Data/Attoparsec/ByteString/Char8.hs:(447,1)-(448,49)    2387          0    0.0    0.0     0.0    0.0
+   *>                                              Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:189:5-26              2389          1    0.0    0.0     0.0    0.0
+    >>=                                            Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:(147,5)-(149,44)      2390          1    0.0    0.0     0.0    0.0
+   >>                                              Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:152:5-15              2388          1    0.0    0.0     0.0    0.0
+ CAF:decimal_k11                                   Data.Attoparsec.ByteString.Char8    <no location info>                                      2045          0    0.0    0.0     0.0    0.0
+  decimal                                          Data.Attoparsec.ByteString.Char8    Data/Attoparsec/ByteString/Char8.hs:(447,1)-(448,49)    2395          0    0.0    0.0     0.0    0.0
+   >>=                                             Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:(147,5)-(149,44)      2396          1    0.0    0.0     0.0    0.0
+ CAF:decimal_m24                                   Data.Attoparsec.ByteString.Char8    <no location info>                                      2043          0    0.0    0.0     0.0    0.0
+  decimal                                          Data.Attoparsec.ByteString.Char8    Data/Attoparsec/ByteString/Char8.hs:(447,1)-(448,49)    2398          0    0.0    0.0     0.0    0.0
+   fmap                                            Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:(172,5)-(174,42)      2399          1    0.0    0.0     0.0    0.0
+ CAF:decimal_m25                                   Data.Attoparsec.ByteString.Char8    <no location info>                                      2042          0    0.0    0.0     0.0    0.0
+  decimal                                          Data.Attoparsec.ByteString.Char8    Data/Attoparsec/ByteString/Char8.hs:(447,1)-(448,49)    2392          0    0.0    0.0     0.0    0.0
+   >>=                                             Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:(147,5)-(149,44)      2393          1    0.0    0.0     0.0    0.0
+ CAF:demandInput_$sdemandInput3                    Data.Attoparsec.Internal            <no location info>                                      1793          0    0.0    0.0     0.0    0.0
+  demandInput                                      Data.Attoparsec.Internal            Data/Attoparsec/Internal.hs:(73,1)-(78,41)              2484          1    0.0    0.0     0.0    0.0
+ CAF:endOfLine1                                    Data.Attoparsec.ByteString.Internal <no location info>                                      1668          0    0.0    0.0     0.0    0.0
+  endOfLine                                        Data.Attoparsec.ByteString.Internal Data/Attoparsec/ByteString/Internal.hs:442:1-68         2326          1    0.0    0.0     0.0    0.0
+   <|>                                             Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:208:5-16              2327          1    0.0    0.0     0.0    0.0
+   plus                                            Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:(162,1)-(164,38)      2328          1    0.0    0.0     0.0    0.0
+ CAF:endOfLine3                                    Data.Attoparsec.ByteString.Internal <no location info>                                      1667          0    0.0    0.0     0.0    0.0
+  endOfLine                                        Data.Attoparsec.ByteString.Internal Data/Attoparsec/ByteString/Internal.hs:442:1-68         2509          0    0.0    0.0     0.0    0.0
+   *>                                              Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:189:5-26              2511          1    0.0    0.0     0.0    0.0
+    >>=                                            Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:(147,5)-(149,44)      2512          1    0.0    0.0     0.0    0.0
+   >>                                              Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:152:5-15              2510          1    0.0    0.0     0.0    0.0
+ CAF:endOfLine4                                    Data.Attoparsec.ByteString.Internal <no location info>                                      1666          0    0.0    0.0     0.0    0.0
+  endOfLine                                        Data.Attoparsec.ByteString.Internal Data/Attoparsec/ByteString/Internal.hs:442:1-68         2333          0    0.0    0.0     0.0    0.0
+   *>                                              Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:189:5-26              2335          1    0.0    0.0     0.0    0.0
+    >>=                                            Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:(147,5)-(149,44)      2336          1    0.0    0.0     0.0    0.0
+   >>                                              Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:152:5-15              2334          1    0.0    0.0     0.0    0.0
+ CAF:endOfLine5                                    Data.Attoparsec.ByteString.Internal <no location info>                                      1639          0    0.0    0.0     0.0    0.0
+  endOfLine                                        Data.Attoparsec.ByteString.Internal Data/Attoparsec/ByteString/Internal.hs:442:1-68         2340          0    0.0    0.0     0.0    0.0
+   pure                                            Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:185:5-66              2342          1    0.0    0.0     0.0    0.0
+   return                                          Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:144:5-21              2341          1    0.0    0.0     0.0    0.0
+ CAF:endOfLine6                                    Data.Attoparsec.ByteString.Internal <no location info>                                      1665          0    0.0    0.0     0.0    0.0
+  endOfLine                                        Data.Attoparsec.ByteString.Internal Data/Attoparsec/ByteString/Internal.hs:442:1-68         2338          0    0.0    0.0     0.0    0.0
+   >>=                                             Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:(147,5)-(149,44)      2339          1    0.0    0.0     0.0    0.0
+ CAF:k1_rbGq                                       Lib                                 <no location info>                                      2128          0    0.0    0.0     0.0    0.0
+  parseFieldWithConstraint                         Lib                                 src/Lib.hs:(52,1)-(56,23)                               2228          0    0.0    0.0     0.0    0.0
+   >>=                                             Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:(147,5)-(149,44)      2229          1    0.0    0.0     0.0    0.0
+ CAF:k2_rbGA                                       Lib                                 <no location info>                                      2135          0    0.0    0.0     0.0    0.0
+  parseRange                                       Lib                                 src/Lib.hs:(36,1)-(42,20)                               2293          0    0.0    0.0     0.0    0.0
+   >>=                                             Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:(147,5)-(149,44)      2294          1    0.0    0.0     0.0    0.0
+    >>=.\                                          Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:(148,9)-(149,44)      2295          0    0.0    0.0     0.0    0.0
+     >>=.\.succ'                                   Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:148:13-76             2296          0    0.0    0.0     0.0    0.0
+ CAF:k3_rbGL                                       Lib                                 <no location info>                                      2143          0    0.0    0.0     0.0    0.0
+  parseRange                                       Lib                                 src/Lib.hs:(36,1)-(42,20)                               2264          0    0.0    0.0     0.0    0.0
+   >>=                                             Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:(147,5)-(149,44)      2265          1    0.0    0.0     0.0    0.0
+ CAF:loadInput6                                    Lib                                 <no location info>                                      2150          0    0.0    0.0     0.0    0.0
+  parseInput                                       Lib                                 src/Lib.hs:(65,1)-(75,49)                               2192          1    0.0    0.0     0.0    0.0
+   >>=                                             Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:(147,5)-(149,44)      2193          1    0.0    0.0     0.0    0.0
+ CAF:lvl11_rbGf                                    Lib                                 <no location info>                                      2119          0    0.0    0.0     0.0    0.0
+  parseTicket                                      Lib                                 src/Lib.hs:62:1-39                                      2380          0    0.0    0.0     0.0    0.0
+   decimal                                         Data.Attoparsec.ByteString.Char8    Data/Attoparsec/ByteString/Char8.hs:(447,1)-(448,49)    2381          1    0.0    0.0     0.0    0.0
+    fmap                                           Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:(172,5)-(174,42)      2382          1    0.0    0.0     0.0    0.0
+     fmap.\                                        Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:(173,7)-(174,42)      2544          0    0.0    0.0     0.0    0.0
+      fmap.\.succ'                                 Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:173:11-58             2545          0    0.0    0.0     0.0    0.0
+       decimal.step                                Data.Attoparsec.ByteString.Char8    Data/Attoparsec/ByteString/Char8.hs:448:9-49            2546          0    0.0    0.0     0.0    0.0
+ CAF:m1_rbGr                                       Lib                                 <no location info>                                      2129          0    0.0    0.0     0.0    0.0
+  parseFieldWithConstraint                         Lib                                 src/Lib.hs:(52,1)-(56,23)                               2213          0    0.0    0.0     0.0    0.0
+   *>                                              Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:189:5-26              2215          1    0.0    0.0     0.0    0.0
+    >>=                                            Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:(147,5)-(149,44)      2216          1    0.0    0.0     0.0    0.0
+   >>                                              Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:152:5-15              2214          1    0.0    0.0     0.0    0.0
+ CAF:m25_r2MJ1                                     Data.Attoparsec.ByteString.Char8    <no location info>                                      2044          0    0.0    0.0     0.0    0.0
+  decimal                                          Data.Attoparsec.ByteString.Char8    Data/Attoparsec/ByteString/Char8.hs:(447,1)-(448,49)    2474          0    0.0    0.0     0.0    0.0
+   >>=                                             Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:(147,5)-(149,44)      2475          0    0.0    0.0     0.0    0.0
+    >>=.\                                          Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:(148,9)-(149,44)      2476          0    0.0    0.0     0.0    0.0
+     >>=.\.succ'                                   Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:148:13-76             2477          0    0.0    0.0     0.0    0.0
+      fmap                                         Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:(172,5)-(174,42)      2478          1    0.0    0.0     0.0    0.0
+ CAF:m3_rbGz                                       Lib                                 <no location info>                                      2134          0    0.0    0.0     0.0    0.0
+  parseRange                                       Lib                                 src/Lib.hs:(36,1)-(42,20)                               2297          0    0.0    0.0     0.0    0.0
+   >>=                                             Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:(147,5)-(149,44)      2298          0    0.0    0.0     0.0    0.0
+    >>=.\                                          Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:(148,9)-(149,44)      2299          0    0.0    0.0     0.0    0.0
+     >>=.\.succ'                                   Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:148:13-76             2300          0    0.0    0.0     0.0    0.0
+      fmap                                         Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:(172,5)-(174,42)      2301          1    0.0    0.0     0.0    0.0
+ CAF:m41_rbGm                                      Lib                                 <no location info>                                      2125          0    0.0    0.0     0.0    0.0
+  parseFieldWithConstraint                         Lib                                 src/Lib.hs:(52,1)-(56,23)                               2219          0    0.0    0.0     0.0    0.0
+   >>=                                             Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:(147,5)-(149,44)      2220          1    0.0    0.0     0.0    0.0
+ CAF:m42_rbGn                                      Lib                                 <no location info>                                      2126          0    0.0    0.0     0.0    0.0
+  parseFieldWithConstraint                         Lib                                 src/Lib.hs:(52,1)-(56,23)                               2231          0    0.0    0.0     0.0    0.0
+   fmap                                            Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:(172,5)-(174,42)      2232          1    0.0    0.0     0.0    0.0
+ CAF:m4_rbGB                                       Lib                                 <no location info>                                      2136          0    0.0    0.0     0.0    0.0
+  parseRange                                       Lib                                 src/Lib.hs:(36,1)-(42,20)                               2289          0    0.0    0.0     0.0    0.0
+   >>=                                             Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:(147,5)-(149,44)      2290          1    0.0    0.0     0.0    0.0
+    >>=.\                                          Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:(148,9)-(149,44)      2291          0    0.0    0.0     0.0    0.0
+     >>=.\.succ'                                   Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:148:13-76             2292          0    0.0    0.0     0.0    0.0
+ CAF:m5_rbGC                                       Lib                                 <no location info>                                      2137          0    0.0    0.0     0.0    0.0
+  parseRange                                       Lib                                 src/Lib.hs:(36,1)-(42,20)                               2283          0    0.0    0.0     0.0    0.0
+   >>=                                             Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:(147,5)-(149,44)      2284          1    0.0    0.0     0.0    0.0
+    >>=.\                                          Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:(148,9)-(149,44)      2285          0    0.0    0.0     0.0    0.0
+     >>=.\.succ'                                   Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:148:13-76             2286          0    0.0    0.0     0.0    0.0
+      *>                                           Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:189:5-26              2288          1    0.0    0.0     0.0    0.0
+      >>                                           Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:152:5-15              2287          1    0.0    0.0     0.0    0.0
+ CAF:m7_rbGK                                       Lib                                 <no location info>                                      2142          0    0.0    0.0     0.0    0.0
+  parseRange                                       Lib                                 src/Lib.hs:(36,1)-(42,20)                               2267          0    0.0    0.0     0.0    0.0
+   fmap                                            Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:(172,5)-(174,42)      2268          1    0.0    0.0     0.0    0.0
+ CAF:m8_rbGM                                       Lib                                 <no location info>                                      2144          0    0.0    0.0     0.0    0.0
+  parseRange                                       Lib                                 src/Lib.hs:(36,1)-(42,20)                               2262          0    0.0    0.0     0.0    0.0
+   >>=                                             Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:(147,5)-(149,44)      2263          1    0.0    0.0     0.0    0.0
+ CAF:m9_rbGN                                       Lib                                 <no location info>                                      2145          0    0.0    0.0     0.0    0.0
+  parseRange                                       Lib                                 src/Lib.hs:(36,1)-(42,20)                               2257          0    0.0    0.0     0.0    0.0
+   *>                                              Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:189:5-26              2259          1    0.0    0.0     0.0    0.0
+    >>=                                            Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:(147,5)-(149,44)      2260          1    0.0    0.0     0.0    0.0
+   >>                                              Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:152:5-15              2258          1    0.0    0.0     0.0    0.0
+ CAF:m_r2eu4                                       Data.Attoparsec.ByteString.Internal <no location info>                                      1641          0    0.0    0.0     0.0    0.0
+  stringSuspended                                  Data.Attoparsec.ByteString.Internal Data/Attoparsec/ByteString/Internal.hs:(208,1)-(223,54) 2517          0    0.0    0.0     0.0    0.0
+   demandInput_                                    Data.Attoparsec.Internal            Data/Attoparsec/Internal.hs:(85,1)-(91,48)              2518          1    0.0    0.0     0.0    0.0
+ CAF:m_rbGg                                        Lib                                 <no location info>                                      2121          0    0.0    0.0     0.0    0.0
+  parseInput                                       Lib                                 src/Lib.hs:(65,1)-(75,49)                               2447          0    0.0    0.0     0.0    0.0
+   >>=                                             Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:(147,5)-(149,44)      2448          2    0.0    0.0     0.0    0.0
+    >>=.\                                          Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:(148,9)-(149,44)      2449          0    0.0    0.0     0.0    0.0
+     >>=.\.succ'                                   Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:148:13-76             2450          0    0.0    0.0     0.0    0.0
+      sepBy1                                       Data.Attoparsec.Combinator          Data/Attoparsec/Combinator.hs:(161,1)-(162,55)          2451          1    0.0    0.0     0.0    0.0
+       sepBy1.scan                                 Data.Attoparsec.Combinator          Data/Attoparsec/Combinator.hs:162:11-55                 2452          1    0.0    0.0     0.0    0.0
+        *>                                         Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:189:5-26              2471          1    0.0    0.0     0.0    0.0
+        <*>                                        Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:187:5-16              2453          1    0.0    0.0     0.0    0.0
+        <|>                                        Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:208:5-16              2466          1    0.0    0.0     0.0    0.0
+        fmap                                       Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:(172,5)-(174,42)      2456          1    0.0    0.0     0.0    0.0
+        plus                                       Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:(162,1)-(164,38)      2467          1    0.0    0.0     0.0    0.0
+ CAF:main1                                         Main                                <no location info>                                      2186          0    0.0    0.0     0.0    0.0
+  main                                             Main                                app/Main.hs:(13,1)-(23,44)                              2188          1    0.0    0.0     0.0    0.0
+ CAF:main4                                         Main                                <no location info>                                      2185          0    0.0    0.0     0.0    0.0
+  main                                             Main                                app/Main.hs:(13,1)-(23,44)                              2586          0    0.0    0.0     0.0    0.0
+   main.departureColumns                           Main                                app/Main.hs:(20,7)-(22,20)                              2587          0    0.0    0.0     0.0    0.0
+    main.departureColumns.\                        Main                                app/Main.hs:21:31-68                                    2588          0    0.0    0.0     0.0    0.0
+ CAF:p33_rbGc                                      Lib                                 <no location info>                                      2118          0    0.0    0.0     0.0    0.0
+  parseTicket                                      Lib                                 src/Lib.hs:62:1-39                                      2427          0    0.0    0.0     0.0    0.0
+   >>=                                             Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:(147,5)-(149,44)      2428          1    0.0    0.0     0.0    0.0
+ CAF:parseFieldWithConstraint_rbGU                 Lib                                 <no location info>                                      2148          0    0.0    0.0     0.0    0.0
+  parseFieldWithConstraint                         Lib                                 src/Lib.hs:(52,1)-(56,23)                               2210          1    0.0    0.0     0.0    0.0
+   >>=                                             Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:(147,5)-(149,44)      2211          1    0.0    0.0     0.0    0.0
+ CAF:parseFieldsWithConstraints_r2j5               Lib                                 src/Lib.hs:59:1-26                                      2149          0    0.0    0.0     0.0    0.0
+  parseFieldsWithConstraints                       Lib                                 src/Lib.hs:59:1-70                                      2198          1    0.0    0.0     0.0    0.0
+   sepBy1                                          Data.Attoparsec.Combinator          Data/Attoparsec/Combinator.hs:(161,1)-(162,55)          2199          1    0.0    0.0     0.0    0.0
+    sepBy1.scan                                    Data.Attoparsec.Combinator          Data/Attoparsec/Combinator.hs:162:11-55                 2200          1    0.0    0.0     0.0    0.0
+     *>                                            Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:189:5-26              2323          1    0.0    0.0     0.0    0.0
+      >>=                                          Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:(147,5)-(149,44)      2324          1    0.0    0.0     0.0    0.0
+     <*>                                           Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:187:5-16              2201          1    0.0    0.0     0.0    0.0
+     <|>                                           Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:208:5-16              2318          1    0.0    0.0     0.0    0.0
+     >>=                                           Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:(147,5)-(149,44)      2202          1    0.0    0.0     0.0    0.0
+     fmap                                          Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:(172,5)-(174,42)      2206          1    0.0    0.0     0.0    0.0
+     plus                                          Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:(162,1)-(164,38)      2319          1    0.0    0.0     0.0    0.0
+ CAF:parseRange_rbGQ                               Lib                                 <no location info>                                      2146          0    0.0    0.0     0.0    0.0
+  parseRange                                       Lib                                 src/Lib.hs:(36,1)-(42,20)                               2254          1    0.0    0.0     0.0    0.0
+   >>=                                             Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:(147,5)-(149,44)      2255          1    0.0    0.0     0.0    0.0
+ CAF:parseRanges_rbGR                              Lib                                 <no location info>                                      2147          0    0.0    0.0     0.0    0.0
+  parseRanges                                      Lib                                 src/Lib.hs:(45,1)-(49,17)                               2251          1    0.0    0.0     0.0    0.0
+   >>=                                             Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:(147,5)-(149,44)      2252          1    0.0    0.0     0.0    0.0
+ CAF:parseTicket_r2j6                              Lib                                 src/Lib.hs:62:1-11                                      2120          0    0.0    0.0     0.0    0.0
+  parseTicket                                      Lib                                 src/Lib.hs:62:1-39                                      2368          1    0.0    0.0     0.0    0.0
+   sepBy1                                          Data.Attoparsec.Combinator          Data/Attoparsec/Combinator.hs:(161,1)-(162,55)          2369          1    0.0    0.0     0.0    0.0
+    sepBy1.scan                                    Data.Attoparsec.Combinator          Data/Attoparsec/Combinator.hs:162:11-55                 2370          1    0.0    0.0     0.0    0.0
+     *>                                            Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:189:5-26              2424          1    0.0    0.0     0.0    0.0
+      >>=                                          Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:(147,5)-(149,44)      2425          1    0.0    0.0     0.0    0.0
+     <*>                                           Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:187:5-16              2371          1    0.0    0.0     0.0    0.0
+     <|>                                           Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:208:5-16              2419          1    0.0    0.0     0.0    0.0
+     >>=                                           Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:(147,5)-(149,44)      2372          1    0.0    0.0     0.0    0.0
+     fmap                                          Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:(172,5)-(174,42)      2376          1    0.0    0.0     0.0    0.0
+     plus                                          Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:(162,1)-(164,38)      2420          1    0.0    0.0     0.0    0.0
+ CAF:poly_g1_rAaG                                  Data.Attoparsec.Combinator          <no location info>                                      1833          0    0.0    0.0     0.0    0.0
+  sepBy1                                           Data.Attoparsec.Combinator          Data/Attoparsec/Combinator.hs:(161,1)-(162,55)          2351          0    0.0    0.0     0.0    0.0
+   sepBy1.scan                                     Data.Attoparsec.Combinator          Data/Attoparsec/Combinator.hs:162:11-55                 2352          0    0.0    0.0     0.0    0.0
+    pure                                           Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:185:5-66              2353          1    0.0    0.0     0.0    0.0
+ CAF:s1_rbG3                                       Lib                                 <no location info>                                      2114          0    0.0    0.0     0.0    0.0
+  parseInput                                       Lib                                 src/Lib.hs:(65,1)-(75,49)                               2443          0    0.0    0.0     0.0    0.0
+   >>=                                             Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:(147,5)-(149,44)      2444          0    0.0    0.0     0.0    0.0
+    >>=.\                                          Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:(148,9)-(149,44)      2445          0    0.0    0.0     0.0    0.0
+     >>=.\.succ'                                   Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:148:13-76             2446          0    0.0    0.0     0.0    0.0
+ CAF:s2_rbG5                                       Lib                                 <no location info>                                      2115          0    0.0    0.0     0.0    0.0
+  parseInput                                       Lib                                 src/Lib.hs:(65,1)-(75,49)                               2364          0    0.0    0.0     0.0    0.0
+   >>=                                             Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:(147,5)-(149,44)      2365          0    0.0    0.0     0.0    0.0
+    >>=.\                                          Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:(148,9)-(149,44)      2366          0    0.0    0.0     0.0    0.0
+     >>=.\.succ'                                   Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:148:13-76             2367          0    0.0    0.0     0.0    0.0
+ CAF:s3_rbGi                                       Lib                                 <no location info>                                      2122          0    0.0    0.0     0.0    0.0
+  parseFieldWithConstraint                         Lib                                 src/Lib.hs:(52,1)-(56,23)                               2247          0    0.0    0.0     0.0    0.0
+   >>=                                             Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:(147,5)-(149,44)      2248          0    0.0    0.0     0.0    0.0
+    >>=.\                                          Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:(148,9)-(149,44)      2249          0    0.0    0.0     0.0    0.0
+     >>=.\.succ'                                   Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:148:13-76             2250          0    0.0    0.0     0.0    0.0
+ CAF:s4_rbGt                                       Lib                                 <no location info>                                      2130          0    0.0    0.0     0.0    0.0
+  parseRanges                                      Lib                                 src/Lib.hs:(45,1)-(49,17)                               2308          0    0.0    0.0     0.0    0.0
+   >>=                                             Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:(147,5)-(149,44)      2309          0    0.0    0.0     0.0    0.0
+    >>=.\                                          Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:(148,9)-(149,44)      2310          0    0.0    0.0     0.0    0.0
+     >>=.\.succ'                                   Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:148:13-76             2311          0    0.0    0.0     0.0    0.0
+ CAF:s5_rbGE                                       Lib                                 <no location info>                                      2138          0    0.0    0.0     0.0    0.0
+  parseRange                                       Lib                                 src/Lib.hs:(36,1)-(42,20)                               2279          0    0.0    0.0     0.0    0.0
+   >>=                                             Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:(147,5)-(149,44)      2280          0    0.0    0.0     0.0    0.0
+    >>=.\                                          Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:(148,9)-(149,44)      2281          0    0.0    0.0     0.0    0.0
+     >>=.\.succ'                                   Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:148:13-76             2282          0    0.0    0.0     0.0    0.0
+ CAF:s_r2eu2                                       Data.Attoparsec.ByteString.Internal Data/Attoparsec/ByteString/Internal.hs:171:8            1637          0    0.0    0.0     0.0    0.0
+  endOfLine                                        Data.Attoparsec.ByteString.Internal Data/Attoparsec/ByteString/Internal.hs:442:1-68         2514          0    0.0    0.0     0.0    0.0
+ CAF:solveColumns_r2je                             Lib                                 src/Lib.hs:112:1-12                                     2157          0    0.0    0.0     0.0    0.0
+  solveColumns                                     Lib                                 src/Lib.hs:112:1-28                                     2568          1    0.0    0.0     0.0    0.0
+ main                                              Main                                app/Main.hs:(13,1)-(23,44)                              2189          0    0.0    0.2   100.0   94.8
+  loadInput                                        Lib                                 src/Lib.hs:(140,1)-(142,14)                             2190          1    0.0    0.6    66.7   83.8
+   buffer                                          Data.Attoparsec.ByteString.Buffer   Data/Attoparsec/ByteString/Buffer.hs:85:1-45            2222          1    0.0    0.0     0.0    0.0
+   runParser                                       Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:111:7-15              2191          1    0.0    0.0     0.0    0.0
+   parseInput                                      Lib                                 src/Lib.hs:(65,1)-(75,49)                               2194          0    0.0    0.0    66.7   83.2
+    >>=                                            Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:(147,5)-(149,44)      2195      20343   11.1    0.0    66.7   83.2
+     >>=.\                                         Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:(148,9)-(149,44)      2196      51318    0.0   15.3    55.6   83.2
+      runParser                                    Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:111:7-15              2197      56507    0.0    0.0     0.0    0.0
+      >>=.\.succ'                                  Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:148:13-76             2223      45793   22.2    2.6    55.6   45.7
+       runParser                                   Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:111:7-15              2224      45793    0.0    0.0     0.0    0.0
+       *>.\                                        Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:189:26                2227      20276    0.0    0.0     0.0    0.0
+       pure                                        Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:185:5-66              2225      19964   11.1    0.0    33.3   41.4
+        pure.\                                     Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:185:50-66             2226      19964    0.0    0.0    22.2   41.4
+         parseFieldsWithConstraints                Lib                                 src/Lib.hs:59:1-70                                      2312          0    0.0    0.0     0.0    0.0
+          sepBy1                                   Data.Attoparsec.Combinator          Data/Attoparsec/Combinator.hs:(161,1)-(162,55)          2313          0    0.0    0.0     0.0    0.0
+           sepBy1.scan                             Data.Attoparsec.Combinator          Data/Attoparsec/Combinator.hs:162:11-55                 2314          0    0.0    0.0     0.0    0.0
+            fmap                                   Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:(172,5)-(174,42)      2315          0    0.0    0.0     0.0    0.0
+             fmap.\                                Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:(173,7)-(174,42)      2316          0    0.0    0.0     0.0    0.0
+              fmap.\.succ'                         Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:173:11-58             2317         20    0.0    0.0     0.0    0.0
+         parseTicket                               Lib                                 src/Lib.hs:62:1-39                                      2409          0    0.0    0.0    22.2   41.3
+          decimal.step                             Data.Attoparsec.ByteString.Char8    Data/Attoparsec/ByteString/Char8.hs:448:9-49            2543      14459   11.1   35.3    11.1   35.3
+          decimal                                  Data.Attoparsec.ByteString.Char8    Data/Attoparsec/ByteString/Char8.hs:(447,1)-(448,49)    2410          0    0.0    0.0    11.1    3.0
+           fmap                                    Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:(172,5)-(174,42)      2411          0    0.0    0.0    11.1    3.0
+            fmap.\                                 Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:(173,7)-(174,42)      2412          0    0.0    0.0    11.1    3.0
+             fmap.\.succ'                          Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:173:11-58             2413       4920   11.1    3.0    11.1    3.0
+          sepBy1                                   Data.Attoparsec.Combinator          Data/Attoparsec/Combinator.hs:(161,1)-(162,55)          2414          0    0.0    0.0     0.0    3.0
+           sepBy1.scan                             Data.Attoparsec.Combinator          Data/Attoparsec/Combinator.hs:162:11-55                 2415          0    0.0    0.0     0.0    3.0
+            fmap                                   Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:(172,5)-(174,42)      2416          0    0.0    0.0     0.0    3.0
+             fmap.\                                Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:(173,7)-(174,42)      2417          0    0.0    0.0     0.0    3.0
+              fmap.\.succ'                         Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:173:11-58             2418       4920    0.0    3.0     0.0    3.0
+         sepBy1                                    Data.Attoparsec.Combinator          Data/Attoparsec/Combinator.hs:(161,1)-(162,55)          2461          0    0.0    0.0     0.0    0.1
+          sepBy1.scan                              Data.Attoparsec.Combinator          Data/Attoparsec/Combinator.hs:162:11-55                 2462          0    0.0    0.0     0.0    0.1
+           fmap                                    Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:(172,5)-(174,42)      2463          0    0.0    0.0     0.0    0.1
+            fmap.\                                 Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:(173,7)-(174,42)      2464          0    0.0    0.0     0.0    0.1
+             fmap.\.succ'                          Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:173:11-58             2465        244    0.0    0.1     0.0    0.1
+       return                                      Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:144:5-21              2244      14943    0.0    0.0     0.0    0.0
+       *>                                          Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:189:5-26              2246       5066    0.0    1.2     0.0    1.2
+       >>                                          Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:152:5-15              2245       5066    0.0    0.0     0.0    0.0
+       fail                                        Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:(157,5)-(158,43)      2432        245    0.0    0.0     0.0    0.1
+        fail.\                                     Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:157:51-72             2433        245    0.0    0.1     0.0    0.1
+         parseTicket                               Lib                                 src/Lib.hs:62:1-39                                      2434          0    0.0    0.0     0.0    0.0
+          sepBy1                                   Data.Attoparsec.Combinator          Data/Attoparsec/Combinator.hs:(161,1)-(162,55)          2435          0    0.0    0.0     0.0    0.0
+           sepBy1.scan                             Data.Attoparsec.Combinator          Data/Attoparsec/Combinator.hs:162:11-55                 2436          0    0.0    0.0     0.0    0.0
+            plus                                   Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:(162,1)-(164,38)      2437          0    0.0    0.0     0.0    0.0
+             plus.\                                Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:(163,3)-(164,38)      2438          0    0.0    0.0     0.0    0.0
+              plus.\.lose'                         Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:163:7-73              2439        245    0.0    0.0     0.0    0.0
+               runParser                           Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:111:7-15              2440        245    0.0    0.0     0.0    0.0
+            pure                                   Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:185:5-66              2441          0    0.0    0.0     0.0    0.0
+             pure.\                                Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:185:50-66             2442        245    0.0    0.0     0.0    0.0
+       parseRange.(...)                            Lib                                 src/Lib.hs:41:7-45                                      2307         40    0.0    0.1     0.0    0.1
+       parseRange.(...)                            Lib                                 src/Lib.hs:38:7-43                                      2278         40    0.0    0.1     0.0    0.1
+       parseRange.high                             Lib                                 src/Lib.hs:41:7-45                                      2549         40    0.0    0.0     0.0    0.0
+       parseRange.low                              Lib                                 src/Lib.hs:38:7-43                                      2547         40    0.0    0.0     0.0    0.0
+       decimal                                     Data.Attoparsec.ByteString.Char8    Data/Attoparsec/ByteString/Char8.hs:(447,1)-(448,49)    2397          0    0.0    0.0     0.0    0.0
+       endOfLine                                   Data.Attoparsec.ByteString.Internal Data/Attoparsec/ByteString/Internal.hs:442:1-68         2343          0    0.0    0.0     0.0    0.0
+        pure                                       Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:185:5-66              2344          0    0.0    0.0     0.0    0.0
+         pure.\                                    Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:185:50-66             2345        268    0.0    0.0     0.0    0.0
+       fmap                                        Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:(172,5)-(174,42)      2302          0    0.0    0.0     0.0    0.1
+        fmap.\                                     Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:(173,7)-(174,42)      2303         41    0.0    0.0     0.0    0.1
+         fmap.\.succ'                              Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:173:11-58             2305         41    0.0    0.1     0.0    0.1
+         fromPos                                   Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:46:21-27              2306         41    0.0    0.0     0.0    0.0
+         runParser                                 Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:111:7-15              2304         41    0.0    0.0     0.0    0.0
+       parseFieldWithConstraint                    Lib                                 src/Lib.hs:(52,1)-(56,23)                               2230          0    0.0    0.0     0.0    0.0
+       parseFieldsWithConstraints                  Lib                                 src/Lib.hs:59:1-70                                      2346          0    0.0    0.0     0.0    0.0
+        sepBy1                                     Data.Attoparsec.Combinator          Data/Attoparsec/Combinator.hs:(161,1)-(162,55)          2347          0    0.0    0.0     0.0    0.0
+         sepBy1.scan                               Data.Attoparsec.Combinator          Data/Attoparsec/Combinator.hs:162:11-55                 2348          0    0.0    0.0     0.0    0.0
+          pure                                     Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:185:5-66              2362          0    0.0    0.0     0.0    0.0
+           pure.\                                  Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:185:50-66             2363          0    0.0    0.0     0.0    0.0
+       parseRange                                  Lib                                 src/Lib.hs:(36,1)-(42,20)                               2266          0    0.0    0.0     0.0    0.0
+       parseTicket                                 Lib                                 src/Lib.hs:62:1-39                                      2429          0    0.0    0.0     0.0    0.0
+        sepBy1                                     Data.Attoparsec.Combinator          Data/Attoparsec/Combinator.hs:(161,1)-(162,55)          2430          0    0.0    0.0     0.0    0.0
+         sepBy1.scan                               Data.Attoparsec.Combinator          Data/Attoparsec/Combinator.hs:162:11-55                 2431          0    0.0    0.0     0.0    0.0
+       sepBy1                                      Data.Attoparsec.Combinator          Data/Attoparsec/Combinator.hs:(161,1)-(162,55)          2454          0    0.0    0.0     0.0    0.2
+        parseTicket                                Lib                                 src/Lib.hs:62:1-39                                      2473          0    0.0    0.0     0.0    0.0
+        sepBy1.scan                                Data.Attoparsec.Combinator          Data/Attoparsec/Combinator.hs:162:11-55                 2455          0    0.0    0.0     0.0    0.2
+         *>                                        Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:189:5-26              2472          0    0.0    0.0     0.0    0.0
+         fmap                                      Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:(172,5)-(174,42)      2457          0    0.0    0.0     0.0    0.1
+          fmap.\                                   Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:(173,7)-(174,42)      2458        245    0.0    0.1     0.0    0.1
+           runParser                               Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:111:7-15              2459        245    0.0    0.0     0.0    0.0
+           parseTicket                             Lib                                 src/Lib.hs:62:1-39                                      2460          0    0.0    0.0     0.0    0.0
+         plus                                      Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:(162,1)-(164,38)      2468          0    0.0    0.0     0.0    0.1
+          plus.\                                   Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:(163,3)-(164,38)      2469        245    0.0    0.1     0.0    0.1
+           runParser                               Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:111:7-15              2470        245    0.0    0.0     0.0    0.0
+      fromPos                                      Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:46:21-27              2221      15231    0.0    0.0     0.0    0.0
+      ensureSuspended                              Data.Attoparsec.ByteString.Internal Data/Attoparsec/ByteString/Internal.hs:(505,1)-(510,70) 2480          2    0.0    0.0     0.0    0.0
+       *>                                          Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:189:5-26              2483          2    0.0    0.0     0.0    0.0
+       >>                                          Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:152:5-15              2482          2    0.0    0.0     0.0    0.0
+       runParser                                   Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:111:7-15              2481          2    0.0    0.0     0.0    0.0
+      ==                                           Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:128:23-24             2479          1    0.0    0.0     0.0    0.0
+      stringSuspended                              Data.Attoparsec.ByteString.Internal Data/Attoparsec/ByteString/Internal.hs:(208,1)-(223,54) 2515          1    0.0    0.0     0.0    0.2
+       runParser                                   Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:111:7-15              2516          1    0.0    0.0     0.0    0.0
+       demandInput_                                Data.Attoparsec.Internal            Data/Attoparsec/Internal.hs:(85,1)-(91,48)              2519          0    0.0    0.0     0.0    0.2
+        demandInput_.\                             Data.Attoparsec.Internal            Data/Attoparsec/Internal.hs:(86,3)-(91,48)              2520          1    0.0    0.0     0.0    0.2
+         >>=.\.succ'                               Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:148:13-76             2521        246    0.0    0.1     0.0    0.2
+          pure                                     Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:185:5-66              2532        246    0.0    0.0     0.0    0.1
+           pure.\                                  Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:185:50-66             2533        246    0.0    0.0     0.0    0.1
+            sepBy1                                 Data.Attoparsec.Combinator          Data/Attoparsec/Combinator.hs:(161,1)-(162,55)          2534          0    0.0    0.0     0.0    0.1
+             sepBy1.scan                           Data.Attoparsec.Combinator          Data/Attoparsec/Combinator.hs:162:11-55                 2535          0    0.0    0.0     0.0    0.1
+              fmap                                 Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:(172,5)-(174,42)      2536          0    0.0    0.0     0.0    0.1
+               fmap.\                              Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:(173,7)-(174,42)      2537          0    0.0    0.0     0.0    0.1
+                fmap.\.succ'                       Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:173:11-58             2538          0    0.0    0.1     0.0    0.1
+          return                                   Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:144:5-21              2531        246    0.0    0.0     0.0    0.0
+          runParser                                Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:111:7-15              2530        246    0.0    0.0     0.0    0.0
+          demandInput                              Data.Attoparsec.Internal            Data/Attoparsec/Internal.hs:(73,1)-(78,41)              2550          0    0.0    0.0     0.0    0.0
+           demandInput.\                           Data.Attoparsec.Internal            Data/Attoparsec/Internal.hs:(74,3)-(78,41)              2551          0    0.0    0.0     0.0    0.0
+            parseTicket                            Lib                                 src/Lib.hs:62:1-39                                      2552          0    0.0    0.0     0.0    0.0
+             sepBy1                                Data.Attoparsec.Combinator          Data/Attoparsec/Combinator.hs:(161,1)-(162,55)          2553          0    0.0    0.0     0.0    0.0
+              sepBy1.scan                          Data.Attoparsec.Combinator          Data/Attoparsec/Combinator.hs:162:11-55                 2554          0    0.0    0.0     0.0    0.0
+               fmap                                Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:(172,5)-(174,42)      2555          0    0.0    0.0     0.0    0.0
+                fmap.\                             Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:(173,7)-(174,42)      2556          0    0.0    0.0     0.0    0.0
+                 fmap.\.succ'                      Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:173:11-58             2557          0    0.0    0.0     0.0    0.0
+          sepBy1                                   Data.Attoparsec.Combinator          Data/Attoparsec/Combinator.hs:(161,1)-(162,55)          2522          0    0.0    0.0     0.0    0.0
+           sepBy1.scan                             Data.Attoparsec.Combinator          Data/Attoparsec/Combinator.hs:162:11-55                 2523          0    0.0    0.0     0.0    0.0
+            plus                                   Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:(162,1)-(164,38)      2524          0    0.0    0.0     0.0    0.0
+             plus.\                                Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:(163,3)-(164,38)      2525          0    0.0    0.0     0.0    0.0
+              plus.\.lose'                         Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:163:7-73              2526          1    0.0    0.0     0.0    0.0
+               runParser                           Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:111:7-15              2527          1    0.0    0.0     0.0    0.0
+            pure                                   Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:185:5-66              2528          0    0.0    0.0     0.0    0.0
+             pure.\                                Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:185:50-66             2529          1    0.0    0.0     0.0    0.0
+      +                                            Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:47:38-40              2243          0    0.0    2.5     0.0    2.5
+      decimal                                      Data.Attoparsec.ByteString.Char8    Data/Attoparsec/ByteString/Char8.hs:(447,1)-(448,49)    2394          0    0.0    0.0     0.0   13.2
+       fmap                                        Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:(172,5)-(174,42)      2400          0    0.0    0.0     0.0   13.2
+        fmap.\                                     Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:(173,7)-(174,42)      2401       4920    0.0    5.4     0.0   13.2
+         fmap.\.succ'                              Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:173:11-58             2403       4920    0.0    4.8     0.0    7.8
+          >>=.\.succ'                              Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:148:13-76             2404       4920    0.0    1.2     0.0    3.0
+           *>                                      Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:189:5-26              2408       4920    0.0    1.8     0.0    1.8
+           >>                                      Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:152:5-15              2407       4920    0.0    0.0     0.0    0.0
+           runParser                               Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:111:7-15              2405       4920    0.0    0.0     0.0    0.0
+         fromPos                                   Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:46:21-27              2406       4920    0.0    0.0     0.0    0.0
+         runParser                                 Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:111:7-15              2402       4920    0.0    0.0     0.0    0.0
+      demandInput                                  Data.Attoparsec.Internal            Data/Attoparsec/Internal.hs:(73,1)-(78,41)              2485          0    0.0    0.0     0.0    0.0
+       demandInput.\                               Data.Attoparsec.Internal            Data/Attoparsec/Internal.hs:(74,3)-(78,41)              2486          2    0.0    0.0     0.0    0.0
+        endOfLine                                  Data.Attoparsec.ByteString.Internal Data/Attoparsec/ByteString/Internal.hs:442:1-68         2504          0    0.0    0.0     0.0    0.0
+         *>                                        Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:189:5-26              2513          0    0.0    0.0     0.0    0.0
+         plus                                      Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:(162,1)-(164,38)      2505          0    0.0    0.0     0.0    0.0
+          plus.\                                   Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:(163,3)-(164,38)      2506          0    0.0    0.0     0.0    0.0
+           plus.\.lose'                            Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:163:7-73              2507          1    0.0    0.0     0.0    0.0
+            runParser                              Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:111:7-15              2508          1    0.0    0.0     0.0    0.0
+        parseTicket                                Lib                                 src/Lib.hs:62:1-39                                      2487          0    0.0    0.0     0.0    0.0
+         sepBy1                                    Data.Attoparsec.Combinator          Data/Attoparsec/Combinator.hs:(161,1)-(162,55)          2488          0    0.0    0.0     0.0    0.0
+          sepBy1.scan                              Data.Attoparsec.Combinator          Data/Attoparsec/Combinator.hs:162:11-55                 2489          0    0.0    0.0     0.0    0.0
+           pure                                    Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:185:5-66              2494         20    0.0    0.0     0.0    0.0
+            pure.\                                 Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:185:50-66             2495         21    0.0    0.0     0.0    0.0
+             >>=.\.succ'                           Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:148:13-76             2496         20    0.0    0.0     0.0    0.0
+              return                               Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:144:5-21              2498         20    0.0    0.0     0.0    0.0
+              runParser                            Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:111:7-15              2497         20    0.0    0.0     0.0    0.0
+           fmap                                    Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:(172,5)-(174,42)      2499          0    0.0    0.0     0.0    0.0
+            fmap.\                                 Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:(173,7)-(174,42)      2500          0    0.0    0.0     0.0    0.0
+             fmap.\.succ'                          Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:173:11-58             2501          1    0.0    0.0     0.0    0.0
+              >>=.\.succ'                          Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:148:13-76             2502          1    0.0    0.0     0.0    0.0
+               runParser                           Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:111:7-15              2503          1    0.0    0.0     0.0    0.0
+           plus                                    Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:(162,1)-(164,38)      2490          0    0.0    0.0     0.0    0.0
+            plus.\                                 Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:(163,3)-(164,38)      2491          0    0.0    0.0     0.0    0.0
+             plus.\.lose'                          Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:163:7-73              2492          1    0.0    0.0     0.0    0.0
+              runParser                            Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:111:7-15              2493          1    0.0    0.0     0.0    0.0
+      endOfLine                                    Data.Attoparsec.ByteString.Internal Data/Attoparsec/ByteString/Internal.hs:442:1-68         2329          0    0.0    0.0     0.0    0.1
+       *>                                          Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:189:5-26              2337          0    0.0    0.0     0.0    0.0
+       plus                                        Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:(162,1)-(164,38)      2330          0    0.0    0.0     0.0    0.1
+        plus.\                                     Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:(163,3)-(164,38)      2331        269    0.0    0.1     0.0    0.1
+         runParser                                 Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:111:7-15              2332        269    0.0    0.0     0.0    0.0
+      parseFieldWithConstraint                     Lib                                 src/Lib.hs:(52,1)-(56,23)                               2217          0    0.0    0.0     0.0    0.1
+       *>                                          Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:189:5-26              2218          0    0.0    0.0     0.0    0.0
+       fmap                                        Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:(172,5)-(174,42)      2233          0    0.0    0.0     0.0    0.1
+        fmap.\                                     Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:(173,7)-(174,42)      2234         21    0.0    0.0     0.0    0.1
+         fmap.\.succ'                              Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:173:11-58             2236         21    0.0    0.0     0.0    0.0
+          >>=.\.succ'                              Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:148:13-76             2237         21    0.0    0.0     0.0    0.0
+           *>                                      Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:189:5-26              2241         21    0.0    0.0     0.0    0.0
+           >>                                      Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:152:5-15              2240         21    0.0    0.0     0.0    0.0
+           runParser                               Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:111:7-15              2238         21    0.0    0.0     0.0    0.0
+         fromPos                                   Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:46:21-27              2239         21    0.0    0.0     0.0    0.0
+         runParser                                 Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:111:7-15              2235         21    0.0    0.0     0.0    0.0
+      parseFieldsWithConstraints                   Lib                                 src/Lib.hs:59:1-70                                      2203          0    0.0    0.0     0.0    0.0
+       sepBy1                                      Data.Attoparsec.Combinator          Data/Attoparsec/Combinator.hs:(161,1)-(162,55)          2204          0    0.0    0.0     0.0    0.0
+        sepBy1.scan                                Data.Attoparsec.Combinator          Data/Attoparsec/Combinator.hs:162:11-55                 2205          0    0.0    0.0     0.0    0.0
+         pure                                      Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:185:5-66              2354         20    0.0    0.0     0.0    0.0
+          pure.\                                   Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:185:50-66             2355         21    0.0    0.0     0.0    0.0
+           >>=.\.succ'                             Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:148:13-76             2356         21    0.0    0.0     0.0    0.0
+            runParser                              Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:111:7-15              2357         21    0.0    0.0     0.0    0.0
+            return                                 Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:144:5-21              2358         20    0.0    0.0     0.0    0.0
+            *>                                     Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:189:5-26              2361          3    0.0    0.0     0.0    0.0
+            >>                                     Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:152:5-15              2360          3    0.0    0.0     0.0    0.0
+         *>                                        Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:189:5-26              2325          0    0.0    0.0     0.0    0.0
+         fmap                                      Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:(172,5)-(174,42)      2207          0    0.0    0.0     0.0    0.0
+          fmap.\                                   Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:(173,7)-(174,42)      2208         21    0.0    0.0     0.0    0.0
+           runParser                               Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:111:7-15              2209         21    0.0    0.0     0.0    0.0
+           fmap.\.succ'                            Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:173:11-58             2359          0    0.0    0.0     0.0    0.0
+           parseFieldWithConstraint                Lib                                 src/Lib.hs:(52,1)-(56,23)                               2212          0    0.0    0.0     0.0    0.0
+         plus                                      Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:(162,1)-(164,38)      2320          0    0.0    0.0     0.0    0.0
+          plus.\                                   Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:(163,3)-(164,38)      2321         20    0.0    0.0     0.0    0.0
+           runParser                               Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:111:7-15              2322         20    0.0    0.0     0.0    0.0
+           plus.\.lose'                            Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:163:7-73              2349          1    0.0    0.0     0.0    0.0
+            runParser                              Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:111:7-15              2350          1    0.0    0.0     0.0    0.0
+      parseRange                                   Lib                                 src/Lib.hs:(36,1)-(42,20)                               2256          0    0.0    0.0     0.0    0.1
+       *>                                          Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:189:5-26              2261          0    0.0    0.0     0.0    0.0
+       fmap                                        Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:(172,5)-(174,42)      2269          0    0.0    0.0     0.0    0.1
+        fmap.\                                     Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:(173,7)-(174,42)      2270         40    0.0    0.0     0.0    0.1
+         fmap.\.succ'                              Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:173:11-58             2272         40    0.0    0.1     0.0    0.1
+          >>=.\.succ'                              Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:148:13-76             2273         40    0.0    0.0     0.0    0.0
+           *>                                      Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:189:5-26              2277         40    0.0    0.0     0.0    0.0
+           >>                                      Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:152:5-15              2276         40    0.0    0.0     0.0    0.0
+           runParser                               Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:111:7-15              2274         40    0.0    0.0     0.0    0.0
+         fromPos                                   Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:46:21-27              2275         40    0.0    0.0     0.0    0.0
+         runParser                                 Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:111:7-15              2271         40    0.0    0.0     0.0    0.0
+      parseRanges                                  Lib                                 src/Lib.hs:(45,1)-(49,17)                               2253          0    0.0    0.0     0.0    0.0
+      parseTicket                                  Lib                                 src/Lib.hs:62:1-39                                      2373          0    0.0    0.0     0.0    6.0
+       decimal                                     Data.Attoparsec.ByteString.Char8    Data/Attoparsec/ByteString/Char8.hs:(447,1)-(448,49)    2383          0    0.0    0.0     0.0    2.4
+        *>                                         Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:189:5-26              2391          0    0.0    0.0     0.0    0.0
+        fmap                                       Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:(172,5)-(174,42)      2384          0    0.0    0.0     0.0    2.4
+         fmap.\                                    Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:(173,7)-(174,42)      2385       4920    0.0    2.4     0.0    2.4
+          runParser                                Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:111:7-15              2386       4920    0.0    0.0     0.0    0.0
+       sepBy1                                      Data.Attoparsec.Combinator          Data/Attoparsec/Combinator.hs:(161,1)-(162,55)          2374          0    0.0    0.0     0.0    3.6
+        sepBy1.scan                                Data.Attoparsec.Combinator          Data/Attoparsec/Combinator.hs:162:11-55                 2375          0    0.0    0.0     0.0    3.6
+         *>                                        Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:189:5-26              2426          0    0.0    0.0     0.0    0.0
+         fmap                                      Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:(172,5)-(174,42)      2377          0    0.0    0.0     0.0    1.2
+          fmap.\                                   Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:(173,7)-(174,42)      2378       4920    0.0    1.2     0.0    1.2
+           runParser                               Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:111:7-15              2379       4920    0.0    0.0     0.0    0.0
+         plus                                      Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:(162,1)-(164,38)      2421          0    0.0    0.0     0.0    2.4
+          plus.\                                   Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:(163,3)-(164,38)      2422       4920    0.0    2.4     0.0    2.4
+           runParser                               Data.Attoparsec.Internal.Types      Data/Attoparsec/Internal/Types.hs:111:7-15              2423       4920    0.0    0.0     0.0    0.0
+  main.departureColumns                            Main                                app/Main.hs:(20,7)-(22,20)                              2583          1    0.0    0.0     0.0    0.0
+   main.departureColumns.\                         Main                                app/Main.hs:21:31-68                                    2585         20    0.0    0.0     0.0    0.0
+  main.errorRate                                   Main                                app/Main.hs:15:7-56                                     2539          1    0.0    0.0     0.0    0.3
+   calculateTicketScanningErrorRate                Lib                                 src/Lib.hs:(94,1)-(98,69)                               2540          1    0.0    0.0     0.0    0.3
+    calculateTicketScanningErrorRate.invalidValues Lib                                 src/Lib.hs:(97,3)-(98,69)                               2541          1    0.0    0.3     0.0    0.3
+     fieldIsInvalid                                Lib                                 src/Lib.hs:(90,1)-(91,68)                               2542       4900    0.0    0.0     0.0    0.0
+      fieldSatisfiesConstraint                     Lib                                 src/Lib.hs:(86,1)-(87,72)                               2548       5953    0.0    0.0     0.0    0.0
+  main.solvedTicket                                Main                                app/Main.hs:18:7-38                                     2558          1    0.0    0.0    33.3   10.4
+   solveTicket                                     Lib                                 src/Lib.hs:(132,1)-(137,77)                             2559          1    0.0    0.0    33.3   10.4
+    solveTicket.columnPossibilities                Lib                                 src/Lib.hs:(135,3)-(136,60)                             2565          1    0.0    5.6    22.2    6.6
+     possibleFields                                Lib                                 src/Lib.hs:(104,1)-(109,71)                             2575         20    0.0    0.8    22.2    1.0
+      possibleFields.possibleFields                Lib                                 src/Lib.hs:(108,3)-(109,71)                             2576         20    0.0    0.2    22.2    0.2
+       possibleFields.possibleFields.\             Lib                                 src/Lib.hs:109:23-63                                    2577        400   22.2    0.0    22.2    0.0
+        fieldSatisfiesConstraint                   Lib                                 src/Lib.hs:(86,1)-(87,72)                               2578      58045    0.0    0.0     0.0    0.0
+    solveTicket.onlyValidTickets                   Lib                                 src/Lib.hs:134:3-39                                     2560          1    0.0    0.0    11.1    0.2
+     validTickets                                  Lib                                 src/Lib.hs:(78,1)-(79,52)                               2561          1    0.0    0.2    11.1    0.2
+      validTicket                                  Lib                                 src/Lib.hs:(82,1)-(83,50)                               2562          1   11.1    0.0    11.1    0.0
+       fieldIsInvalid                              Lib                                 src/Lib.hs:(90,1)-(91,68)                               2563       4436    0.0    0.0     0.0    0.0
+        fieldSatisfiesConstraint                   Lib                                 src/Lib.hs:(86,1)-(87,72)                               2564       5489    0.0    0.0     0.0    0.0
+    solveTicket.solvedColumns                      Lib                                 src/Lib.hs:137:3-77                                     2567          1    0.0    0.0     0.0    3.6
+     solveTicket.solvedColumns.\                   Lib                                 src/Lib.hs:137:40-41                                    2584         20    0.0    0.0     0.0    0.0
+     solveColumns                                  Lib                                 src/Lib.hs:112:1-28                                     2569          0    0.0    0.0     0.0    3.6
+      solveColumns'                                Lib                                 src/Lib.hs:(115,1)-(128,79)                             2570         21    0.0    0.0     0.0    3.6
+       solveColumns'.solved                        Lib                                 src/Lib.hs:(122,3)-(123,27)                             2581         83    0.0    0.0     0.0    0.0
+       solveColumns'.columns'                      Lib                                 src/Lib.hs:121:3-69                                     2580         21    0.0    0.5     0.0    2.2
+        solveColumns'.filterImpossibilities        Lib                                 src/Lib.hs:(127,3)-(128,79)                             2582        400    0.0    1.7     0.0    1.7
+       solveColumns'.columnsMarkedSolved           Lib                                 src/Lib.hs:120:3-46                                     2571         21    0.0    0.6     0.0    0.6
+        solveColumns'.markSolved                   Lib                                 src/Lib.hs:(124,3)-(126,18)                             2574        420    0.0    0.0     0.0    0.0
+       solveColumns'.solvedSet'                    Lib                                 src/Lib.hs:(118,3)-(119,75)                             2572         21    0.0    0.8     0.0    0.8
+        solveColumns'.solved                       Lib                                 src/Lib.hs:(122,3)-(123,27)                             2573        420    0.0    0.0     0.0    0.0
+        solveColumns'.solvedSet'.\                 Lib                                 src/Lib.hs:119:38                                       2579        230    0.0    0.0     0.0    0.0

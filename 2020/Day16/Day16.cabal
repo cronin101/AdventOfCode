@@ -1,0 +1,71 @@
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.33.0.
+--
+-- see: https://github.com/sol/hpack
+--
+-- hash: 8cac0c4954ad1d44db48033c4aeb734cb221572cc7a524650b55081fbd155e53
+
+name:           Day16
+version:        0.1.0.0
+description:    Please see the README on GitHub at <https://github.com/cronin10/Day16#readme>
+homepage:       https://github.com/cronin10/AdventOfCode#readme
+bug-reports:    https://github.com/cronin10/AdventOfCode/issues
+author:         Aaron Cronin
+maintainer:     cronin@include.cat
+copyright:      MIT
+license:        BSD3
+license-file:   LICENSE
+build-type:     Simple
+extra-source-files:
+    README.md
+    ChangeLog.md
+
+source-repository head
+  type: git
+  location: https://github.com/cronin10/AdventOfCode
+
+library
+  exposed-modules:
+      Lib
+  other-modules:
+      Paths_Day16
+  hs-source-dirs:
+      src
+  build-depends:
+      attoparsec
+    , base >=4.7 && <5
+    , bytestring
+    , containers
+  default-language: Haskell2010
+
+executable Day16-exe
+  main-is: Main.hs
+  other-modules:
+      Paths_Day16
+  hs-source-dirs:
+      app
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      Day16
+    , attoparsec
+    , base >=4.7 && <5
+    , bytestring
+    , containers
+  default-language: Haskell2010
+
+test-suite Day16-test
+  type: exitcode-stdio-1.0
+  main-is: Spec.hs
+  other-modules:
+      Paths_Day16
+  hs-source-dirs:
+      test
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      Day16
+    , attoparsec
+    , base >=4.7 && <5
+    , bytestring
+    , containers
+  default-language: Haskell2010
