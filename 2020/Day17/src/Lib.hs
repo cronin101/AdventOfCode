@@ -1,48 +1,56 @@
+{-# LANGUAGE Strict #-}
+
 module Lib
   ( loadInput
   , stepUntil
-  , showState
   , activeCount
+  , Space(ThreeDimensions, FourDimensions)
   ) where
 
 import qualified Data.ByteString.Char8         as B
 import qualified Data.Map.Strict               as M
 import qualified Data.Set                      as S
 import           Control.Monad                  ( ap )
-import           Data.List                      ( intercalate
-                                                , groupBy
-                                                , sortBy
-                                                , foldl'
-                                                )
+import           Data.List                      ( foldl' )
 import           Data.Maybe                     ( fromJust )
-import           Data.Function                  ( on )
 
--- 3d Coordinate (x, y, z)
-type C3 = (Int, Int, Int)
+data Space = ThreeDimensions | FourDimensions
 
--- WorldState: (ActiveCells, LiveCells, KnownNeighbours)
-type WState = (S.Set C3, S.Set C3, M.Map C3 (S.Set C3))
+-- 4d Coordinate (x, y, z, w)
+type C4 = (Int, Int, Int, Int)
+
+-- WorldState: (Space, ActiveCells, LiveCells, KnownNeighbours)
+type WState = (Space, S.Set C4, S.Set C4, M.Map C4 (S.Set C4))
 
 -- (Round, WorldState) pair
 type State = (Int, WState)
 
-computeNeighbours :: C3 -> S.Set C3
-computeNeighbours (x, y, z) = S.fromList
-  [ (x + xD, y + yD, z + zD)
+computeNeighbours :: Space -> C4 -> S.Set C4
+computeNeighbours ThreeDimensions (x, y, z, 0) = S.fromList
+  [ (x + xD, y + yD, z + zD, 0)
   | xD <- [-1 .. 1]
   , yD <- [-1 .. 1]
   , zD <- [-1 .. 1]
   , (xD, yD, zD) /= (0, 0, 0)
   ]
 
+computeNeighbours FourDimensions (x, y, z, w) = S.fromList
+  [ (x + xD, y + yD, z + zD, w + wD)
+  | xD <- [-1 .. 1]
+  , yD <- [-1 .. 1]
+  , zD <- [-1 .. 1]
+  , wD <- [-1 .. 1]
+  , (xD, yD, zD, wD) /= (0, 0, 0, 0)
+  ]
+
 precalculateActiveNeighbours
-  :: M.Map C3 (S.Set C3) -> S.Set C3 -> M.Map C3 (S.Set C3)
-precalculateActiveNeighbours = foldl' ensure
+  :: Space -> M.Map C4 (S.Set C4) -> S.Set C4 -> M.Map C4 (S.Set C4)
+precalculateActiveNeighbours space = foldl' ensure
  where
   ensure map c =
-    if M.member c map then map else M.insert c (computeNeighbours c) map
+    if M.member c map then map else M.insert c (computeNeighbours space c) map
 
-nextActiveCells :: S.Set C3 -> S.Set C3 -> M.Map C3 (S.Set C3) -> S.Set C3
+nextActiveCells :: S.Set C4 -> S.Set C4 -> M.Map C4 (S.Set C4) -> S.Set C4
 nextActiveCells liveCells activeCells knownNeighbours = S.union
   activeLiveCells
   deadActiveCells
@@ -59,12 +67,13 @@ nextActiveCells liveCells activeCells knownNeighbours = S.union
     activeNeighbourCount = length $ S.intersection neighbours activeCells
 
 step :: State -> State
-step (iteration, (activeCells, liveCells, knownNeighbours)) =
-  (iteration', (activeCells', liveCells', knownNeighbours'))
+step (iteration, (space, activeCells, liveCells, knownNeighbours)) =
+  (iteration', (space, activeCells', liveCells', knownNeighbours'))
  where
-  iteration'       = iteration + 1
-  knownNeighbours' = precalculateActiveNeighbours knownNeighbours liveCells
-  activeCells'     = nextActiveCells liveCells activeCells knownNeighbours'
+  iteration' = iteration + 1
+  knownNeighbours' =
+    precalculateActiveNeighbours space knownNeighbours liveCells
+  activeCells' = nextActiveCells liveCells activeCells knownNeighbours'
   changedCells =
     (activeCells S.\\ activeCells') `S.union` (activeCells' S.\\ activeCells)
   liveCells' =
@@ -77,44 +86,18 @@ stepUntil targetIteration state@(iteration, _)
   | otherwise                    = stepUntil targetIteration $ step state
 
 activeCount :: State -> Int
-activeCount (_, (activeCells, _, _)) = S.size activeCells
+activeCount (_, (_, activeCells, _, _)) = S.size activeCells
 
-loadRows :: [B.ByteString] -> State
-loadRows rows = (0, (activeCells, liveCells, knownNeighbours))
+loadRows :: Space -> [B.ByteString] -> State
+loadRows space rows = (0, (space, activeCells, liveCells, knownNeighbours))
  where
   activeCells = S.fromList
-    [ (x, y, 0) | (row, y) <- zip rows [0 ..], x <- B.elemIndices '#' row ]
+    [ (x, y, 0, 0) | (row, y) <- zip rows [0 ..], x <- B.elemIndices '#' row ]
   liveCells = S.unions $ M.elems knownNeighbours
   knownNeighbours =
-    M.fromDistinctAscList $ map (ap (,) computeNeighbours) $ S.toAscList
+    M.fromDistinctAscList $ map (ap (,) (computeNeighbours space)) $ S.toAscList
       activeCells
 
-showState :: State -> String
-showState (iteration, (activeCells, _, _)) =
-  "Iteration "
-    ++ show iteration
-    ++ ": \n"
-    ++ intercalate "\n\n" (map showLayer layeredCells)
-    ++ "\n"
- where
-  showLayer layer = intercalate
-    "\n"
-    [ concat
-        [ (if S.member (x, y, head $ zs layer) activeCells then "#" else ".")
-        | x <- [xMin layer .. xMax layer]
-        ]
-    | y <- [yMin layer .. yMax layer]
-    ]
-  xs layer = map (\(x, _, _) -> x) layer
-  xMin layer = minimum $ xs layer
-  xMax layer = maximum $ xs layer
-  ys layer = map (\(_, y, _) -> y) layer
-  yMin layer = minimum $ ys layer
-  yMax layer = maximum $ ys layer
-  zs layer = map (\(_, _, z) -> z) layer
-  layeredCells = groupBy (\(_, _, z1) (_, _, z2) -> z1 == z2) sortedCells
-  sortedCells =
-    sortBy (compare `on` (\(x, y, z) -> (z, y, x))) $ S.toList activeCells
-
-loadInput :: String -> IO State
-loadInput fileName = loadRows . B.lines <$> B.readFile ("src/" ++ fileName)
+loadInput :: Space -> String -> IO State
+loadInput space fileName =
+  loadRows space . B.lines <$> B.readFile ("src/" ++ fileName)
