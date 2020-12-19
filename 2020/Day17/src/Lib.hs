@@ -20,13 +20,13 @@ data Space = ThreeDimensions | FourDimensions
 type C4 = (Int, Int, Int, Int)
 
 -- WorldState: (Space, ActiveCells, LiveCells, KnownNeighbours)
-type WState = (Space, S.Set C4, S.Set C4, M.Map C4 (S.Set C4))
+type WState = (Space, S.Set C4, S.Set C4, M.Map C4 [C4])
 
 -- (Round, WorldState) pair
 type State = (Int, WState)
 
-computeNeighbours :: Space -> C4 -> S.Set C4
-computeNeighbours ThreeDimensions (x, y, z, 0) = S.fromList
+computeNeighbours :: Space -> C4 -> [C4]
+computeNeighbours ThreeDimensions (x, y, z, 0) =
   [ (x + xD, y + yD, z + zD, 0)
   | xD <- [-1 .. 1]
   , yD <- [-1 .. 1]
@@ -34,7 +34,7 @@ computeNeighbours ThreeDimensions (x, y, z, 0) = S.fromList
   , (xD, yD, zD) /= (0, 0, 0)
   ]
 
-computeNeighbours FourDimensions (x, y, z, w) = S.fromList
+computeNeighbours FourDimensions (x, y, z, w) =
   [ (x + xD, y + yD, z + zD, w + wD)
   | xD <- [-1 .. 1]
   , yD <- [-1 .. 1]
@@ -44,13 +44,13 @@ computeNeighbours FourDimensions (x, y, z, w) = S.fromList
   ]
 
 precalculateActiveNeighbours
-  :: Space -> M.Map C4 (S.Set C4) -> S.Set C4 -> M.Map C4 (S.Set C4)
+  :: Space -> M.Map C4 [C4] -> S.Set C4 -> M.Map C4 [C4]
 precalculateActiveNeighbours space = foldl' ensure
  where
   ensure map c =
     if M.member c map then map else M.insert c (computeNeighbours space c) map
 
-nextActiveCells :: S.Set C4 -> S.Set C4 -> M.Map C4 (S.Set C4) -> S.Set C4
+nextActiveCells :: S.Set C4 -> S.Set C4 -> M.Map C4 [C4] -> S.Set C4
 nextActiveCells liveCells activeCells knownNeighbours = S.union
   activeLiveCells
   deadActiveCells
@@ -63,8 +63,9 @@ nextActiveCells liveCells activeCells knownNeighbours = S.union
     becomesActive = not wasActive && activeNeighbourCount == 3
     staysActive =
       wasActive && activeNeighbourCount >= 2 && activeNeighbourCount <= 3
-    neighbours           = fromJust $ M.lookup cell knownNeighbours
-    activeNeighbourCount = length $ S.intersection neighbours activeCells
+    neighbours = fromJust $ M.lookup cell knownNeighbours
+    activeNeighbourCount =
+      length $ take 4 $ filter (`S.member` activeCells) neighbours
 
 step :: State -> State
 step (iteration, (space, activeCells, liveCells, knownNeighbours)) =
@@ -76,9 +77,8 @@ step (iteration, (space, activeCells, liveCells, knownNeighbours)) =
   activeCells' = nextActiveCells liveCells activeCells knownNeighbours'
   changedCells =
     (activeCells S.\\ activeCells') `S.union` (activeCells' S.\\ activeCells)
-  liveCells' =
-    S.unions $ map (fromJust . (`M.lookup` knownNeighbours')) $ S.toList
-      changedCells
+  liveCells' = S.fromList
+    $ concatMap (fromJust . (`M.lookup` knownNeighbours)) changedCells
 
 stepUntil :: Int -> State -> State
 stepUntil targetIteration state@(iteration, _)
@@ -93,7 +93,7 @@ loadRows space rows = (0, (space, activeCells, liveCells, knownNeighbours))
  where
   activeCells = S.fromList
     [ (x, y, 0, 0) | (row, y) <- zip rows [0 ..], x <- B.elemIndices '#' row ]
-  liveCells = S.unions $ M.elems knownNeighbours
+  liveCells = S.fromList . concat $ M.elems knownNeighbours
   knownNeighbours =
     M.fromDistinctAscList $ map (ap (,) (computeNeighbours space)) $ S.toAscList
       activeCells

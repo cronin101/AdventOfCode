@@ -1,23 +1,24 @@
-	Thu Dec 17 19:37 2020 Time and Allocation Profiling Report  (Final)
+	Thu Dec 17 20:17 2020 Time and Allocation Profiling Report  (Final)
 
 	   Day17-exe +RTS -N -p -RTS
 
-	total time  =        0.37 secs   (1152 ticks @ 1000 us, 16 processors)
-	total alloc = 1,794,767,776 bytes  (excludes profiling overheads)
+	total time  =        0.33 secs   (1028 ticks @ 1000 us, 16 processors)
+	total alloc = 1,277,264,624 bytes  (excludes profiling overheads)
 
 COST CENTRE                                   MODULE    SRC                        %time %alloc
 
-nextActiveCells.isActive.activeNeighbourCount Lib       src/Lib.hs:67:5-73          56.9   41.3
-computeNeighbours                             Lib       src/Lib.hs:(29,1)-(44,3)    17.4   44.5
-step.liveCells'                               Lib       src/Lib.hs:(79,3)-(81,18)   16.4   12.1
-precalculateActiveNeighbours.ensure           Lib       src/Lib.hs:(50,3)-(51,78)    5.6    1.7
-nextActiveCells.isActive.neighbours           Lib       src/Lib.hs:66:5-67           1.6    0.1
+nextActiveCells.isActive.activeNeighbourCount Lib       src/Lib.hs:(67,5)-(68,66)   41.6    3.2
+step.liveCells'                               Lib       src/Lib.hs:(80,3)-(83,20)   38.4   52.3
+computeNeighbours                             Lib       src/Lib.hs:(29,1)-(44,3)     8.9   41.4
+precalculateActiveNeighbours.ensure           Lib       src/Lib.hs:(50,3)-(51,78)    3.8    2.3
+nextActiveCells.isActive.neighbours           Lib       src/Lib.hs:66:5-57           1.6    0.1
+nextActiveCells.isActive                      Lib       src/Lib.hs:(60,3)-(68,66)    1.3    0.0
 
 
                                                                                                                             individual      inherited
 COST CENTRE                                            MODULE                SRC                         no.     entries  %time %alloc   %time %alloc
 
-MAIN                                                   MAIN                  <built-in>                  182          0    0.0    0.0   100.0  100.0
+MAIN                                                   MAIN                  <built-in>                  182          0    0.9    0.0   100.0  100.0
  CAF                                                   GHC.Conc.Signal       <entire-module>             282          0    0.0    0.0     0.0    0.0
  CAF                                                   GHC.IO.Encoding       <entire-module>             263          0    0.0    0.0     0.0    0.0
  CAF                                                   GHC.IO.Encoding.Iconv <entire-module>             261          0    0.0    0.0     0.0    0.0
@@ -26,41 +27,43 @@ MAIN                                                   MAIN                  <bu
  CAF                                                   GHC.IO.Handle.Text    <entire-module>             250          0    0.0    0.0     0.0    0.0
  CAF                                                   GHC.Event.Poll        <entire-module>             200          0    0.0    0.0     0.0    0.0
  CAF                                                   GHC.Event.Thread      <entire-module>             199          0    0.0    0.0     0.0    0.0
- CAF:loadInput2                                        Lib                   <no location info>          327          0    0.0    0.0     0.0    0.0
-  loadInput                                            Lib                   src/Lib.hs:(102,1)-(103,62) 373          0    0.0    0.0     0.0    0.0
-   loadRows                                            Lib                   src/Lib.hs:(92,1)-(99,17)   374          0    0.0    0.0     0.0    0.0
-    loadRows.activeCells                               Lib                   src/Lib.hs:(94,3)-(95,78)   375          0    0.0    0.0     0.0    0.0
+ CAF:loadInput2                                        Lib                   <no location info>          333          0    0.0    0.0     0.0    0.0
+  loadInput                                            Lib                   src/Lib.hs:(104,1)-(105,62) 373          0    0.0    0.0     0.0    0.0
+   loadRows                                            Lib                   src/Lib.hs:(94,1)-(101,17)  374          0    0.0    0.0     0.0    0.0
+    loadRows.activeCells                               Lib                   src/Lib.hs:(96,3)-(97,78)   375          0    0.0    0.0     0.0    0.0
  CAF:main1                                             Main                  <no location info>          362          0    0.0    0.0     0.0    0.0
   main                                                 Main                  app/Main.hs:(15,1)-(23,30)  364          1    0.0    0.0     0.0    0.0
  CAF:main2                                             Main                  <no location info>          361          0    0.0    0.0     0.0    0.0
- main                                                  Main                  app/Main.hs:(15,1)-(23,30)  365          0    0.0    0.0   100.0  100.0
-  activeCount                                          Lib                   src/Lib.hs:89:1-60          368          2    0.0    0.0     0.0    0.0
-  main.load                                            Main                  app/Main.hs:16:7-40         366          2    0.0    0.0     0.0    0.1
-   loadInput                                           Lib                   src/Lib.hs:(102,1)-(103,62) 367          2    0.0    0.0     0.0    0.1
-    loadRows                                           Lib                   src/Lib.hs:(92,1)-(99,17)   371          2    0.0    0.0     0.0    0.1
-     loadRows.activeCells                              Lib                   src/Lib.hs:(94,3)-(95,78)   372          2    0.0    0.0     0.0    0.0
-     loadRows.knownNeighbours                          Lib                   src/Lib.hs:(97,3)-(99,17)   376          2    0.0    0.0     0.0    0.1
+ main                                                  Main                  app/Main.hs:(15,1)-(23,30)  365          0    0.0    0.0    99.1  100.0
+  activeCount                                          Lib                   src/Lib.hs:91:1-60          368          2    0.0    0.0     0.0    0.0
+  main.load                                            Main                  app/Main.hs:16:7-40         366          2    0.0    0.0     0.1    0.2
+   loadInput                                           Lib                   src/Lib.hs:(104,1)-(105,62) 367          2    0.0    0.0     0.1    0.2
+    loadRows                                           Lib                   src/Lib.hs:(94,1)-(101,17)  371          2    0.0    0.0     0.1    0.2
+     loadRows.activeCells                              Lib                   src/Lib.hs:(96,3)-(97,78)   372          2    0.0    0.0     0.0    0.0
+     loadRows.knownNeighbours                          Lib                   src/Lib.hs:(99,3)-(101,17)  376          2    0.0    0.0     0.0    0.1
       computeNeighbours                                Lib                   src/Lib.hs:(29,1)-(44,3)    377         78    0.0    0.1     0.0    0.1
-     loadRows.liveCells                                Lib                   src/Lib.hs:96:3-48          378          2    0.0    0.0     0.0    0.0
-  main.(...)                                           Main                  app/Main.hs:20:7-72         370          1    0.0    0.0   100.0   99.9
-   stepUntil                                           Lib                   src/Lib.hs:(84,1)-(86,73)   379         14    0.0    0.0   100.0   99.9
-    step                                               Lib                   src/Lib.hs:(70,1)-(81,18)   380         12    0.0    0.0   100.0   99.9
-     step.activeCells'                                 Lib                   src/Lib.hs:76:3-71          385         12    0.0    0.0    60.0   41.5
-      nextActiveCells                                  Lib                   src/Lib.hs:(54,1)-(67,73)   386         12    0.0    0.0    60.0   41.5
-       nextActiveCells.activeLiveCells                 Lib                   src/Lib.hs:59:3-47          388         12    0.3    0.0    59.8   41.4
-        nextActiveCells.isActive                       Lib                   src/Lib.hs:(60,3)-(67,73)   389      76306    0.3    0.0    59.5   41.4
-         nextActiveCells.isActive.activeNeighbourCount Lib                   src/Lib.hs:67:5-73          391      76306   56.9   41.3    56.9   41.3
-         nextActiveCells.isActive.becomesActive        Lib                   src/Lib.hs:63:5-62          392      76306    0.0    0.0     0.0    0.0
-         nextActiveCells.isActive.neighbours           Lib                   src/Lib.hs:66:5-67          390      76306    1.6    0.1     1.6    0.1
-         nextActiveCells.isActive.staysActive          Lib                   src/Lib.hs:(64,5)-(65,73)   394      76306    0.0    0.0     0.0    0.0
-         nextActiveCells.isActive.wasActive            Lib                   src/Lib.hs:62:5-45          393      76306    0.8    0.0     0.8    0.0
-       nextActiveCells.deadActiveCells                 Lib                   src/Lib.hs:58:3-46          387         12    0.2    0.1     0.2    0.1
-     step.changedCells                                 Lib                   src/Lib.hs:(77,3)-(78,77)   395         12    0.3    0.1     0.3    0.1
-     step.iteration'                                   Lib                   src/Lib.hs:73:3-28          397         12    0.0    0.0     0.0    0.0
-     step.knownNeighbours'                             Lib                   src/Lib.hs:(74,3)-(75,64)   381         12    0.0    0.0    23.4   46.2
-      precalculateActiveNeighbours                     Lib                   src/Lib.hs:(48,1)-(51,78)   382         12    0.3    0.2    23.4   46.2
-       precalculateActiveNeighbours.ensure             Lib                   src/Lib.hs:(50,3)-(51,78)   383      76306    5.6    1.7    23.0   46.1
-        computeNeighbours                              Lib                   src/Lib.hs:(29,1)-(44,3)    384      34712   17.4   44.4    17.4   44.4
-     step.liveCells'                                   Lib                   src/Lib.hs:(79,3)-(81,18)   396         12   16.4   12.1    16.4   12.1
+     loadRows.liveCells                                Lib                   src/Lib.hs:98:3-59          378          2    0.1    0.1     0.1    0.1
+  main.(...)                                           Main                  app/Main.hs:20:7-72         370          1    0.0    0.0    99.0   99.7
+   stepUntil                                           Lib                   src/Lib.hs:(86,1)-(88,73)   379         14    0.0    0.0    99.0   99.7
+    step                                               Lib                   src/Lib.hs:(71,1)-(83,20)   380         12    0.0    0.0    99.0   99.7
+     step.activeCells'                                 Lib                   src/Lib.hs:77:3-71          385         12    0.9    0.0    47.9    3.4
+      nextActiveCells                                  Lib                   src/Lib.hs:(54,1)-(68,66)   386         12    0.8    0.0    47.0    3.4
+       nextActiveCells.activeLiveCells                 Lib                   src/Lib.hs:59:3-47          388         12    0.8    0.0     9.3    3.3
+        nextActiveCells.isActive                       Lib                   src/Lib.hs:(60,3)-(68,66)   389      76306    0.4    0.0     8.6    3.3
+         nextActiveCells.isActive.activeNeighbourCount Lib                   src/Lib.hs:(67,5)-(68,66)   391      76306    5.7    3.2     5.7    3.2
+         nextActiveCells.isActive.becomesActive        Lib                   src/Lib.hs:63:5-62          394      76306    0.0    0.0     0.0    0.0
+         nextActiveCells.isActive.neighbours           Lib                   src/Lib.hs:66:5-57          390      76306    1.6    0.1     1.6    0.1
+         nextActiveCells.isActive.staysActive          Lib                   src/Lib.hs:(64,5)-(65,73)   396      76306    0.0    0.0     0.0    0.0
+         nextActiveCells.isActive.wasActive            Lib                   src/Lib.hs:62:5-45          395      76306    0.9    0.0     0.9    0.0
+       nextActiveCells.deadActiveCells                 Lib                   src/Lib.hs:58:3-46          387         12    0.1    0.1     0.1    0.1
+       nextActiveCells.isActive                        Lib                   src/Lib.hs:(60,3)-(68,66)   392          0    0.9    0.0    36.8    0.0
+        nextActiveCells.isActive.activeNeighbourCount  Lib                   src/Lib.hs:(67,5)-(68,66)   393          0   35.9    0.0    35.9    0.0
+     step.changedCells                                 Lib                   src/Lib.hs:(78,3)-(79,77)   397         12    0.1    0.1     0.1    0.1
+     step.iteration'                                   Lib                   src/Lib.hs:74:3-28          399         12    0.0    0.0     0.0    0.0
+     step.knownNeighbours'                             Lib                   src/Lib.hs:(75,3)-(76,64)   381         12    0.0    0.0    12.6   43.9
+      precalculateActiveNeighbours                     Lib                   src/Lib.hs:(48,1)-(51,78)   382         12    0.0    0.2    12.6   43.9
+       precalculateActiveNeighbours.ensure             Lib                   src/Lib.hs:(50,3)-(51,78)   383      76306    3.8    2.3    12.6   43.7
+        computeNeighbours                              Lib                   src/Lib.hs:(29,1)-(44,3)    384      34712    8.9   41.3     8.9   41.3
+     step.liveCells'                                   Lib                   src/Lib.hs:(80,3)-(83,20)   398         12   38.4   52.3    38.4   52.3
   main.booted3d                                        Main                  app/Main.hs:20:7-72         369          1    0.0    0.0     0.0    0.0
-  main.booted4d                                        Main                  app/Main.hs:20:7-72         398          1    0.0    0.0     0.0    0.0
+  main.booted4d                                        Main                  app/Main.hs:20:7-72         400          1    0.0    0.0     0.0    0.0
