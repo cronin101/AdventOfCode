@@ -49,13 +49,13 @@ calculate :: [Instruction] -> Int
 calculate = calculate' 0
  where
   calculate' total []       = total
-  calculate' total (i : is) = case i of
-    (_, Literal x) -> calculate' (total `op` x) is
-    (_, Scope s  ) -> calculate' (total `op` calculate s) is
+  calculate' total (i : is) = case snd i of
+    Literal x -> calculate' (total `op` x) is
+    Scope   s -> calculate' (total `op` calculate s) is
    where
-    op = case i of
-      (Add , _) -> (+)
-      (Mult, _) -> (*)
+    op = case fst i of
+      Add  -> (+)
+      Mult -> (*)
 
 sumTotals :: [[Instruction]] -> Int
 sumTotals = sum . map calculate
