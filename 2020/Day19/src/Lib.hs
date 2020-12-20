@@ -1,8 +1,10 @@
-{-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE Strict, OverloadedStrings #-}
 
 module Lib
   ( loadInput
   , filterValidData
+  , balancedIngestor
+  , repeatingIngestor
   ) where
 
 import qualified Data.ByteString.Char8         as B
@@ -12,24 +14,21 @@ import           Data.Bifunctor                 ( Bifunctor(second) )
 import           Data.Maybe                     ( fromJust
                                                 , mapMaybe
                                                 )
-import           Data.List                      ( partition )
+import           Data.List                      ( partition
+                                                , foldl'
+                                                )
 import           Control.Arrow                  ( Arrow((***)) )
 import           Data.Attoparsec.ByteString.Char8
-                                                ( peekChar
+                                                ( anyChar
                                                 , try
-                                                , many1
-                                                , parse
                                                 , isDigit
                                                 , sepBy1
                                                 , parseOnly
-                                                , string
                                                 , takeWhile1
                                                 , char
                                                 , choice
                                                 , Parser
-                                                , IResult(Done)
                                                 )
-import           Debug.Trace                    ( trace )
 import           AoCUtils                       ( breakOnBlankLines )
 
 -- (Rules, Data)
@@ -38,14 +37,14 @@ type Input = ([Rule], [B.ByteString])
 -- (Rule#, Definition, Dependencies)
 type Rule = (Int, B.ByteString, S.IntSet)
 
+type Ingestor = B.ByteString -> [B.ByteString]
+
+parseRule :: B.ByteString -> (Int, B.ByteString, S.IntSet)
 parseRule bs = (ruleNumber, definition, dependencies)
  where
   Just (ruleNumber, definition) = second (B.drop 2) <$> B.readInt bs
   dependencies =
-    S.fromList
-      $ filter (/= ruleNumber)
-      $ mapMaybe (fmap fst . B.readInt)
-      $ B.split ' ' definition
+    S.fromList $ mapMaybe (fmap fst . B.readInt) $ B.split ' ' definition
 
 orderByDependencies :: [Rule] -> [Rule]
 orderByDependencies rules = orderByDependencies rules [] S.empty
@@ -64,72 +63,79 @@ orderByDependencies rules = orderByDependencies rules [] S.empty
     withRemainingDependencies rule@(_, _, dependencies) =
       (rule, dependencies S.\\ satisfiedDependencies)
 
-parseTerminal :: Parser (Parser B.ByteString)
-parseTerminal = do
-  char '"'
-  terminal <- takeWhile1 (/= '"')
-  char '"'
-  return $ string terminal
-
-parseSequentialRules
-  :: M.IntMap (Parser B.ByteString) -> Parser (Parser B.ByteString)
-parseSequentialRules parsersMap = do
-  rules <- sepBy1 (fst . fromJust . B.readInt <$> takeWhile1 isDigit) " "
-  let parsers = mapMaybe (`M.lookup` parsersMap) rules
-  if length parsers == length rules
-    then return $ foldl1 (>>) parsers
-    else handleRecursive parsersMap ((\x -> trace (show x) x) $ rules)
-
-handleRecursive
-  :: M.IntMap (Parser B.ByteString) -> [Int] -> Parser (Parser B.ByteString)
-handleRecursive parsersMap rules = case rules of
-  [42, 8] -> return $ B.concat <$> many1 (fromJust $ M.lookup 42 parsersMap)
-  [42, 11, 31] -> return
-    (do
-      prefix <- many1 (fromJust $ M.lookup 42 parsersMap)
-      suffix <- many1 (fromJust $ M.lookup 31 parsersMap)
-      peek   <- peekChar
-      if length prefix == length suffix
-        then return $ B.concat $ (\x -> trace (show x) x) (prefix ++ suffix)
-        else (\x -> trace (show (prefix, suffix, peek)) x) $ fail "Unbalanced"
+parseTerminal :: Parser Ingestor
+parseTerminal = try $ do
+  terminal <- char '"' *> anyChar <* char '"'
+  return
+    (\bs -> case B.uncons bs of
+      Nothing        -> []
+      Just (c, rest) -> [ rest | c == terminal ]
     )
-  rules -> trace ("oh fuck" ++ show rules) fail "oh no"
 
-parseSubRules :: M.IntMap (Parser B.ByteString) -> Parser (Parser B.ByteString)
-parseSubRules parsersMap = do
+ingestMany :: [Ingestor] -> Ingestor
+ingestMany ingestors bs = foldl' (flip concatMap) [bs] ingestors
+
+ingestEither :: (Ingestor, Ingestor) -> Ingestor
+ingestEither (left, right) bs = left bs ++ right bs
+
+parseSequentialRules :: M.IntMap Ingestor -> Parser Ingestor
+parseSequentialRules ingestorMap = do
+  rules <- sepBy1 (fst . fromJust . B.readInt <$> takeWhile1 isDigit) " "
+  return $ ingestMany $ mapMaybe (`M.lookup` ingestorMap) rules
+
+parseUnion :: M.IntMap Ingestor -> Parser Ingestor
+parseUnion parsersMap = do
   sequentialRules <- sepBy1 (parseSequentialRules parsersMap) " | "
-  return $ choice sequentialRules
+  return $ case sequentialRules of
+    [single]      -> single
+    [left, right] -> ingestEither (left, right)
 
-parseRuleDefinition
-  :: M.IntMap (Parser B.ByteString) -> Parser (Parser B.ByteString)
-parseRuleDefinition parsersMap = do
-  choice [parseTerminal, parseSubRules parsersMap]
+parseRuleDefinition :: M.IntMap Ingestor -> Parser Ingestor
+parseRuleDefinition ingestorMap =
+  choice [parseTerminal, parseUnion ingestorMap]
 
-createParsers :: [Rule] -> M.IntMap (Parser B.ByteString)
-createParsers rules = foldl
-  (\m (n, definition) ->
-    M.insert n (getParser $ parseOnly (parseRuleDefinition m) definition) m
+createIngestors
+  :: [Rule] -> M.IntMap (M.IntMap Ingestor -> Ingestor) -> M.IntMap Ingestor
+createIngestors rules overrides = foldl
+  (\m (n, definition, _) -> M.insert
+    n
+    (if M.member n overrides
+      then (overrides M.! n) m
+      else getParsed $ parseOnly (parseRuleDefinition m) definition
+    )
+    m
   )
   M.empty
   orderedRules
  where
-  getParser (Right p    ) = p
-  getParser (Left  error) = trace
-    error
-    (do
-      return ""
-    )
-  orderedRules = map (\(number, definition, _) -> (number, definition))
-    $ orderByDependencies rules
+  getParsed (Right p) = p
+  orderedRules = orderByDependencies rules
 
-filterValidData :: Input -> [B.ByteString]
-filterValidData (rules, inputData) = filter
-  (parserCompleted . parse parser . (\x -> trace (show x) x))
+filterValidData
+  :: Input -> M.IntMap (M.IntMap Ingestor -> Ingestor) -> [B.ByteString]
+filterValidData (rules, inputData) overrides = filter
+  (any B.null . rootIngestor)
   inputData
- where
-  parserCompleted (Done "" _) = True
-  parserCompleted _           = False
-  parser = fromJust $ M.lookup 0 $ createParsers rules
+  where rootIngestor = createIngestors rules overrides M.! 0
+
+ingestorsFromIndices :: [Int] -> M.IntMap Ingestor -> Ingestor
+ingestorsFromIndices is map = ingestMany $ mapMaybe (`M.lookup` map) is
+
+balancedIngestor :: (Int, Int) -> M.IntMap Ingestor -> Ingestor
+balancedIngestor ends@(prefix, suffix) m = ingestEither
+  ( ingestorsFromIndices [prefix, suffix] m
+  , ingestMany
+    [ ingestorsFromIndices [prefix] m
+    , balancedIngestor ends m
+    , ingestorsFromIndices [suffix] m
+    ]
+  )
+
+repeatingIngestor :: Int -> M.IntMap Ingestor -> Ingestor
+repeatingIngestor repeater m = ingestEither
+  ( ingestorsFromIndices [repeater] m
+  , ingestMany [ingestorsFromIndices [repeater] m, repeatingIngestor repeater m]
+  )
 
 loadInput :: String -> IO Input
 loadInput fileName = do
