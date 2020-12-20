@@ -3,6 +3,8 @@
 module Lib
   ( loadInput
   , step
+  , solve
+  , multiplyCorners
   ) where
 
 import qualified Data.ByteString.Char8         as BS
@@ -88,6 +90,7 @@ toEdgeValue bs orientation@(rotation, flipState) =
   flippedIndices = BS.elemIndices '#' bs
   bitCount       = BS.length bs
 
+getBottomEdgeValue :: (Tile, (RotateS, FlipS)) -> Value
 getBottomEdgeValue (Tile (_, edges, _), (rotation, flipState)) =
   fst $ fromJust . find (rotationTest . fst . snd) $ filter
     (flipStateTest . snd . snd)
@@ -134,34 +137,83 @@ loadInput fileName = do
         edgesWithTiles
   return (M.singleton (0, 0) (startTile, (CW0, U)), (tileMap, edgeMap))
 
-matchingTiles :: RemainingTiles -> Int -> [(Tile, Orientation)]
-matchingTiles (tilesMap, tilesForEdge) value =
+matchingTilesForValue :: RemainingTiles -> Int -> [(Tile, Orientation)]
+matchingTilesForValue (tilesMap, tilesForEdge) value =
   case IM.lookup value tilesForEdge of
     Nothing -> []
     Just tileIds ->
       map
-          ( (\tile@(Tile (_, edges, _)) ->
-              (tile, snd . fromJust $ find ((== value) . fst) edges)
-            )
-          . (tilesMap IM.!)
+          (\tile@(Tile (_, edges, _)) ->
+            (tile, snd . fromJust $ find ((== value) . fst) edges)
           )
+        $ mapMaybe (`IM.lookup` tilesMap)
         $ S.toList tileIds
 
+matchingTilesForBottomEdge :: State -> [[(Tile, Orientation)]]
+matchingTilesForBottomEdge (boardState, remainingTiles) = map
+  (matchingTilesForValue remainingTiles)
+  bottomValues
+  where bottomValues = map (getBottomEdgeValue . snd) $ bottomEdge boardState
+
+
+bottomEdge :: BoardState -> [((Int, Int), (Tile, Orientation))]
+bottomEdge boardState =
+  map (\coord -> (coord, boardState M.! coord))
+    $ filter ((== yMax) . snd)
+    $ M.keys boardState
+  where yMax = maximum $ map snd $ M.keys boardState
+
+insertMatchesIntoBoardState
+  :: BoardState -> [((Int, Int), (Tile, Orientation))] -> BoardState
+insertMatchesIntoBoardState = foldl (\bs ((x, y), t) -> M.insert (x, y) t bs)
+
+removeMatchesFromRemainingTiles :: RemainingTiles -> [Tile] -> RemainingTiles
+removeMatchesFromRemainingTiles (tiles, tilesForEdge) matches =
+  (tiles', tilesForEdge)
+  where tiles' = foldl (\t (Tile (id, _, _)) -> IM.delete id t) tiles matches
+
+rotateBoardState :: BoardState -> BoardState
+rotateBoardState boardState =
+  M.map
+      (\(tile, (rotation, flipstate)) -> (tile, (rotate90 rotation, flipstate)))
+    $ M.mapKeys (\(x, y) -> (y, -x)) boardState
+
 step :: State -> State
-step (boardState, remainingTiles@(tiles, tilesForEdge))
+step state@(boardState, remainingTiles@(tiles, tilesForEdge))
+  | IM.size tiles == 0 = trace "No tiles remaining!" state
   | any null matches = trace "no matches, rotate"
-                             (rotatedBoardState, remainingTiles)
+                             (rotateBoardState boardState, remainingTiles)
+  | all ((== 1) . length) matches = trace
+    "trivial matches!"
+    ( insertMatchesIntoBoardState boardState
+                                  (zipMatchesWithCoords (concat matches))
+    , removeMatchesFromRemainingTiles remainingTiles (map fst $ concat matches)
+    )
   | otherwise = trace ("matches " ++ show matches) (boardState, remainingTiles)
  where
-  rotatedBoardState =
-    M.map
-        (\(tile, (rotation, flipstate)) ->
-          (tile, (rotate90 rotation, flipstate))
-        )
-      $ M.mapKeys (\(x, y) -> (y, -x)) boardState
-  matches      = map (matchingTiles remainingTiles) bottomValues
-  yMax         = maximum $ map snd $ M.keys boardState
-  bottomValues = map getBottomEdgeValue bottomEdge
-  bottomEdge =
-    map (boardState M.!) $ filter ((== yMax) . snd) $ M.keys boardState
+  matches = matchingTilesForBottomEdge state
+  zipMatchesWithCoords prunedMatches = zip
+    (map ((\(x, y) -> (x, y + 1)) . fst) $ bottomEdge boardState)
+    prunedMatches
+
+
+solve :: State -> State
+solve state =
+  head
+    $ dropWhile (\(_, (tilesRemaining, _)) -> (not . IM.null) tilesRemaining)
+    $ iterate step state
+
+multiplyCorners :: BoardState -> Int
+multiplyCorners boardState = product $ map
+  ((\(Tile (id, _, _), _) -> id) . (boardState M.!))
+  [(xLow, yLow), (xLow, yHigh), (xHigh, yLow), (xHigh, yHigh)]
+ where
+  xs          = map fst coordinates
+  xLow        = minimum xs
+  xHigh       = maximum xs
+  ys          = map snd coordinates
+  yLow        = minimum ys
+  yHigh       = maximum ys
+  coordinates = M.keys boardState
+
 
