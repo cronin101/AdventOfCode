@@ -1,0 +1,36 @@
+	Wed Dec 01 22:42 2021 Time and Allocation Profiling Report  (Final)
+
+	   Day1-exe.EXE +RTS -N -p -RTS
+
+	total time  =        0.00 secs   (0 ticks @ 1000 us, 8 processors)
+	total alloc =   2,391,024 bytes  (excludes profiling overheads)
+
+COST CENTRE          MODULE           SRC                        %time %alloc
+
+windowsOfLengthThree Lib              src\Lib.hs:21:1-95           0.0   31.4
+loadInput            Lib              src\Lib.hs:(24,1)-(27,26)    0.0   30.1
+countWindowIncreases Lib              src\Lib.hs:18:1-70           0.0   21.4
+countIncreases       Lib              src\Lib.hs:15:1-70           0.0   14.9
+CAF                  GHC.IO.Handle.FD <entire-module>              0.0    1.5
+
+
+                                                                                                individual      inherited
+COST CENTRE               MODULE                   SRC                       no.     entries  %time %alloc   %time %alloc
+
+MAIN                      MAIN                     <built-in>                161           0    0.0    0.1     0.0  100.0
+ CAF                      GHC.IO.FD                <entire-module>           311           0    0.0    0.0     0.0    0.0
+ CAF                      GHC.Conc.Windows         <entire-module>           290           0    0.0    0.0     0.0    0.0
+ CAF                      GHC.IO.Handle.Text       <entire-module>           251           0    0.0    0.0     0.0    0.0
+ CAF                      GHC.IO.Handle.FD         <entire-module>           249           0    0.0    1.5     0.0    1.5
+ CAF                      GHC.IO.Encoding.CodePage <entire-module>           240           0    0.0    0.0     0.0    0.0
+ CAF                      GHC.IO.Encoding          <entire-module>           239           0    0.0    0.0     0.0    0.0
+ CAF:countWindowIncreases Lib                      src\Lib.hs:18:1-20        198           0    0.0    0.0     0.0    0.0
+  countWindowIncreases    Lib                      src\Lib.hs:18:1-70        326           1    0.0    0.0     0.0    0.0
+ CAF:main1                Main                     <no location info>        194           0    0.0    0.0     0.0    0.0
+  main                    Main                     app\Main.hs:(6,1)-(9,36)  322           1    0.0    0.0     0.0    0.0
+ main                     Main                     app\Main.hs:(6,1)-(9,36)  323           0    0.0    0.5     0.0   98.3
+  countIncreases          Lib                      src\Lib.hs:15:1-70        325           1    0.0    0.0     0.0    0.0
+  loadInput               Lib                      src\Lib.hs:(24,1)-(27,26) 324           1    0.0   30.1     0.0   30.1
+  countWindowIncreases    Lib                      src\Lib.hs:18:1-70        327           0    0.0   21.4     0.0   67.7
+   countIncreases         Lib                      src\Lib.hs:15:1-70        329           1    0.0   14.9     0.0   14.9
+   windowsOfLengthThree   Lib                      src\Lib.hs:21:1-95        328           1    0.0   31.4     0.0   31.4
