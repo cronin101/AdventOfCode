@@ -18,7 +18,7 @@ countWindowIncreases :: [Int] -> Int
 countWindowIncreases = countIncreases . map sum . windowsOfLengthThree
 
 windowsOfLengthThree :: [a] -> [[a]]
-windowsOfLengthThree list = take (length list - 2) $ transpose [list, drop 1 list, drop 2 list]
+windowsOfLengthThree list = take (length list - 2) $ transpose $ take 3 $ tails list
 
 loadInput :: [Char] -> IO [Int]
 loadInput fileName =
