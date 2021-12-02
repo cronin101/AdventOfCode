@@ -11,13 +11,10 @@ where
 import Control.Monad (join)
 import Data.Attoparsec.ByteString.Char8
   ( Parser,
-    char,
     choice,
     endOfLine,
-    inClass,
     isDigit,
     parseOnly,
-    satisfy,
     sepBy1,
     space,
     string,
