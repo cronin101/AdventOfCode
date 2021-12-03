@@ -1,73 +1,69 @@
-	Fri Dec 03 13:13 2021 Time and Allocation Profiling Report  (Final)
+	Fri Dec 03 13:37 2021 Time and Allocation Profiling Report  (Final)
 
 	   Day3-exe.EXE +RTS -N -p -RTS
 
-	total time  =        0.00 secs   (0 ticks @ 1000 us, 8 processors)
-	total alloc =  22,344,840 bytes  (excludes profiling overheads)
+	total time  =        0.00 secs   (2 ticks @ 1000 us, 8 processors)
+	total alloc =  22,342,608 bytes  (excludes profiling overheads)
 
 COST CENTRE                                                                               MODULE SRC                        %time %alloc
 
-loadInput                                                                                 Lib    src\Lib.hs:(59,1)-(62,26)    0.0    6.7
-groupedDigits                                                                             Lib    src\Lib.hs:39:1-58           0.0   79.4
-filterCandidatesByDigitComparison.filterCandidatesByDigitComparison'.target               Lib    src\Lib.hs:55:9-95           0.0   10.8
-filterCandidatesByDigitComparison.filterCandidatesByDigitComparison'.candidatesAtPosition Lib    src\Lib.hs:56:9-60           0.0    1.6
+loadInput                                                                                 Lib    src\Lib.hs:(60,1)-(63,26)   50.0    6.7
+groupedDigits                                                                             Lib    src\Lib.hs:40:1-58          50.0   79.4
+filterCandidatesByDigitComparison.filterCandidatesByDigitComparison'.target               Lib    src\Lib.hs:56:9-95           0.0   10.8
+filterCandidatesByDigitComparison.filterCandidatesByDigitComparison'.candidatesAtPosition Lib    src\Lib.hs:57:9-60           0.0    1.6
 
 
                                                                                                                                                                       individual      inherited
 COST CENTRE                                                                                     MODULE                   SRC                       no.     entries  %time %alloc   %time %alloc
 
-MAIN                                                                                            MAIN                     <built-in>                168           0    0.0    0.0     0.0  100.0
- CAF                                                                                            GHC.IO.FD                <entire-module>           325           0    0.0    0.0     0.0    0.0
- CAF                                                                                            GHC.Conc.Windows         <entire-module>           304           0    0.0    0.0     0.0    0.0
- CAF                                                                                            Text.Read.Lex            <entire-module>           301           0    0.0    0.0     0.0    0.0
- CAF                                                                                            GHC.IO.Handle.Text       <entire-module>           265           0    0.0    0.0     0.0    0.0
- CAF                                                                                            GHC.IO.Handle.FD         <entire-module>           263           0    0.0    0.2     0.0    0.2
- CAF                                                                                            GHC.IO.Encoding.CodePage <entire-module>           254           0    0.0    0.0     0.0    0.0
- CAF                                                                                            GHC.IO.Encoding          <entire-module>           253           0    0.0    0.0     0.0    0.0
- CAF:filterCandidatesByDigitComparison                                                          Lib                      src\Lib.hs:48:1-33        210           0    0.0    0.0     0.0    0.0
-  filterCandidatesByDigitComparison                                                             Lib                      src\Lib.hs:(48,1)-(56,60) 356           1    0.0    0.0     0.0    0.0
- CAF:main1                                                                                      Main                     <no location info>        177           0    0.0    0.0     0.0    0.0
-  main                                                                                          Main                     app\Main.hs:(6,1)-(13,45) 336           1    0.0    0.0     0.0    0.0
- CAF:main2                                                                                      Main                     <no location info>        176           0    0.0    0.0     0.0    0.0
-  main                                                                                          Main                     app\Main.hs:(6,1)-(13,45) 338           0    0.0    0.0     0.0    0.0
-   loadInput                                                                                    Lib                      src\Lib.hs:(59,1)-(62,26) 339           1    0.0    0.0     0.0    0.0
- CAF:main3                                                                                      Main                     <no location info>        175           0    0.0    0.0     0.0    0.0
- CAF:oxygenRating                                                                               Lib                      src\Lib.hs:42:1-12        211           0    0.0    0.0     0.0    0.0
-  oxygenRating                                                                                  Lib                      src\Lib.hs:42:1-58        368           1    0.0    0.0     0.0    0.0
- CAF:readBinary                                                                                 Lib                      src\Lib.hs:21:1-10        209           0    0.0    0.0     0.0    0.0
-  readBinary                                                                                    Lib                      src\Lib.hs:21:1-57        342           1    0.0    0.0     0.0    0.0
- CAF:readBinary5                                                                                Lib                      <no location info>        205           0    0.0    0.0     0.0    0.0
- CAF:scrubberRating                                                                             Lib                      src\Lib.hs:45:1-14        212           0    0.0    0.0     0.0    0.0
-  scrubberRating                                                                                Lib                      src\Lib.hs:45:1-60        355           1    0.0    0.0     0.0    0.0
- main                                                                                           Main                     app\Main.hs:(6,1)-(13,45) 337           0    0.0    0.0     0.0   99.8
-  main.epsilonInt                                                                               Main                     app\Main.hs:9:7-45        341           1    0.0    0.0     0.0   39.9
-   epsilon                                                                                      Lib                      src\Lib.hs:31:1-73        344           1    0.0    0.0     0.0   39.7
-    getFromGroupsByLengthComparison                                                             Lib                      src\Lib.hs:34:1-78        347          12    0.0    0.0     0.0    0.0
-    groupedDigits                                                                               Lib                      src\Lib.hs:39:1-58        345           1    0.0   39.7     0.0   39.7
-   readBinary                                                                                   Lib                      src\Lib.hs:21:1-57        343           0    0.0    0.2     0.0    0.2
-  main.gammaInt                                                                                 Main                     app\Main.hs:8:7-41        348           1    0.0    0.0     0.0   39.9
-   gamma                                                                                        Lib                      src\Lib.hs:26:1-71        350           1    0.0    0.0     0.0   39.7
-    getFromGroupsByLengthComparison                                                             Lib                      src\Lib.hs:34:1-78        352          12    0.0    0.0     0.0    0.0
-    groupedDigits                                                                               Lib                      src\Lib.hs:39:1-58        351           1    0.0   39.7     0.0   39.7
-   readBinary                                                                                   Lib                      src\Lib.hs:21:1-57        349           0    0.0    0.2     0.0    0.2
-  main.oxygenRatingInt                                                                          Main                     app\Main.hs:11:7-55       366           1    0.0    0.0     0.0    6.9
-   oxygenRating                                                                                 Lib                      src\Lib.hs:42:1-58        370           0    0.0    0.0     0.0    6.7
-    filterCandidatesByDigitComparison                                                           Lib                      src\Lib.hs:(48,1)-(56,60) 371           0    0.0    0.0     0.0    6.7
-     filterCandidatesByDigitComparison.filterCandidatesByDigitComparison'                       Lib                      src\Lib.hs:(50,5)-(56,60) 372          13    0.0    0.0     0.0    6.7
-      filterCandidatesByDigitComparison.filterCandidatesByDigitComparison'.candidates'          Lib                      src\Lib.hs:53:9-53        373          12    0.0    0.3     0.0    0.3
-       filterCandidatesByDigitComparison.filterCandidatesByDigitComparison'.matchesTarget       Lib                      src\Lib.hs:54:9-50        374        2050    0.0    0.0     0.0    0.0
-      filterCandidatesByDigitComparison.filterCandidatesByDigitComparison'.candidatesAtPosition Lib                      src\Lib.hs:56:9-60        377          12    0.0    0.8     0.0    0.8
-      filterCandidatesByDigitComparison.filterCandidatesByDigitComparison'.target               Lib                      src\Lib.hs:55:9-95        375          12    0.0    5.6     0.0    5.6
-       getFromGroupsByLengthComparison                                                          Lib                      src\Lib.hs:34:1-78        376          12    0.0    0.0     0.0    0.0
-   readBinary                                                                                   Lib                      src\Lib.hs:21:1-57        367           0    0.0    0.2     0.0    0.2
-  main.scrubberRatingInt                                                                        Main                     app\Main.hs:12:7-59       353           1    0.0    0.0     0.0    6.4
-   readBinary                                                                                   Lib                      src\Lib.hs:21:1-57        354           0    0.0    0.2     0.0    0.2
-   scrubberRating                                                                               Lib                      src\Lib.hs:45:1-60        358           0    0.0    0.0     0.0    6.2
-    filterCandidatesByDigitComparison                                                           Lib                      src\Lib.hs:(48,1)-(56,60) 359           0    0.0    0.0     0.0    6.2
-     filterCandidatesByDigitComparison.filterCandidatesByDigitComparison'                       Lib                      src\Lib.hs:(50,5)-(56,60) 360           9    0.0    0.0     0.0    6.2
-      filterCandidatesByDigitComparison.filterCandidatesByDigitComparison'.candidates'          Lib                      src\Lib.hs:53:9-53        361           8    0.0    0.2     0.0    0.2
-       filterCandidatesByDigitComparison.filterCandidatesByDigitComparison'.matchesTarget       Lib                      src\Lib.hs:54:9-50        362        1947    0.0    0.0     0.0    0.0
-      filterCandidatesByDigitComparison.filterCandidatesByDigitComparison'.candidatesAtPosition Lib                      src\Lib.hs:56:9-60        365           8    0.0    0.8     0.0    0.8
-      filterCandidatesByDigitComparison.filterCandidatesByDigitComparison'.target               Lib                      src\Lib.hs:55:9-95        363           8    0.0    5.2     0.0    5.2
-       getFromGroupsByLengthComparison                                                          Lib                      src\Lib.hs:34:1-78        364           8    0.0    0.0     0.0    0.0
-  loadInput                                                                                     Lib                      src\Lib.hs:(59,1)-(62,26) 340           0    0.0    6.7     0.0    6.7
+MAIN                                                                                            MAIN                     <built-in>                166           0    0.0    0.0   100.0  100.0
+ CAF                                                                                            GHC.IO.FD                <entire-module>           321           0    0.0    0.0     0.0    0.0
+ CAF                                                                                            GHC.Conc.Windows         <entire-module>           300           0    0.0    0.0     0.0    0.0
+ CAF                                                                                            Text.Read.Lex            <entire-module>           297           0    0.0    0.0     0.0    0.0
+ CAF                                                                                            GHC.IO.Handle.Text       <entire-module>           261           0    0.0    0.0     0.0    0.0
+ CAF                                                                                            GHC.IO.Handle.FD         <entire-module>           259           0    0.0    0.2     0.0    0.2
+ CAF                                                                                            GHC.IO.Encoding.CodePage <entire-module>           250           0    0.0    0.0     0.0    0.0
+ CAF                                                                                            GHC.IO.Encoding          <entire-module>           249           0    0.0    0.0     0.0    0.0
+ CAF:filterCandidatesByDigitComparison                                                          Lib                      src\Lib.hs:49:1-33        206           0    0.0    0.0     0.0    0.0
+  filterCandidatesByDigitComparison                                                             Lib                      src\Lib.hs:(49,1)-(57,60) 350           1    0.0    0.0     0.0    0.0
+ CAF:main1                                                                                      Main                     <no location info>        173           0    0.0    0.0     0.0    0.0
+  main                                                                                          Main                     app\Main.hs:(6,1)-(13,45) 332           1    0.0    0.0     0.0    0.0
+ CAF:oxygenRating                                                                               Lib                      src\Lib.hs:43:1-12        207           0    0.0    0.0     0.0    0.0
+  oxygenRating                                                                                  Lib                      src\Lib.hs:43:1-58        361           1    0.0    0.0     0.0    0.0
+ CAF:readBinary                                                                                 Lib                      src\Lib.hs:22:1-10        205           0    0.0    0.0     0.0    0.0
+  readBinary                                                                                    Lib                      src\Lib.hs:22:1-57        336           1    0.0    0.0     0.0    0.0
+ CAF:readBinary5                                                                                Lib                      <no location info>        201           0    0.0    0.0     0.0    0.0
+ CAF:scrubberRating                                                                             Lib                      src\Lib.hs:46:1-14        208           0    0.0    0.0     0.0    0.0
+  scrubberRating                                                                                Lib                      src\Lib.hs:46:1-60        349           1    0.0    0.0     0.0    0.0
+ main                                                                                           Main                     app\Main.hs:(6,1)-(13,45) 333           0    0.0    0.1   100.0   99.8
+  loadInput                                                                                     Lib                      src\Lib.hs:(60,1)-(63,26) 334           1   50.0    6.7    50.0    6.7
+  main.epsilonInt                                                                               Main                     app\Main.hs:9:7-45        335           1    0.0    0.0     0.0   39.9
+   epsilon                                                                                      Lib                      src\Lib.hs:32:1-73        338           1    0.0    0.0     0.0   39.7
+    getFromGroupsByLengthComparison                                                             Lib                      src\Lib.hs:35:1-78        341          12    0.0    0.0     0.0    0.0
+    groupedDigits                                                                               Lib                      src\Lib.hs:40:1-58        339           1    0.0   39.7     0.0   39.7
+   readBinary                                                                                   Lib                      src\Lib.hs:22:1-57        337           0    0.0    0.2     0.0    0.2
+  main.gammaInt                                                                                 Main                     app\Main.hs:8:7-41        342           1    0.0    0.0    50.0   39.9
+   gamma                                                                                        Lib                      src\Lib.hs:27:1-71        344           1    0.0    0.0    50.0   39.7
+    getFromGroupsByLengthComparison                                                             Lib                      src\Lib.hs:35:1-78        346          12    0.0    0.0     0.0    0.0
+    groupedDigits                                                                               Lib                      src\Lib.hs:40:1-58        345           1   50.0   39.7    50.0   39.7
+   readBinary                                                                                   Lib                      src\Lib.hs:22:1-57        343           0    0.0    0.2     0.0    0.2
+  main.oxygenRatingInt                                                                          Main                     app\Main.hs:11:7-55       359           1    0.0    0.0     0.0    6.9
+   oxygenRating                                                                                 Lib                      src\Lib.hs:43:1-58        362           0    0.0    0.0     0.0    6.7
+    filterCandidatesByDigitComparison                                                           Lib                      src\Lib.hs:(49,1)-(57,60) 363           0    0.0    0.0     0.0    6.7
+     filterCandidatesByDigitComparison.filterCandidatesByDigitComparison'                       Lib                      src\Lib.hs:(51,5)-(57,60) 364          13    0.0    0.0     0.0    6.7
+      filterCandidatesByDigitComparison.filterCandidatesByDigitComparison'.candidates'          Lib                      src\Lib.hs:54:9-53        368          12    0.0    0.3     0.0    0.3
+       filterCandidatesByDigitComparison.filterCandidatesByDigitComparison'.matchesTarget       Lib                      src\Lib.hs:55:9-50        369        2050    0.0    0.0     0.0    0.0
+      filterCandidatesByDigitComparison.filterCandidatesByDigitComparison'.candidatesAtPosition Lib                      src\Lib.hs:57:9-60        365          12    0.0    0.8     0.0    0.8
+      filterCandidatesByDigitComparison.filterCandidatesByDigitComparison'.target               Lib                      src\Lib.hs:56:9-95        366          12    0.0    5.6     0.0    5.6
+       getFromGroupsByLengthComparison                                                          Lib                      src\Lib.hs:35:1-78        367          12    0.0    0.0     0.0    0.0
+   readBinary                                                                                   Lib                      src\Lib.hs:22:1-57        360           0    0.0    0.2     0.0    0.2
+  main.scrubberRatingInt                                                                        Main                     app\Main.hs:12:7-59       347           1    0.0    0.0     0.0    6.4
+   readBinary                                                                                   Lib                      src\Lib.hs:22:1-57        348           0    0.0    0.2     0.0    0.2
+   scrubberRating                                                                               Lib                      src\Lib.hs:46:1-60        351           0    0.0    0.0     0.0    6.2
+    filterCandidatesByDigitComparison                                                           Lib                      src\Lib.hs:(49,1)-(57,60) 352           0    0.0    0.0     0.0    6.2
+     filterCandidatesByDigitComparison.filterCandidatesByDigitComparison'                       Lib                      src\Lib.hs:(51,5)-(57,60) 353           9    0.0    0.0     0.0    6.2
+      filterCandidatesByDigitComparison.filterCandidatesByDigitComparison'.candidates'          Lib                      src\Lib.hs:54:9-53        357           8    0.0    0.2     0.0    0.2
+       filterCandidatesByDigitComparison.filterCandidatesByDigitComparison'.matchesTarget       Lib                      src\Lib.hs:55:9-50        358        1947    0.0    0.0     0.0    0.0
+      filterCandidatesByDigitComparison.filterCandidatesByDigitComparison'.candidatesAtPosition Lib                      src\Lib.hs:57:9-60        354           8    0.0    0.8     0.0    0.8
+      filterCandidatesByDigitComparison.filterCandidatesByDigitComparison'.target               Lib                      src\Lib.hs:56:9-95        355           8    0.0    5.2     0.0    5.2
+       getFromGroupsByLengthComparison                                                          Lib                      src\Lib.hs:35:1-78        356           8    0.0    0.0     0.0    0.0
