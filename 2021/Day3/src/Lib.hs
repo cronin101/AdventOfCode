@@ -12,7 +12,6 @@ import qualified Data.ByteString.Char8 as BSC
 import Data.Char (isDigit)
 import Data.Function (on)
 import Data.List (group, maximumBy, minimumBy, sort, transpose)
-import Data.Maybe (mapMaybe)
 import Numeric (readInt)
 
 -- >>> readBinary "101"
