@@ -11,12 +11,9 @@ where
 import qualified Data.Attoparsec.ByteString.Char8 as A
 import qualified Data.ByteString.Char8 as BSC
 import Data.Either (fromRight)
-import qualified Data.Int as S
 import qualified Data.IntSet as S
 import Data.List (find, transpose)
-import qualified Data.Map as M
-import Data.Maybe (fromJust, isJust)
-import Debug.Trace (trace, traceShow)
+import Data.Maybe (isJust)
 
 type BingoCard = [[Int]]
 
@@ -86,14 +83,12 @@ playBingo :: InitialState -> Maybe EndState
 playBingo ([], _) = Nothing
 playBingo (x : xs, cards) = playBingo' (S.fromList [x]) x xs
   where
-    playBingo' :: S.IntSet -> Int -> [Int] -> Maybe EndState
     playBingo' called lastCalled remaining = case winningCard of
       Just card -> Just (S.toAscList called, scoreCard called lastCalled card, card)
       Nothing -> case remaining of
         (r : rs) -> playBingo' (S.insert r called) r rs
         [] -> Nothing
       where
-        winningCard :: Maybe BingoCard
         winningCard = find (hasBingo called) cards
 
 playUntilLastWin :: InitialState -> Maybe EndState
