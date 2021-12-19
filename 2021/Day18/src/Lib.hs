@@ -3,7 +3,16 @@
 {-# LANGUAGE Strict #-}
 
 module Lib
-  (
+  ( readPair,
+    explode,
+    add,
+    explodeAt',
+    toExplode,
+    reduce,
+    split,
+    reduceMany,
+    loadInput,
+    magnitude',
   )
 where
 
@@ -13,6 +22,7 @@ import qualified Data.Attoparsec.ByteString.Char8 as A
 import qualified Data.ByteString.Char8 as BSC
 import Data.Char (digitToInt, intToDigit, isDigit, isHexDigit)
 import qualified Data.Char as A
+import Data.Complex (magnitude)
 import Data.Either (fromRight, isRight)
 import Data.Function (fix, on)
 import Data.Maybe (fromJust, listToMaybe, mapMaybe)
@@ -121,8 +131,6 @@ toExplode' (LeftPair _ (p, x)) = toExplode' p
 toExplode' (RightPair _ (x, p)) = toExplode' p
 toExplode' (Balanced _ (a, b)) = head (map Just (mapMaybe toExplode' [a, b]) ++ [Nothing])
 
--- >>> toExplode $ readPair "[[[[[9,8],1],2],3],4]"
-
 leftMost :: Pair a -> a
 leftMost (Literal _ (l, _)) = l
 leftMost (RightPair _ (l, _)) = l
@@ -134,15 +142,6 @@ rightMost (Literal _ (_, r)) = r
 rightMost (RightPair _ (_, r)) = rightMost r
 rightMost (LeftPair _ (_, r)) = r
 rightMost (Balanced _ (_, r)) = rightMost r
-
--- >>> explode $ readPair "[[[[[9,8],1],2],3],4]"
--- (Just (0,(9,0)),[[[[0,9],2],3],4])
-
--- >>> explode $ readPair "[7,[6,[5,[4,[3,2]]]]]"
--- (Just (3,(0,3)),[7,[6,[5,[7,0]]]])
-
--- >>> explode $ readPair "[[6,[5,[4,[3,2]]]],1]"
--- (Just (2,(0,3)),[[6,[5,[7,0]]],1])
 
 -- >>> size $ readPair "[1,[[[[3,2],4],5],6]]"
 -- 1
@@ -171,9 +170,6 @@ toIndex p = fst <$> withIndex p
 -- >>> toIndex $ readPair "[[3,[2,[1,[7,3]]]],[6,[5,[4,[3,2]]]]]"
 -- [[0,[1,[2,[3,3]]]],[4,[5,[6,[7,7]]]]]
 
--- >>> fmapIndex (const 99, const 88) 2 $ readPair "[1,[[[[3,2],4],5],6]]"
--- [1,[[[[3,2],88],5],6]]
-
 fmapIndex :: (a -> a) -> (LiteralPair a -> LiteralPair a) -> Int -> Pair a -> Pair a
 fmapIndex f fl n = fmapIndex' 0
   where
@@ -181,70 +177,48 @@ fmapIndex f fl n = fmapIndex' 0
       | current == n = Literal d (fl l)
       | otherwise = literal
     fmapIndex' current leftPair@(LeftPair d (p, y))
-      | current + size p == n = LeftPair d (fmapIndex' current p, f y)
+      | current + size p == n = LeftPair d (p, f y)
       | otherwise = LeftPair d (fmapIndex' current p, y)
     fmapIndex' current rightPair@(RightPair d (x, p))
-      | current == n = RightPair d (f x, fmapIndex' (current + 1) p)
+      | current == n = RightPair d (f x, p)
       | otherwise = RightPair d (x, fmapIndex' (current + 1) p)
-    fmapIndex' current (Balanced d (l, r)) = Balanced d (fmapIndex' current l, fmapIndex' (current + size l) r)
+    fmapIndex' current (Balanced d (l, r))
+      | n < current + size l = Balanced d (fmapIndex' current l, r)
+      | otherwise = Balanced d (l, fmapIndex' (current + size l) r)
 
 explode :: Pair Int -> Pair Int
 explode p = case exploded of
-  (Just (index, (lCarry, rCarry)), p) -> fmapIndex (+ rCarry) (first (+ rCarry)) (index + 1) $ fmapIndex (+ lCarry) (second (+ lCarry)) (index - 1) p
+  (Just ((lIndex, rIndex), (lCarry, rCarry)), p) -> fmapIndex (+ rCarry) (first (+ rCarry)) rIndex $ fmapIndex (+ lCarry) (second (+ lCarry)) lIndex p
   _ -> p
   where
     e = toExplode p
     exploded = explodeAt' e 0 Nothing p
 
--- explodeAt' (Just (index, toExplode)) currentIndex (Just (ExplodedIndex,(lCarry,rCarry)) pair
-explodeAt' :: Eq a => Num a => Maybe (Int, Pair a) -> Int -> Maybe (Int, (a, a)) -> Pair a -> (Maybe (Int, (a, a)), Pair a)
+-- explodeAt' (Just (index, toExplode)) currentIndex (Just ((leftCarryIndex, rightCarryIndex),(lCarry,rCarry)) pair
+explodeAt' :: Eq a => Num a => Maybe (Int, Pair a) -> Int -> Maybe ((Int, Int), (a, a)) -> Pair a -> (Maybe ((Int, Int), (a, a)), Pair a)
 explodeAt' Nothing _ _ p = (Nothing, p)
 explodeAt' _ _ index@(Just _) p = (index, p)
 explodeAt' _ i _ literal@(Literal _ _) = (Nothing, literal)
 explodeAt' e i _ leftPair@(LeftPair _ (literal@(Literal d (x, y)), z))
-  | Just (i, literal) == e = (Just (i, (x, 0)), Literal (d - 1) (0, y + z))
+  | Just (i, literal) == e = (Just ((i - 1, i), (x, 0)), Literal (d - 1) (0, y + z))
   | otherwise = (Nothing, leftPair)
 explodeAt' e i _ rightPair@(RightPair _ (x, literal@(Literal d (y, z))))
-  | Just (i + 1, literal) == e = (Just (i, (0, z)), Literal (d - 1) (x + y, 0))
+  | Just (i + 1, literal) == e = (Just ((i, i + 1), (0, z)), Literal (d - 1) (x + y, 0))
   | otherwise = (Nothing, rightPair)
 explodeAt' e i _ balanced@(Balanced d (l, r))
-  | Just (i, l) == e = (Just (i - 1, (leftMost l, rightMost l)), r)
-  | Just (i + size l, r) == e = (Just (i, (leftMost r, rightMost r)), l)
+  | Just (i, l) == e = (Just ((i -1, i + 1), (leftMost l, rightMost l)), RightPair d (0, r))
+  | Just (i + size l, r) == e = (Just ((i + size l - 1, i + size l + 1), (leftMost r, rightMost r)), LeftPair d (l, 0))
   | otherwise = case explodeAt' e i Nothing l of
     (index@(Just _), l') -> (index, Balanced d (l', r))
     _ -> case explodeAt' e (i + size l) Nothing r of
-      (index@(Just _), r') -> (index, Balanced d (l, r'))
+      (index@(Just (i, diff)), r') -> (Just (i, diff), Balanced d (l, r'))
       _ -> (Nothing, balanced)
 explodeAt' e i _ leftPair@(LeftPair d (l, x)) = case explodeAt' e i Nothing l of
-  (index@(Just _), l') -> (index, LeftPair d (l', x))
+  (index@(Just (i', diff)), l') -> (Just (i', diff), LeftPair d (l', x))
   (Nothing, _) -> (Nothing, leftPair)
 explodeAt' e i _ rightPair@(RightPair d (x, r)) = case explodeAt' e (i + 1) Nothing r of
-  (index@(Just _), r') -> (index, RightPair d (x, r'))
+  (index@(Just (i', diff)), r') -> (Just (i', diff), RightPair d (x, r'))
   (Nothing, _) -> (Nothing, rightPair)
-
--- >>> explode $ readPair "[[[[[9,8],1],2],3],4]"
--- [[[[0,9],2],3],4]
-
--- >>> toExplode $ readPair "[7,[6,[5,[4,[3,2]]]]]"
--- Just (4,[3,2])
-
--- >>> explode $ readPair "[7,[6,[5,[4,[3,2]]]]]"
--- [7,[6,[5,[7,0]]]]
-
--- >>> explode $ readPair "[[6,[5,[4,[3,2]]]],1]"
--- [[6,[5,[7,0]]],3]
-
--- >>> explode $ readPair "[[3,[2,[1,[7,3]]]],[6,[5,[4,[3,2]]]]]"
--- [[3,[2,[8,0]]],[9,[5,[4,[3,2]]]]]
-
--- >>> explode $ readPair "[[3,[2,[8,0]]],[9,[5,[4,[3,2]]]]]"
--- [[3,[2,[8,0]]],[9,[5,[7,0]]]]
-
--- >>> (\x -> explodeAt' (toExplode x) 0 Nothing x) $ readPair "[[3,[2,[8,0]]],[9,[5,[4,[3,2]]]]]"
--- (Just (5,(0,2)),[[3,[2,[8,0]]],[9,[5,[7,0]]]])
-
--- >>> toIndex $ readPair "[[3,[2,[8,0]]],[9,[5,[4,[3,2]]]]]"
--- [[0,[1,[2,2]]],[3,[4,[5,[6,6]]]]]
 
 splitValue :: (Num a, Integral a) => Int -> a -> Pair a
 splitValue d x = Literal (d + 1) (floor (x `divide` 2), ceiling (x `divide` 2))
@@ -259,17 +233,21 @@ split literal@(Literal d (x, y))
   | y >= 10 = RightPair d (x, splitValue d y)
   | otherwise = literal
 split (LeftPair d (p, y))
-  | y >= 10 = Balanced d (split p, splitValue d y)
+  | y >= 10 && split p == p = Balanced d (p, splitValue d y)
   | otherwise = LeftPair d (split p, y)
 split (RightPair d (x, p))
-  | x >= 10 = Balanced d (splitValue d x, split p)
+  | x >= 10 = Balanced d (splitValue d x, p)
   | otherwise = RightPair d (x, split p)
-split (Balanced d (a, b)) = Balanced d (split a, split b)
+split (Balanced d (a, b))
+  | split a /= a = Balanced d (split a, b)
+  | otherwise = Balanced d (a, split b)
 
 -- >>> reduce $ readPair "[[[[[4,3],4],4],[7,[[8,4],9]]],[1,1]]"
 -- [[[[0,7],4],[[7,8],[6,0]]],[8,1]]
 reduce :: Pair Int -> Pair Int
-reduce = (until =<< ((==) =<<)) (split . explode)
+reduce = (until =<< ((==) =<<)) step
+  where
+    step = split . (until =<< ((==) =<<)) explode
 
 -- >>> loadInput "example.txt"
 -- [[[[0,[4,5]],[0,0]],[[[4,5],[2,6]],[9,5]]],[7,[[[3,7],[4,3]],[[6,3],[8,8]]]]]
@@ -281,45 +259,13 @@ loadInput fileName =
     <$> BSC.readFile
       ("src/" ++ fileName)
 
--- >>> reduceMany <$> loadInput "example.txt"
--- [[[[4,0],[5,6]],[9,5]],[[6,6],[8,0]]]
+-- >>> magnitude' . reduceMany <$> loadInput "input.txt"
+-- 4120
 reduceMany :: [Pair Int] -> Pair Int
 reduceMany = foldl1 ((reduce .) . add)
 
--- >>>  toExplode .foldl1 (add) <$> loadInput "example.txt"
--- Just (1,[4,5])
-
--- >>> toExplode . foldl1 (add) <$> loadInput "example.txt"
--- Just [4,5]
-
--- >>> map toExplode <$> loadInput "example.txt"
--- [Nothing,Nothing]
-
--- >>> reduceMany $ [readPair "[[[[4,3],4],4],[7,[[8,4],9]]]", readPair "[1,1]"]
--- [[[[0,7],4],[[7,8],[6,0]]],[8,1]]
-
--- >>> reduceMany $ [readPair "[1,1]", readPair "[2,2]", readPair "[3,3]", readPair "[4,4]"]
--- [[[[1,1],[2,2]],[3,3]],[4,4]]
-
--- >>> reduceMany $ [readPair "[[[[1,1],[2,2]],[3,3]],[4,4]]", readPair "[5,5]"]
--- [[[5,3],[4,4]],[5,5]]
-
--- >>> toExplode $ readPair "[[[[1,1],[2,2]],[3,3]],[4,4]]" `add` readPair "[5,5]"
--- Just (0,[1,1])
-
--- >>> (\x -> explodeAt' (toExplode x) 0 Nothing x) $ readPair "[[[[1,1],[2,2]],[3,3]],[4,4]]" `add` readPair "[5,5]"
--- (Just (-1,(1,1)),[[[[2,2],[3,3]],[4,4]],[5,5]])
-
--- >>> toIndex $ readPair "[[[[1,1],[2,2]],[3,3]],[4,4]]" `add` readPair "[5,5]"
--- [[[[[0,0],[1,1]],[2,2]],[3,3]],[4,4]]
-
--- >>> explode $ readPair "[[[[1,1],[2,2]],[3,3]],[4,4]]" `add` readPair "[5,5]"
--- [[[[3,2],[3,3]],[4,4]],[5,5]]
-
--- >>> toExplode $ explode $ readPair "[[[[1,1],[2,2]],[3,3]],[4,4]]" `add` readPair "[5,5]"
--- Just (0,[3,2])
-
--- >>>  explode $ explode $ readPair "[[[[1,1],[2,2]],[3,3]],[4,4]]" `add` readPair "[5,5]"
--- Balanced 1 (Balanced 2 (Literal 4 (5,3),Literal 3 (4,4)),Literal 2 (5,5))
-
--- >>> explode $ readPair "[[3,[2,[1,[7,3]]]],[6,[5,[4,[3,2]]]]]"
+magnitude' :: Pair Int -> Int
+magnitude' (Literal _ (x, y)) = 3 * x + 2 * y
+magnitude' (LeftPair _ (p, x)) = 3 * magnitude' p + 2 * x
+magnitude' (RightPair _ (x, p)) = 3 * x + 2 * magnitude' p
+magnitude' (Balanced _ (a, b)) = 3 * magnitude' a + 2 * magnitude' b

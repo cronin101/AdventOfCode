@@ -49,3 +49,5 @@ tests:
     - -with-rtsopts=-N
     dependencies:
     - Day18
+    - hspec
+    - hspec-discover
