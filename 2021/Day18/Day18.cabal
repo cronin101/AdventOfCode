@@ -65,5 +65,7 @@ test-suite Day18-test
     , attoparsec
     , base >=4.7 && <5
     , bytestring
+    , hspec
+    , hspec-discover
     , text
   default-language: Haskell2010
