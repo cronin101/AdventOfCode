@@ -9,7 +9,7 @@ import Data.Either (fromRight)
 import qualified Data.IntMap.Strict as IM
 import Data.List (intercalate)
 import qualified Data.Map as M
-import Data.Maybe (fromMaybe)
+import Data.Maybe (fromMaybe, mapMaybe)
 import qualified Data.Set as S
 import qualified GHC.ResponseFile as A
 
@@ -91,13 +91,13 @@ adjacents :: Coordinate -> S.Set Coordinate
 adjacents p = S.fromList $ filter (/= p) $ kernel p
 
 step :: State -> State
-step (lastChanged, enhancementAlgorithm, image@(bgColour, pixels)) = (nextChanged, enhancementAlgorithm, (bgColour', pixels'))
+step (lastChanged, enhancementAlgorithm, image@(bgColour, pixels)) = (M.keysSet update, enhancementAlgorithm, (bgColour', pixels'))
   where
     bgColour' = nextBgColour enhancementAlgorithm image
     toUpdate = S.unions $ S.map adjacents $ S.unions $ S.map adjacents lastChanged
-    update = M.unions $ map (\p -> M.singleton p (kernelValue enhancementAlgorithm image p)) $ S.toList toUpdate
+    update = M.unions $ mapMaybe ((\(p, v) -> if isUpdate p v then Just $ M.singleton p v else Nothing) . (\p -> (p, kernelValue enhancementAlgorithm image p))) $ S.toList toUpdate
+    isUpdate point value = not (M.member point pixels) || (M.lookup point pixels /= Just value)
     pixels' = M.union update pixels
-    nextChanged = S.filter (\p -> M.lookup p pixels /= M.lookup p pixels') toUpdate
 
 -- >>> (\(_, a, i) -> kernelValue a i (2,2)) <$> loadInput "example.txt"
 -- True
