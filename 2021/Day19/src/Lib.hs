@@ -76,9 +76,9 @@ tryMatchScanners a b = case knownLocation a of
   Nothing -> Nothing
   Just location
     | overlapCount < 12 -> Nothing
-    | otherwise -> Just b {knownLocation = Just offsetToKnown, knownRotation = Just rotationId, knownBeacons = Just ({--S.union (fromJust $ knownBeacons a) $--} S.map (+ offsetToKnown) (beacons b !! rotationId))}
+    | otherwise -> Just b {knownLocation = Just offsetToKnown, knownRotation = Just rotationId, knownBeacons = Just (S.map (+ offsetToKnown) (beacons b !! rotationId))}
     where
-      (rotationId, (offsetToKnown, overlapCount)) = mostMatches [(rid,) $ mostCommonWithCount [a - b | a <- S.toList $fromJust $ knownBeacons a, b <- S.toList $ beacons b !! rid] | rid <- rids]
+      (rotationId, (offsetToKnown, overlapCount)) = mostMatches [(rid,) $ mostCommonWithCount [a - b | a <- S.toList $ fromJust $ knownBeacons a, b <- S.toList $ beacons b !! rid] | rid <- rids]
       rids = [0 .. length (beacons b) - 1]
       mostMatches = maximumBy (compare `on` (snd . snd))
       mostCommonWithCount = maximumBy (compare `on` snd) . map (\cs -> (head cs, length cs)) . group . sort
