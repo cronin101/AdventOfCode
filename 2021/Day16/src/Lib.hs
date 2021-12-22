@@ -8,7 +8,6 @@ module Lib
   )
 where
 
-import Control.Monad (ap)
 import qualified Data.Attoparsec.ByteString.Char8 as A
 import qualified Data.ByteString.Char8 as BSC
 import Data.Char (digitToInt, intToDigit, isDigit, isHexDigit)
