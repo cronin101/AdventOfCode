@@ -11,7 +11,6 @@ import Data.List (intercalate)
 import qualified Data.Map as M
 import Data.Maybe (fromMaybe, mapMaybe)
 import qualified Data.Set as S
-import qualified GHC.ResponseFile as A
 
 type EnhancementAlgorithm = IM.IntMap Bool
 
