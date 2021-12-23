@@ -14,19 +14,19 @@ import qualified Data.Map as M
 import Data.Maybe (fromMaybe, mapMaybe)
 import qualified Data.Set as S
 
-type Coord3D = (Int, Int, Int)
+type Coord3D a = (a, a, a)
 
-type PhysicalReactor = S.Set Coord3D
+type PhysicalReactor a = S.Set (Coord3D a)
 
-type Cuboid = (Coord3D, Coord3D)
+type Cuboid a = (Coord3D a, Coord3D a)
 
-type Instruction = (Bool, Cuboid)
+type Instruction a = (Bool, Cuboid a)
 
-type VirtualReactor = S.Set Cuboid
+type VirtualReactor a = S.Set (Cuboid a)
 
 -- >>> A.parseOnly parseInstruction "on x=10..12,y=10..12,z=10..12"
 -- Right (True,((10,10,10),(12,12,12)))
-parseInstruction :: A.Parser Instruction
+parseInstruction :: Integral a => A.Parser (Instruction a)
 parseInstruction = do
   toggle <- "on" <|> "off"
   " x="
@@ -43,40 +43,40 @@ parseInstruction = do
   zmax <- A.signed A.decimal
   return (toggle == "on", ((xmin, ymin, zmin), (xmax, ymax, zmax)))
 
-overlap :: Cuboid -> Cuboid -> Cuboid
+overlap :: Integral a => Cuboid a -> Cuboid a -> Cuboid a
 overlap ((xmin, ymin, zmin), (xmax, ymax, zmax)) ((xmin', ymin', zmin'), (xmax', ymax', zmax')) = ((max xmin xmin', max ymin ymin', max zmin zmin'), (min xmax xmax', min ymax ymax', min zmax zmax'))
 
-union :: Cuboid -> Cuboid -> [Cuboid]
+union :: Integral a => Cuboid a -> Cuboid a -> [Cuboid a]
 union a b = [overlap a b]
 
-volume :: Cuboid -> Int
+volume :: Integral a => Cuboid a -> a
 volume ((xmin, ymin, zmin), (xmax, ymax, zmax)) = (abs (xmax - xmin) + 1) * (abs (ymax - ymin) + 1) * (abs (zmax - zmin) + 1)
 
-parseInstructions :: A.Parser [Instruction]
+parseInstructions :: Integral a => A.Parser [Instruction a]
 parseInstructions = A.sepBy1 parseInstruction A.endOfLine
 
 -- >>> loadInput "smallExample.txt"
 -- [(True,((10,10,10),(12,12,12))),(True,((11,11,11),(13,13,13))),(False,((9,9,9),(11,11,11))),(True,((10,10,10),(10,10,10)))]
-loadInput :: [Char] -> IO [Instruction]
+loadInput :: Integral a => [Char] -> IO [Instruction a]
 loadInput fileName =
   fromRight []
     . A.parseOnly parseInstructions
     <$> BSC.readFile
       ("src/" ++ fileName)
 
-boundedPoints :: Cuboid -> [Coord3D]
+boundedPoints :: Integral a => Cuboid a -> [Coord3D a]
 boundedPoints cuboid = [(x, y, z) | x <- [xmin .. xmax], y <- [ymin .. ymax], z <- [zmin .. zmax]]
   where
     ((xmin, ymin, zmin), (xmax, ymax, zmax)) = overlap cuboid ((-50, -50, -50), (50, 50, 50))
 
-doesIntersect :: Cuboid -> Cuboid -> Bool
+doesIntersect :: Integral a => Cuboid a -> Cuboid a -> Bool
 doesIntersect a b = (> 0) . volume $ overlap a b
 
-physicalEvaluate :: PhysicalReactor -> Instruction -> PhysicalReactor
+physicalEvaluate :: Integral a => PhysicalReactor a -> Instruction a -> PhysicalReactor a
 physicalEvaluate r (True, cuboid) = S.union (S.fromList $ boundedPoints cuboid) r
 physicalEvaluate r (False, cuboid) = r S.\\ S.fromList (boundedPoints cuboid)
 
-physicalSimulate :: [Instruction] -> PhysicalReactor
+physicalSimulate :: Integral a => [Instruction a] -> PhysicalReactor a
 physicalSimulate = foldl physicalEvaluate S.empty
 
 -- >>> S.size . physicalSimulate <$> loadInput "smallExample.txt"
@@ -88,15 +88,15 @@ physicalSimulate = foldl physicalEvaluate S.empty
 -- >>> S.size . physicalSimulate <$> loadInput "input.txt"
 -- 553201
 
-normalizedReactor :: VirtualReactor -> Cuboid -> VirtualReactor
+normalizedReactor :: Integral a => VirtualReactor a -> Cuboid a -> VirtualReactor a
 normalizedReactor r c = S.unions $ S.map (\c' -> S.fromList $ snd $ normalize (c, c')) r
 
-normalizedCuboid :: VirtualReactor -> Cuboid -> S.Set Cuboid
+normalizedCuboid :: Integral a => VirtualReactor a -> Cuboid a -> S.Set (Cuboid a)
 normalizedCuboid r c = S.unions $ S.map (\c' -> S.fromList $ fst $ normalize (c, c')) r
 
 -- >>> ((virtualEvaluate S.empty) . head)  <$> loadInput "smallExample.txt"
 -- fromList [((10,10,10),(12,12,12))]
-virtualEvaluate :: VirtualReactor -> Instruction -> VirtualReactor
+virtualEvaluate :: Integral a => VirtualReactor a -> Instruction a -> VirtualReactor a
 virtualEvaluate r (True, c)
   | S.null r = S.singleton c
   | otherwise = S.union (normalizedCuboid r c) (normalizedReactor r c)
@@ -106,7 +106,7 @@ virtualEvaluate r (False, c)
 
 -- >>> (virtualVolume. virtualSimulate . take 2 ) <$> loadInput "smallExample.txt"
 -- 46
-virtualSimulate :: [Instruction] -> VirtualReactor
+virtualSimulate :: Integral a => [Instruction a] -> VirtualReactor a
 virtualSimulate = foldl virtualEvaluate S.empty
 
 -- >>> ( S.toList . virtualSimulate . take 3) <$> loadInput "smallExample.txt"
@@ -115,13 +115,13 @@ virtualSimulate = foldl virtualEvaluate S.empty
 -- >>> (virtualVolume. virtualSimulate) <$> loadInput "virtualExample.txt"
 -- 39
 
-virtualVolume :: VirtualReactor -> Int
+virtualVolume :: Integral a => VirtualReactor a -> a
 virtualVolume r = sum $ map volume $ S.toList r
 
 -- >>> normalize (((10,10,12),(10,11,12)), ((10,10,10),(10,10,10)))
 -- ([((10,11,12),(10,11,12)),((10,10,12),(10,10,12))],[((10,10,10),(10,10,10))])
 
-simplify :: [Cuboid] -> [Cuboid]
+simplify :: Integral a => [Cuboid a] -> [Cuboid a]
 simplify [] = []
 simplify c =
   if volume bounding == sum (map volume c)
@@ -138,7 +138,7 @@ simplify c =
 
 -- >>> normalize (((10,10,10),(12,12,12)), ((11,11,11),(13,13,13)))
 -- ([((11,11,11),(12,12,12)),((10,11,10),(10,12,10)),((10,10,10),(10,10,10)),((10,11,11),(10,12,12)),((10,10,11),(10,10,12)),((11,10,11),(12,10,12)),((11,10,10),(12,10,10)),((11,11,10),(12,12,10))],[((11,11,11),(12,12,12)),((13,11,11),(13,13,13)),((11,13,11),(12,13,12)),((11,13,13),(12,13,13)),((11,11,13),(12,12,13))])
-normalize :: (Cuboid, Cuboid) -> ([Cuboid], [Cuboid])
+normalize :: Integral a => (Cuboid a, Cuboid a) -> ([Cuboid a], [Cuboid a])
 normalize (a, b) = case valid [overlap a b] of
   [overlap] -> (valid $ o : a_rest, valid $ o : b_rest)
   _ -> ([a], [b])
