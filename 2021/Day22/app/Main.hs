@@ -4,5 +4,5 @@ import Lib
 
 main :: IO ()
 main = do
-  input <- loadInput "virtualExample.txt"
+  input <- loadInput "input.txt"
   print $ virtualVolume $ virtualSimulate $ input
