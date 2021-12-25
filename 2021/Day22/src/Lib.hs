@@ -1,17 +1,22 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE Strict #-}
 
-module Lib (virtualVolume, virtualSimulate, loadInput) where
+module Lib (virtualVolume, virtualSimulate, loadInput, physicalVolume, physicalSimulate) where
 
-import Control.Applicative (Alternative (empty), (<|>))
+import Control.Applicative ((<|>))
 import qualified Data.Attoparsec.ByteString.Char8 as A
 import qualified Data.ByteString.Char8 as BSC
 import Data.Either (fromRight)
-import Data.List (intercalate)
 import Data.Maybe (catMaybes, fromJust, fromMaybe, isJust, isNothing, mapMaybe)
 import qualified Data.Set as S
 
 type Coord3D a = (a, a, a)
+
+setX x (_, y, z) = (x, y, z)
+
+setY y (x, _, z) = (x, y, z)
+
+setZ z (x, y, _) = (x, y, z)
 
 type PhysicalReactor a = S.Set (Coord3D a)
 
@@ -56,12 +61,11 @@ loadInput fileName =
 
 boundedPoints :: Integral a => Cuboid a -> S.Set (Coord3D a)
 boundedPoints cuboid =
-  if doesIntersect cuboid bounds
-    then S.fromList [(x, y, z) | x <- [xmin .. xmax], y <- [ymin .. ymax], z <- [zmin .. zmax]]
-    else S.empty
+  case intersection cuboid bounds of
+    Just ((xmin, ymin, zmin), (xmax, ymax, zmax)) -> S.fromList [(x, y, z) | x <- [xmin .. xmax], y <- [ymin .. ymax], z <- [zmin .. zmax]]
+    _ -> S.empty
   where
     bounds = ((-50, -50, -50), (50, 50, 50))
-    Just ((xmin, ymin, zmin), (xmax, ymax, zmax)) = intersection cuboid bounds
 
 doesIntersect :: Integral a => Cuboid a -> Cuboid a -> Bool
 doesIntersect a b = isJust $ intersection a b
@@ -90,6 +94,9 @@ virtualEvaluate r (False, c)
 virtualSimulate :: Integral a => [Instruction a] -> VirtualReactor a
 virtualSimulate = foldl virtualEvaluate S.empty
 
+physicalVolume :: Integral a => PhysicalReactor a -> Int
+physicalVolume = S.size
+
 virtualVolume :: Integral a => VirtualReactor a -> a
 virtualVolume r = sum $ map volume $ S.toList r
 
@@ -102,15 +109,28 @@ subtractCuboid a b = case intersection a b of
     | overlap == a -> S.empty
     | otherwise -> S.delete overlap (S.fromList $ parts a overlap)
     where
-      parts c@((xmin, ymin, zmin), (xmax, ymax, zmax)) o@((xmin', ymin', zmin'), (xmax', ymax', zmax')) =
-        catMaybes ([front, middleForFrontBack, back] <*> catMaybes ([top, middleForTopBottom, bottom] <*> catMaybes ([left, middleForLeftRight, right] <*> [c])))
+      parts (min, max) ((xmin', ymin', zmin'), (xmax', ymax', zmax')) =
+        catMaybes ([front, middleForFrontBack, back] <*> catMaybes ([top, middleForTopBottom, bottom] <*> catMaybes ([left, middleForLeftRight, right] <*> [(min, max)])))
         where
-          left = (`intersection` ((xmin, ymin, zmin), (xmin' - 1, ymax, zmax)))
-          middleForLeftRight = (`intersection` ((xmin', ymin, zmin), (xmax', ymax, zmax)))
-          right = (`intersection` ((xmax' + 1, ymin, zmin), (xmax, ymax, zmax)))
-          top = (`intersection` ((xmin, ymax' + 1, zmin), (xmax, ymax, zmax)))
-          middleForTopBottom = (`intersection` ((xmin, ymin', zmin), (xmax, ymax', zmax)))
-          bottom = (`intersection` ((xmin, ymin, zmin), (xmax, ymin' - 1, zmax)))
-          front = (`intersection` ((xmin, ymin, zmax' + 1), (xmax, ymax, zmax)))
-          middleForFrontBack = (`intersection` ((xmin, ymin, zmin'), (xmax, ymax, zmax')))
-          back = (`intersection` ((xmin, ymin, zmin), (xmax, ymax, zmin' - 1)))
+          [left, middleForLeftRight, right] =
+            map
+              (uncurry subsetFactory)
+              [ (id, setX (xmin' - 1)),
+                (setX xmin', setX xmax'),
+                (setX $ xmax' + 1, id)
+              ]
+          [top, middleForTopBottom, bottom] =
+            map
+              (uncurry subsetFactory)
+              [ (setY $ ymax' + 1, id),
+                (setY ymin', setY ymax'),
+                (id, setY (ymin' - 1))
+              ]
+          [front, middleForFrontBack, back] =
+            map
+              (uncurry subsetFactory)
+              [ (setZ $ zmax' + 1, id),
+                (setZ zmin', setZ zmax'),
+                (id, setZ $ zmin' - 1)
+              ]
+          subsetFactory fMin fMax = (`intersection` (fMin min, fMax max))
