@@ -26,12 +26,12 @@ type StrategyBEntry = (Janken, Outcome)
 -- (Paper,Scissors)
 evaluateStrategy :: StrategyBEntry -> StrategyAEntry
 evaluateStrategy (choice, Draw)   = (choice, choice)
-evaluateStrategy (Rock, Win)      = (Rock, Paper)
-evaluateStrategy (Rock, Lose)     = (Rock, Scissors)
-evaluateStrategy (Paper, Win)     = (Paper, Scissors)
-evaluateStrategy (Paper, Lose)    = (Paper, Rock)
-evaluateStrategy (Scissors, Win)  = (Scissors, Rock)
-evaluateStrategy (Scissors, Lose) = (Scissors, Paper)
+evaluateStrategy (hisChoice, Win)
+  | hisChoice < Scissors = (hisChoice, succ hisChoice)
+  | otherwise = (Scissors, Rock)
+evaluateStrategy (hisChoice, Lose)
+ | hisChoice > Rock = (hisChoice, pred hisChoice)
+ | otherwise = (Rock, Scissors)
 
 -- >>> scoreRound (Rock, Paper)
 -- 8
@@ -41,10 +41,9 @@ scoreRound r@(_, myChoice) = outcomeScore r + shapeScore myChoice
 -- >>> outcomeScore (Rock, Paper)
 -- 6
 outcomeScore :: StrategyAEntry -> Int
-outcomeScore (Rock, Paper) = 6
-outcomeScore (Paper, Scissors) = 6
 outcomeScore (Scissors, Rock) = 6
 outcomeScore (hisChoice, myChoice)
+  | fromEnum myChoice == fromEnum hisChoice + 1 = 6
   | myChoice == hisChoice = 3
   | otherwise = 0
 
