@@ -24,6 +24,7 @@ dependencies:
 - attoparsec
 - bytestring
 - containers
+- lens
 - pretty-terminal
 
 ghc-options:

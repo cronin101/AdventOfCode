@@ -36,6 +36,7 @@ library
     , base >=4.7 && <5
     , bytestring
     , containers
+    , lens
     , pretty-terminal
   default-language: Haskell2010
 
@@ -52,6 +53,7 @@ executable Day8-exe
     , base >=4.7 && <5
     , bytestring
     , containers
+    , lens
     , pretty-terminal
   default-language: Haskell2010
 
@@ -69,5 +71,6 @@ test-suite Day8-test
     , base >=4.7 && <5
     , bytestring
     , containers
+    , lens
     , pretty-terminal
   default-language: Haskell2010

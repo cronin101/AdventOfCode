@@ -7,9 +7,11 @@ module Lib
     solve,
     countVisible,
     step,
+    bestScore,
   )
 where
 
+import Control.Lens (each, over)
 import Control.Monad (ap)
 import Data.Attoparsec.ByteString.Char8 qualified as A
 import Data.ByteString.Char8 qualified as BSC
@@ -37,7 +39,7 @@ unknownVis :: HeightKnowledge
 unknownVis = HeightKnowledge Nothing Nothing Nothing Nothing
 
 -- >>> toCoordinateMap [[3,0,3,7,3],[2,5,5,1,2]]
--- ((5,2),fromList [((0,0),3),((0,1),2),((1,0),0),((1,1),5),((2,0),3),((2,1),5),((3,0),7),((3,1),1),((4,0),3),((4,1),2)])
+-- ((4,1),fromList [((0,0),3),((0,1),2),((1,0),0),((1,1),5),((2,0),3),((2,1),5),((3,0),7),((3,1),1),((4,0),3),((4,1),2)])
 toCoordinateMap :: [[Int]] -> BoundedCoordinateMap
 toCoordinateMap values = ((xMax, yMax),) $ M.fromList $ concat annotatedValues
   where
@@ -46,12 +48,12 @@ toCoordinateMap values = ((xMax, yMax),) $ M.fromList $ concat annotatedValues
     annotatedValues = zipWith (\y -> map (\(x, v) -> ((x, y), v))) [0 ..] $ map (zip [0 ..]) values
 
 -- >>> A.parseOnly parseLine "25512"
--- Right [3,0,3,7,3]
+-- Right [2,5,5,1,2]
 parseLine :: A.Parser [Int]
 parseLine = A.many1 (read . return <$> A.digit)
 
 -- >>> A.parseOnly parseGrid "30373\n25512"
--- Right (fromList [((0,0),3),((0,1),2),((1,0),0),((1,1),5),((2,0),3),((2,1),5),((3,0),7),((3,1),1),((4,0),3),((4,1),2)])
+-- Right ((4,1),fromList [((0,0),3),((0,1),2),((1,0),0),((1,1),5),((2,0),3),((2,1),5),((3,0),7),((3,1),1),((4,0),3),((4,1),2)])
 parseGrid :: A.Parser BoundedCoordinateMap
 parseGrid = toCoordinateMap <$> A.sepBy1 parseLine A.endOfLine
 
@@ -117,3 +119,19 @@ countVisible ((_, cMap), vMap, _) = length $ filter (uncurry isVisible) $ zip (M
 
 isVisible :: Int -> HeightKnowledge -> Bool
 isVisible height (HeightKnowledge n e s w) = or $ mapMaybe (fmap ((height >=) . maximum . (0 :) . M.keys)) [n, e, s, w]
+
+scenicScore :: HeightKnowledgeMap -> BoundedCoordinateMap -> (Int, Int) -> Int
+scenicScore kMap ((xMax, yMax), cMap) p@(x, y) = product [northScore, eastScore, southScore, westScore]
+  where
+    northScore = (minimum . (y :) . map snd) northScores
+    eastScore = (minimum . ((xMax - x) :) . map snd) eastScores
+    southScore = (minimum . (yMax - y :) . map snd) southScores
+    westScore = (minimum . (x :) . map snd) westScores
+    (northScores, eastScores, southScores, westScores) = over each (filter ((> height) . fst) . M.toList) (northDistances, eastDistances, southDistances, westDistances)
+    (eastDistances, westDistances) = over each (M.map (\(x', _) -> abs (x - x')) . fromJust) (e, w)
+    (northDistances, southDistances) = over each (M.map (\(_, y') -> abs (y - y')) . fromJust) (n, s)
+    height = fromJust $ M.lookup p cMap
+    HeightKnowledge n e s w = fromJust $ M.lookup p kMap
+
+bestScore :: State -> Int
+bestScore (bCMap, kMap, _) = maximum $ map (scenicScore kMap bCMap) $ M.keys kMap
