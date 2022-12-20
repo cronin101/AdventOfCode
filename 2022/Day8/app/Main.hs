@@ -1,9 +1,11 @@
 module Main (main) where
 
-import Lib (countVisible, loadInput, solve)
+import Lib (bestScore, countVisible, loadInput, solve)
 
 main :: IO ()
 main = do
   input <- loadInput "input.txt"
-  let solved = solve input
+  let solved@(bCMap, kMap, _) = solve input
   print $ countVisible solved
+  let scenicScore = bestScore solved
+  print scenicScore
