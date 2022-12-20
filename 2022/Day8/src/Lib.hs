@@ -24,7 +24,9 @@ type CoordinateMap = M.Map (Int, Int) Int
 
 type BoundedCoordinateMap = ((Int, Int), CoordinateMap)
 
-data HeightKnowledge = HeightKnowledge {fromNorth :: Maybe Int, fromEast :: Maybe Int, fromSouth :: Maybe Int, fromWest :: Maybe Int}
+type LocationPerHeight = Maybe (M.Map Int (Int, Int))
+
+data HeightKnowledge = HeightKnowledge {fromNorth :: LocationPerHeight, fromEast :: LocationPerHeight, fromSouth :: LocationPerHeight, fromWest :: LocationPerHeight}
   deriving (Eq, Show)
 
 type HeightKnowledgeMap = M.Map (Int, Int) HeightKnowledge
@@ -65,10 +67,10 @@ toInitialState bCMap@(limits@(xMax, yMax), cMap) =
   where
     vMap = M.union startingPerimeter $ M.map (pure unknownVis) cMap
     startingPerimeter = M.unionsWith mergePartialKnowledge [topEdge, rightEdge, bottomEdge, leftEdge]
-    topEdge = M.fromList $ map (\x -> ((x, 0), unknownVis {fromNorth = Just 0})) [0 .. xMax]
-    bottomEdge = M.fromList $ map (\x -> ((x, yMax), unknownVis {fromSouth = Just 0})) [0 .. xMax]
-    leftEdge = M.fromList $ map (\y -> ((0, y), unknownVis {fromWest = Just 0})) [0 .. yMax]
-    rightEdge = M.fromList $ map (\y -> ((xMax, y), unknownVis {fromEast = Just 0})) [0 .. yMax]
+    topEdge = M.fromList $ map (\x -> ((x, 0), unknownVis {fromNorth = Just M.empty})) [0 .. xMax]
+    bottomEdge = M.fromList $ map (\x -> ((x, yMax), unknownVis {fromSouth = Just M.empty})) [0 .. xMax]
+    leftEdge = M.fromList $ map (\y -> ((0, y), unknownVis {fromWest = Just M.empty})) [0 .. yMax]
+    rightEdge = M.fromList $ map (\y -> ((xMax, y), unknownVis {fromEast = Just M.empty})) [0 .. yMax]
 
 frontierDelta :: (Int, Int) -> (Int, Int) -> HeightKnowledge -> HeightKnowledge -> S.Set (Int, Int)
 frontierDelta (x, y) (xMax, yMax) v' v =
@@ -101,7 +103,7 @@ step (bCMap@(limits, cMap), kMap, frontier) = (bCMap, kMap', frontier')
             }
         )
       where
-        calculateDirection point dir = fmap (max (1 + fromJust (M.lookup point cMap))) (dir =<< M.lookup point kMap)
+        calculateDirection point dir = fmap (M.insert (1 + fromJust (M.lookup point cMap)) point) (dir =<< M.lookup point kMap)
 
 solve :: State -> State
 solve input
@@ -114,4 +116,4 @@ countVisible :: State -> Int
 countVisible ((_, cMap), vMap, _) = length $ filter (uncurry isVisible) $ zip (M.elems cMap) (M.elems vMap)
 
 isVisible :: Int -> HeightKnowledge -> Bool
-isVisible height (HeightKnowledge n e s w) = or $ mapMaybe (fmap (height >=)) [n, e, s, w]
+isVisible height (HeightKnowledge n e s w) = or $ mapMaybe (fmap ((height >=) . maximum . (0 :) . M.keys)) [n, e, s, w]
