@@ -6,10 +6,8 @@ module Lib
   ( loadSprites,
     startState,
     loadInput,
-    step,
     heightAtScore,
-    hintSolutionB,
-    moveUpAndSetScore,
+    prepareSolutionBStart,
   )
 where
 
@@ -129,15 +127,30 @@ step state@State {sprite, background, xRange, nextDirections, nextSprites, score
       R -> \(y, x) -> (y, x + 1)
 
 heightAtScore :: Int -> State -> Int
-heightAtScore target = (\((_, _), (_, yMax)) -> yMax + 1) . bounds . head . dropWhile ((< target) . score) . iterate step
+heightAtScore target = height . head . dropWhile ((< target) . score) . iterate step
 
-hintSolutionB :: Int -> Int -> State -> (Int, Int, State)
-hintSolutionB m n s = ((\((_, _), (_, yMax)) -> yMax + 1) $ bounds state, score state, state)
+advanceToStep :: Int -> State -> State
+advanceToStep n s = filter (not . S.null . sprite) (iterate step s) !! max 0 n
+
+height :: State -> Int
+height = (\((_, _), (_, yMax)) -> yMax + 1) . bounds
+
+lastCalculableHeightAndScore :: Int -> State -> (Int, Int)
+lastCalculableHeightAndScore cycleLength state = (height state' + (multiple * deltaHeight), score state' + (multiple * deltaScore))
   where
-    state = filter (not . S.null . sprite) (iterate step s) !! max 0 (n * m)
+    multiple = (1000000000000 - score state') `div` deltaScore
+    (deltaHeight, deltaScore) = (height state'' - height state', score state'' - score state')
+    state'' = advanceToStep cycleLength state'
+    state' = advanceToStep cycleLength state
 
 moveUpAndSetScore :: (Int, Int) -> State -> State
-moveUpAndSetScore (targetHeight, targetScore) state@State {background} = state {score = targetScore, background = S.map (\(y, x) -> (y + translationNeeded, x)) background}
+moveUpAndSetScore (targetHeight, targetScore) state@State {background} =
+  state
+    { score = targetScore,
+      background = S.map (\(y, x) -> (y + heightNeeded, x)) background
+    }
   where
-    translationNeeded = targetHeight - currentHeight
-    ((_, _), (_, currentHeight)) = bounds state
+    heightNeeded = 1 + targetHeight - height state
+
+prepareSolutionBStart :: Int -> State -> State
+prepareSolutionBStart cycleLength state = moveUpAndSetScore (lastCalculableHeightAndScore cycleLength state) $ advanceToStep cycleLength state
