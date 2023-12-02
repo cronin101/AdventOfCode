@@ -47,9 +47,9 @@ loadInput = (fromRight [] . A.parseOnly (A.sepBy1 parseGame A.endOfLine) <$>) . 
 -- >>> part1 <$> loadInput "example.txt"
 -- 8
 part1 :: Input -> Int
-part1 input =
+part1 =
   let ballCount = M.fromList [(Red, 12), (Green, 13), (Blue, 14)]
-   in sum $ map gameID $ filter (\(Game _ _ ub) -> all (\k -> (ballCount M.! k) >= (ub M.! k)) (M.keys ballCount)) input
+   in sum . map gameID . filter ((ballCount ==) . M.unionWith max ballCount . upperBounds)
 
 -- >>> part2 <$> loadInput "example.txt"
 -- 2286
