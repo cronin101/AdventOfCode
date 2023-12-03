@@ -6,6 +6,7 @@ module Lib
   )
 where
 
+import Control.Applicative ((<|>))
 import Data.Attoparsec.ByteString.Char8 (letter_ascii)
 import Data.Attoparsec.ByteString.Char8 qualified as A
 import Data.Attoparsec.Combinator qualified as A
@@ -34,7 +35,7 @@ digitParser acceptSpelledDigits = A.choice (A.digit : [spelledDigit | acceptSpel
 -- Right 81
 parseFirstAndLastDigit :: Bool -> A.Parser Int
 parseFirstAndLastDigit acceptSpelledDigits = do
-  numbers <- catMaybes <$> A.many1 (A.choice [Just <$> digitParser acceptSpelledDigits, letter_ascii $> Nothing])
+  numbers <- catMaybes <$> A.many1 (Just <$> digitParser acceptSpelledDigits <|> letter_ascii $> Nothing)
   let twoDigitNumber = [head numbers, last numbers]
   return $ read twoDigitNumber
 
