@@ -66,8 +66,7 @@ findCycleLength nodes stepCycleLength stepsAtStart start =
 findPeriodAndOffset :: Network -> (BSC.ByteString -> Bool) -> BSC.ByteString -> (Int, Int)
 findPeriodAndOffset network predicate start = (period, offset)
   where
-    offset = valueDepth
-    valueDepth = solveLength (nodeMap network) start predicate steps 0
+    offset = solveLength (nodeMap network) start predicate steps 0
     period = findCycleLength (nodeMap network) (length $ route network) steps start
     steps = cycle $ route network
 
