@@ -6,4 +6,4 @@ main :: IO ()
 main = do
   input <- loadInput "input.txt"
   print $ part1 input
-  print $ part2 input
+  print $ part2 False input

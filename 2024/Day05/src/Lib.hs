@@ -64,6 +64,15 @@ compareUsing rules left right
 isValidAccordingTo :: Rules -> [Int] -> Bool
 isValidAccordingTo rules update = all (== LT) . zipWith (compareUsing rules) update $ tail update
 
+-- Lovely alternative brute-force solution, thanks to Evan
+sortUsing' :: Rules -> [Int] -> [Int]
+sortUsing' _ [] = []
+sortUsing' rules (x : xs) = placeCorrectly x $ sortUsing' rules xs
+  where
+    placeCorrectly e l = head $ filter (isValidAccordingTo rules) $ insertElementEverywhere e l
+    insertElementEverywhere e l = [insertAt e l i | i <- [0 .. length l]]
+    insertAt e l i = take i l ++ [e] ++ drop i l
+
 -- >>> sortUsing (IM.fromList [(29, IS.fromList [11])]) [11, 29]
 -- [29,11]
 sortUsing :: Rules -> [Int] -> [Int]
@@ -90,10 +99,13 @@ sortUsing rules update = solve initialRules initialFrontier []
 part1 :: Input -> Int
 part1 (Input rules updates) = sum . mapMaybe middleElement . filter (isValidAccordingTo rules) $ updates
 
--- >>> part2 <$> loadInput "example.txt"
+-- >>> part2 True <$> loadInput "example.txt"
 -- 123
-part2 :: Input -> Int
-part2 (Input rules updates) = sum . mapMaybe (middleElement . sortUsing rules) . filter (not . isValidAccordingTo rules) $ updates
+
+-- >>> part2 False <$> loadInput "example.txt"
+-- 123
+part2 :: Bool -> Input -> Int
+part2 bruteForce (Input rules updates) = sum . mapMaybe (middleElement . (if bruteForce then sortUsing' else sortUsing) rules) . filter (not . isValidAccordingTo rules) $ updates
 
 -- >>> middleElement [1, 2, 3]
 -- Just 2
