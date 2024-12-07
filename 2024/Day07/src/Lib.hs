@@ -34,12 +34,9 @@ parseEquations = parseEquation `A.sepBy` A.endOfLine
 -- fromList [29,190,1019]
 possibleResults :: [Operator] -> [Int] -> IS.IntSet
 possibleResults _ [] = IS.empty
-possibleResults ops (x : xs) = possibleResults' (IS.singleton x) xs
+possibleResults ops (x : xs) = foldl applyAllOps (IS.singleton x) xs
   where
-    possibleResults' acc [] = acc
-    possibleResults' acc (y : ys) =
-      let acc' = IS.unions $ map (\a -> IS.fromList (map (\f -> f a y) ops)) $ IS.toList acc
-       in possibleResults' acc' ys
+    applyAllOps acc y = IS.unions $ map (\a -> IS.fromList (map (\f -> f a y) ops)) $ IS.toList acc
 
 -- Loads the calibration equations from a file.
 -- >>> loadInput "example.txt"
