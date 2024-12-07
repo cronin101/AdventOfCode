@@ -16,6 +16,8 @@ import Prelude hiding ((||))
 
 type Equation = (Int, [Int])
 
+type Operator = Int -> Int -> Int
+
 -- Parses a single equation from the input.
 -- Each equation consists of a target value and a list of numbers to be combined with operators.
 -- >>> A.parseOnly parseEquation "1: 2 3 4"
@@ -28,9 +30,9 @@ parseEquations :: A.Parser [Equation]
 parseEquations = parseEquation `A.sepBy` A.endOfLine
 
 -- Determines all possible results from combining the numbers with the given operators.
--- >>> possibleResults [10, 19]
--- fromList [29,190]
-possibleResults :: [Int -> Int -> Int] -> [Int] -> IS.IntSet
+-- >>> possibleResults [(+), (*), (||)] [10, 19]
+-- fromList [29,190,1019]
+possibleResults :: [Operator] -> [Int] -> IS.IntSet
 possibleResults _ [] = IS.empty
 possibleResults ops (x : xs) = possibleResults' (IS.singleton x) xs
   where
@@ -46,12 +48,14 @@ loadInput :: [Char] -> IO [Equation]
 loadInput = (fromRight [] . A.parseOnly parseEquations <$>) . BSC.readFile . ("src/" ++)
 
 -- Checks if a given equation is valid by seeing if the target value can be produced by the operators.
-isValid :: [Int -> Int -> Int] -> Equation -> Bool
+isValid :: [Operator] -> Equation -> Bool
 isValid ops (target, values) = IS.member target $ possibleResults ops values
 
 -- Concatenates two numbers.
-(||) :: Int -> Int -> Int
-(||) x y = read (show x ++ show y)
+(||) :: Operator
+(||) x y =
+  let yDigits = length $ show y
+   in x * 10 ^ yDigits + y
 
 -- Finds the total calibration result for equations that can be made true using addition and multiplication.
 -- >>> part1 <$> loadInput "example.txt"
