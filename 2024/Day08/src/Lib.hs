@@ -19,16 +19,22 @@ import Data.List (tails)
 import Data.Map qualified as M
 import Data.Set qualified as S
 
+-- This function parses a row of the map to identify the coordinates and types of tiles (antennas or empty spaces).
+-- The coordinates are paired with their respective tiles for further processing.
 -- >>> A.parseOnly parseRow "........0..."
 -- Right [((0,0),'.'),((1,0),'.'),((2,0),'.'),((3,0),'.'),((4,0),'.'),((5,0),'.'),((6,0),'.'),((7,0),'.'),((8,0),'0'),((9,0),'.'),((10,0),'.'),((11,0),'.')]
 parseRow :: A.Parser [(Coord2D, Tile)]
 parseRow = zipWith (\x -> ((x, 0),)) [0 ..] . map (read . pure) <$> A.many1 (A.notChar '\n')
 
+-- This function parses the entire map, row by row, and constructs a Space object.
+-- The Space object contains all the tiles and the computed antinodes based on the antennas' frequencies.
 parseMap :: A.Parser Space
 parseMap = toSpace . M.unions . zipWith (\y -> M.fromList . map (first ((,y) . fst))) [0 ..] . reverse <$> (parseRow `A.sepBy1` A.endOfLine)
   where
     toSpace as = Space as (computeAntinodes as)
 
+-- This function groups all antennas by their frequency, ignoring other types of tiles.
+-- Grouping is essential to identify potential antinodes created by antennas of the same frequency.
 -- >>> groupAntennasByFrequency . tiles <$> loadInput "example.txt"
 -- fromList [('0',[(8,10),(7,8),(5,9),(4,7)]),('A',[(9,2),(8,3),(6,6)])]
 groupAntennasByFrequency :: M.Map k Tile -> M.Map Frequency [k]
@@ -36,6 +42,8 @@ groupAntennasByFrequency = M.foldlWithKey accumulate M.empty . M.filter (\case A
   where
     accumulate acc k v = M.insertWith (++) (frequency v) [k] acc
 
+-- This function calculates all antinodes based on the positions and frequencies of the antennas.
+-- It ensures that only the strongest signals are considered when there are collisions
 computeAntinodes :: M.Map Coord2D Tile -> S.Set Antinode
 computeAntinodes ts = onlyStrongest $ S.unions $ map (antinodesForFrequency (bounds ts)) $ M.elems $ groupAntennasByFrequency ts
   where
@@ -43,6 +51,8 @@ computeAntinodes ts = onlyStrongest $ S.unions $ map (antinodesForFrequency (bou
       let (initial, resonant) = S.partition (\case Initial _ -> True; _ -> False) antinodes
        in S.union initial (resonant S.\\ S.map (\case Initial c -> Resonant c; n -> n) initial)
 
+-- This function calculates the antinodes for a given frequency by examining pairs of antennas.
+-- It ensures that the antinodes are within the bounds of the map.
 antinodesForFrequency :: Bounds -> [Coord2D] -> S.Set Antinode
 antinodesForFrequency ((minX, minY), (maxX, maxY)) = S.unions . map antinodesForPair . pairs
   where
