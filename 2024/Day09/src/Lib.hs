@@ -17,16 +17,19 @@ import Data.Either (fromRight)
 import Data.IntMap qualified as IM
 import Data.List (intercalate)
 
+-- Parses a file segment from the disk map.
 -- >>> A.parseOnly (parseFileSegment 1) "2"
 -- Right (FileSegment {fileSize = 2, fileId = 1})
 parseFileSegment :: Int -> A.Parser FileSegment
 parseFileSegment filesSeen = (`FileSegment` filesSeen) . read . pure <$> A.digit
 
+-- Parses a free segment from the disk map.
 -- >>> A.parseOnly parseFreeSegment "2"
 -- Right (FreeSegment {freeSize = 2})
 parseFreeSegment :: A.Parser FreeSegment
 parseFreeSegment = FreeSegment . read . pure <$> A.digit
 
+-- Parses the entire disk map into a FileSystem structure.
 -- >>> A.parseOnly parseDiskMap "2333133121414131402"
 -- Right 00...111...2...333.44.5555.6666.777.888899
 parseDiskMap :: A.Parser FileSystem
@@ -42,6 +45,7 @@ parseDiskMap = parseDiskMap' True 0 $ FileSystem IM.empty IM.empty
         Just (fs', offset) -> parseDiskMap' (not fileComesNext) (idx + offset) fs'
         Nothing -> pure fs
 
+-- Converts segments of the FileSystem into individual blocks.
 -- >>> fractureSegments <$> loadInput "example.txt"
 -- 00...111...2...333.44.5555.6666.777.888899
 fractureSegments :: FileSystem -> FileSystem
@@ -50,10 +54,12 @@ fractureSegments (FileSystem freeSegments fileSegments) = FileSystem freeSegment
     freeSegments' = IM.fromList $ concatMap (\(idx, FreeSegment size) -> map (,FreeSegment 1) [idx .. idx + size - 1]) $ IM.toList freeSegments
     fileSegments' = IM.fromList $ concatMap (\(idx, FileSegment size index) -> map (,FileSegment 1 index) [idx .. idx + size - 1]) $ IM.toList fileSegments
 
+-- Checks if the FileSystem is compacted.
 isCompacted :: FileSystem -> Bool
 isCompacted (FileSystem free files) = fst (IM.findMin free) > fst (IM.findMax files)
 
--- >>>   step . fractureSegments <$> loadInput "example.txt"
+-- Performs a single step of the compaction process.
+-- >>> step . fractureSegments <$> loadInput "example.txt"
 -- 009..111...2...333.44.5555.6666.777.88889.
 step :: FileSystem -> FileSystem
 step fs@(FileSystem free files)
@@ -65,19 +71,23 @@ step fs@(FileSystem free files)
     files'' = IM.insert freeIdx highestFile files'
     free'' = IM.insert fileIdx lowestFree free'
 
+-- Compacts the entire FileSystem.
 -- >>> compact <$> loadInput "example.txt"
 -- 0099811188827773336446555566..............
 compact :: FileSystem -> FileSystem
 compact = head . dropWhile (not . isCompacted) . iterate step . fractureSegments
 
+-- Loads the disk map from a file.
 loadInput :: [Char] -> IO FileSystem
 loadInput = (fromRight (FileSystem IM.empty IM.empty) . A.parseOnly parseDiskMap <$>) . BSC.readFile . ("src/" ++)
 
+-- Calculates the checksum of the compacted FileSystem.
 -- >>> part1 <$> loadInput "example.txt"
 -- 1928
 part1 :: FileSystem -> Int
 part1 = checksum . compact
 
+-- Performs the defragmentation steps.
 defragmentSteps :: FileSystem -> [FileSystem]
 defragmentSteps fs = scanl defragment1 fs (reverse $ IM.toList $ fileSegments fs)
   where
@@ -89,16 +99,19 @@ defragmentSteps fs = scanl defragment1 fs (reverse $ IM.toList $ fileSegments fs
          in FileSystem free' files'
       _ -> fs
 
+-- Defragments the entire FileSystem.
 -- >>> defragment <$> loadInput "example.txt"
 -- 00992111777.44.333....5555.6666.....8888..
 defragment :: FileSystem -> FileSystem
 defragment = last . defragmentSteps
 
+-- Calculates the checksum of the FileSystem.
 checksum :: FileSystem -> Int
 checksum = sum . map segmentValue . IM.toList . fileSegments
   where
     segmentValue (idx, FileSegment size fId) = sum $ map (fId *) [idx .. idx + size - 1]
 
+-- Calculates the checksum of the defragmented FileSystem.
 -- >>> part2 <$> loadInput "example.txt"
 -- 2858
 part2 :: FileSystem -> Int
