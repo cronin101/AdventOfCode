@@ -66,6 +66,6 @@ part1 = rockCount . blinkN 25
 
 -- Calculates the number of pebbles after 75 blinks.
 -- >>> part2 <$> loadInput "example.txt"
--- 237149922829154
+-- 65601038650482
 part2 :: IM.IntMap Int -> Int
 part2 = rockCount . blinkN 75
