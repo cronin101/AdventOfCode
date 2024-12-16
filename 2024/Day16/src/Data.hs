@@ -43,12 +43,6 @@ toVector South = (0, 1)
 toVector East = (1, 0)
 toVector West = (-1, 0)
 
-toReversed :: Direction -> Direction
-toReversed North = South
-toReversed South = North
-toReversed East = West
-toReversed West = East
-
 clockWise :: Direction -> Direction
 clockWise West = North
 clockWise d = succ d
