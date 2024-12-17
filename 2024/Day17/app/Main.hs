@@ -6,5 +6,5 @@ main :: IO ()
 main = do
   input <- loadInput "input.txt"
   print $ part1 input
-  putStrLn $ explain input
+  print $ explain input
   print $ part2 input

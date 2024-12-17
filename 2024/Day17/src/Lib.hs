@@ -37,22 +37,29 @@ instance Show Log where
   show :: Log -> String
   show (Log s) = s
 
+-- Parses a single register from the input string.
+-- Registers are identified by a character and their value.
 -- >>> A.parseOnly parseRegister "Register A: 729"
 -- Right (fromList [('A',729)])
 parseRegister :: A.Parser Registers
 parseRegister = M.singleton <$> ("Register " *> A.anyChar <* ": ") <*> A.decimal
 
+-- Parses multiple registers, separated by new lines.
 parseRegisters :: A.Parser Registers
 parseRegisters = M.unions <$> parseRegister `A.sepBy` A.endOfLine
 
+-- Parses the program instructions from the input string.
+-- Instructions are a list of integers separated by commas.
 -- >>> A.parseOnly parseProgram "Program: 0,1,5,4,3,0"
 -- Right [0,1,5,4,3,0]
 parseProgram :: A.Parser (V.Vector Int)
 parseProgram = V.fromList <$> ("Program: " *> A.decimal `A.sepBy` ",")
 
+-- Initializes the machine state with registers and program.
 parseMachine :: A.Parser Machine
 parseMachine = Machine 0 [] <$> (parseRegisters <* A.count 2 A.endOfLine) <*> parseProgram
 
+-- Executes a single step of the program, performing the instruction at the current instruction pointer.
 step :: Machine -> W.Writer [String] Machine
 step m@(Machine pc output registers instructions) = perform (V.toList $ V.slice pc 2 instructions)
   where
@@ -88,7 +95,7 @@ step m@(Machine pc output registers instructions) = perform (V.toList $ V.slice 
       n <- load r
       power <- combo c
       let d = 2 ^ power
-      W.tell ["Dividing A by 2 raised to" ++ show power]
+      W.tell ["Dividing A by 2 ^ " ++ show power]
       let v = floor $ fromIntegral n / d
       registers'' <- store r v
       return $ next {registers' = registers''}
@@ -156,6 +163,7 @@ step m@(Machine pc output registers instructions) = perform (V.toList $ V.slice 
     -- Error
     perform _ = error "Invalid instruction"
 
+-- Runs the entire program, collecting output.
 -- >>> run <$> loadInput "example.txt"
 -- Machine {pc' = 6, output = [0,1,2,5,3,6,5,3,6,4], registers' = fromList [('A',0),('B',0),('C',0)], instructions' = [0,1,5,4,3,0]}
 run :: Machine -> W.Writer [String] Machine
@@ -169,25 +177,29 @@ run m
       W.tell ["}"]
       run m'
 
+-- Loads the input file and initializes the machine state.
 -- >>> loadInput "example.txt"
 -- Machine {clock' = 0, pc' = 0, output' = [], registers' = fromList [('A',729),('B',0),('C',0)], instructions' = [0,1,5,4,3,0]}
 loadInput :: [Char] -> IO Machine
 loadInput = (fromRight (Machine 0 [] M.empty V.empty) . A.parseOnly parseMachine <$>) . BSC.readFile . ("src/" ++)
 
+-- Extracts the output from the machine state.
 extractOutput :: Machine -> [Int]
 extractOutput = reverse . output'
 
+-- Runs the program and formats the output as a string.
 -- >>> part1 <$> loadInput "example.txt"
 -- "4,6,3,5,6,3,5,2,1,0"
 part1 :: Machine -> String
 part1 m = intersperse ',' $ map (head . show) $ extractOutput $ fst $ W.runWriter (run m)
 
--- >>>   explain <$> loadInput "example2.txt"
+-- Explains the steps taken during the program execution.
+-- >>> explain <$> loadInput "example2.txt"
 -- {
 -- adv
 -- Loaded value 2024 from register A
 -- Combo: Literal 3
--- Dividing A by 2 raised to3
+-- Dividing A by 2 ^ 3
 -- Storing value 253 in register A
 -- Registers: fromList [('A',253),('B',0),('C',0)]
 -- }
@@ -205,7 +217,7 @@ part1 m = intersperse ',' $ map (head . show) $ extractOutput $ fst $ W.runWrite
 -- adv
 -- Loaded value 253 from register A
 -- Combo: Literal 3
--- Dividing A by 2 raised to3
+-- Dividing A by 2 ^ 3
 -- Storing value 31 in register A
 -- Registers: fromList [('A',31),('B',0),('C',0)]
 -- }
@@ -223,7 +235,7 @@ part1 m = intersperse ',' $ map (head . show) $ extractOutput $ fst $ W.runWrite
 -- adv
 -- Loaded value 31 from register A
 -- Combo: Literal 3
--- Dividing A by 2 raised to3
+-- Dividing A by 2 ^ 3
 -- Storing value 3 in register A
 -- Registers: fromList [('A',3),('B',0),('C',0)]
 -- }
@@ -241,7 +253,7 @@ part1 m = intersperse ',' $ map (head . show) $ extractOutput $ fst $ W.runWrite
 -- adv
 -- Loaded value 3 from register A
 -- Combo: Literal 3
--- Dividing A by 2 raised to3
+-- Dividing A by 2 ^ 3
 -- Storing value 0 in register A
 -- Registers: fromList [('A',0),('B',0),('C',0)]
 -- }
@@ -259,14 +271,19 @@ part1 m = intersperse ',' $ map (head . show) $ extractOutput $ fst $ W.runWrite
 explain :: Machine -> Log
 explain m = Log $ intercalate "\n" $ W.execWriter (run m)
 
+-- Sets a new value for register A.
 withNewA :: Machine -> Int -> Machine
 withNewA m i = m {registers' = M.insert 'A' i (registers' m)}
 
--- >>> part2 <$> loadInput "input.txt"
+-- Finds the lowest positive initial value for register A that causes the program to output a copy of itself.
 -- 190384113204239
 part2 :: Machine -> Int
-part2 m = fst $ find (V.toList $ instructions' m) (0, []) m
+part2 m = fst $ find (V.toList (instructions' m)) (0, []) m
 
+-- Searches for the input value that will produce the correct program output.
+-- We can work backwards from the target output to find the lowest bits that will produce the last n elements in the output.
+-- Once we have found a set of bits that produces the last n elements, we can shift them to the left by 3 bits to find the next set of bits.
+-- We can then check each of the 8 possible values for the next set of bits to see if they produce the last n + 1 elements in the output.
 -- >>> find [2,4,1,2,7,5,0,3,4,7,1,7,5,5,3,0] (0, []) <$> loadInput "input.txt"
 -- (190384113204239,[2,4,1,2,7,5,0,3,4,7,1,7,5,5,3,0])
 find :: [Int] -> (Int, [Int]) -> Machine -> (Int, [Int])
@@ -276,11 +293,12 @@ find target (base, found) m
       [] -> (base, found)
       (nextBase, nextFound) : _ -> find target (nextBase `shiftL` 3, nextFound) m
 
+-- We can work backwards from the target output to find the lowest bits that will produce the last n elements in the output.
+-- This function takes the base value (bits that produce all but the last element) and the target output, and returns a list of possible values for the lowest bits that will produce the target output.
 -- >>> findNextLowestBits 0 [0] <$> loadInput "input.txt"
 -- [(5,[0])]
 -- >>> findNextLowestBits (5 `shiftL` 3) [3, 0] <$> loadInput "input.txt"
 -- [(43,[3,0]),(47,[3,0])]
-
 -- >>> findNextLowestBits (43 `shiftL` 3) [5, 3, 0] <$> loadInput "input.txt"
 -- [(346,[5,3,0])]
 findNextLowestBits :: Int -> [Int] -> Machine -> [(Int, [Int])]
