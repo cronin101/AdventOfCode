@@ -23,16 +23,21 @@ import Data.PSQueue (Binding ((:->)))
 import Data.PSQueue qualified as PSQ
 import Data.Set qualified as S
 
+-- Coordinates on the race track grid, representing positions in the code path.
 type Coord2D = (Int, Int)
 
+-- A daring glitch maneuver through a wall: start, wall to pass, and exit point.
 -- (Start, Wall, End)
 type WallClip = (Coord2D, Coord2D, Coord2D)
 
+-- A forbidden shortcut from one point to another, bypassing the normal race path.
 -- (Start, End)
 type Cheat = (Coord2D, Coord2D)
 
+-- The basic building blocks of our race track: walls, the starting line, and the finish line.
 data Tile = Wall | Start | End deriving (Eq)
 
+-- The entire race track layout, including special tiles and distances to key points.
 data RaceTrack = RaceTrack
   { bounds' :: Coord2D,
     tiles' :: M.Map Coord2D Tile,
@@ -52,6 +57,7 @@ instance Show Tile where
   show Start = "S"
   show End = "E"
 
+-- Render the race track with its pathways and obstacles, revealing the distances to victory.
 printRaceTrack :: RaceTrack -> String
 printRaceTrack (RaceTrack (maxX, maxY) m _ distancesFromStart distancesFromEnd) =
   let longestDistanceFromStartStringLength = maximum $ map (length . show) $ M.elems distancesFromStart
@@ -62,14 +68,17 @@ printRaceTrack (RaceTrack (maxX, maxY) m _ distancesFromStart distancesFromEnd) 
       showTile (x, y) = pad $ fromMaybe "." $ M.lookup (x, y) $ M.unions [M.map show m, M.map show minDistanceToExtreme]
    in intercalate "\n" ([concat [showTile (x, y) | x <- [0 .. maxX]] | y <- [0 .. maxY]])
 
+-- Decode a single tile character from the race track map, deciphering walls and starting points.
 parseTile :: A.Parser Tile
 parseTile = (Wall <$ "#") <|> (Start <$ "S") <|> (End <$ "E")
 
+-- Parse a row of the race track map into coordinates and tiles, mapping out the treacherous path.
 -- >>> A.parseOnly parseRow "#S#...#.#.#...#"
 -- Right [((0,0),#),((1,0),S),((2,0),#),((6,0),#),((8,0),#),((10,0),#),((14,0),#)]
 parseRow :: A.Parser [(Coord2D, Tile)]
 parseRow = map (second fromJust) . filter (isJust . snd) . zipWith (\x -> ((x, 0),)) [0 ..] <$> A.many1 (Just <$> parseTile <|> Nothing <$ ".")
 
+-- Assemble the entire race track from the map, plotting walls and calculating distances.
 parseRaceTrack :: A.Parser RaceTrack
 parseRaceTrack = toMap . M.unions . zipWith (\y -> M.fromList . map (first ((,y) . fst))) [0 ..] <$> (parseRow `A.sepBy1` A.endOfLine)
   where
@@ -82,6 +91,7 @@ parseRaceTrack = toMap . M.unions . zipWith (\y -> M.fromList . map (first ((,y)
           distancesFromEnd = dijkstra bounds walls end
        in RaceTrack bounds m end distancesFromStart distancesFromEnd
 
+-- Load the race track map from a file, preparing the stage for the race of a lifetime.
 -- >>> loadInput "example.txt"
 --  #  #  #  #  #  #  #  #  #  #  #  #  #  #  #
 --  #  2  3  4  # 10 11 12  # 26 27 28 29 30  #
@@ -101,14 +111,17 @@ parseRaceTrack = toMap . M.unions . zipWith (\y -> M.fromList . map (first ((,y)
 loadInput :: [Char] -> IO RaceTrack
 loadInput = (fromRight (RaceTrack (0, 0) M.empty (0, 0) M.empty M.empty) . A.parseOnly parseRaceTrack <$>) . BSC.readFile . ("src/" ++)
 
+-- Explore the neighboring positions from a given point, seeking possible moves.
 neighbours :: Coord2D -> [Coord2D]
 neighbours (x, y) = [(x + 1, y), (x - 1, y), (x, y + 1), (x, y - 1)]
 
+-- The best possible race time without resorting to any underhanded tricks.
 -- >>> glitchlessRecord <$> loadInput "example.txt"
 -- 84
 glitchlessRecord :: RaceTrack -> Int
 glitchlessRecord m = distancesFromStart' m M.! end' m
 
+-- Navigate the race track using Dijkstra's algorithm, charting the shortest paths.
 dijkstra :: Coord2D -> S.Set Coord2D -> Coord2D -> M.Map Coord2D Int
 dijkstra (maxX, maxY) walls start = go M.empty $ PSQ.fromList [start :-> 0]
   where
@@ -124,35 +137,42 @@ dijkstra (maxX, maxY) walls start = go M.empty $ PSQ.fromList [start :-> 0]
               costs' = M.insert edge cost costs
            in go costs' edges''
 
+-- Identify all the walls near a point that could be glitched through, plotting potential cheats.
 wallClipsForPoint :: RaceTrack -> Coord2D -> [WallClip]
 wallClipsForPoint m p = [(p, w, e) | p `S.notMember` walls, w <- neighbours p, w `S.member` walls, e <- neighbours w, e `M.member` distancesFromEnd' m, e /= p]
   where
     walls = M.keysSet $ M.filter (== Wall) $ tiles' m
 
+-- Compile a complete list of all cheating opportunities across the race track.
 -- >>> allWallClips <$> loadInput "example.txt"
--- [((1,2),(2,2),(3,2)),((1,2),(2,2),(2,1)),((1,3),(2,3),(3,3)),((1,10),(2,10),(2,9)),((1,11),(2,11),(3,11)),((1,12),(2,12),(3,12)),((1,12),(2,12),(2,13)),((2,1),(2,2),(3,2)),((2,1),(2,2),(1,2)),((2,9),(2,10),(1,10)),((2,9),(2,8),(3,8)),((2,13),(2,12),(3,12)),((2,13),(2,12),(1,12)),((3,1),(4,1),(5,1)),((3,2),(4,2),(5,2)),((3,2),(4,2),(4,3)),((3,2),(2,2),(1,2)),((3,2),(2,2),(2,1)),((3,3),(2,3),(1,3)),((3,8),(4,8),(4,7)),((3,8),(2,8),(2,9)),((3,9),(3,10),(3,11)),((3,11),(2,11),(1,11)),((3,11),(3,10),(3,9)),((3,12),(4,12),(5,12)),((3,12),(4,12),(4,11)),((3,12),(2,12),(1,12)),((3,12),(2,12),(2,13)),((3,13),(4,13),(5,13)),((4,3),(4,2),(5,2)),((4,3),(4,2),(3,2)),((4,7),(4,8),(3,8)),((4,11),(4,12),(5,12)),((4,11),(4,12),(3,12)),((5,1),(4,1),(3,1)),((5,2),(6,2),(7,2)),((5,2),(6,2),(6,1)),((5,2),(4,2),(3,2)),((5,2),(4,2),(4,3)),((5,3),(6,3),(7,3)),((5,7),(6,7),(7,7)),((5,11),(6,11),(7,11)),((5,12),(6,12),(7,12)),((5,12),(6,12),(6,13)),((5,12),(4,12),(3,12)),((5,12),(4,12),(4,11)),((5,13),(4,13),(3,13)),((6,1),(6,2),(7,2)),((6,1),(6,2),(5,2)),((6,13),(6,12),(7,12)),((6,13),(6,12),(5,12)),((7,1),(8,1),(9,1)),((7,2),(8,2),(9,2)),((7,2),(6,2),(5,2)),((7,2),(6,2),(6,1)),((7,3),(8,3),(9,3)),((7,3),(6,3),(5,3)),((7,4),(8,4),(9,4)),((7,5),(8,5),(9,5)),((7,6),(8,6),(9,6)),((7,6),(8,6),(8,7)),((7,7),(6,7),(5,7)),((7,7),(7,8),(7,9)),((7,9),(7,8),(7,7)),((7,10),(8,10),(9,10)),((7,10),(8,10),(8,9)),((7,11),(8,11),(9,11)),((7,11),(6,11),(5,11)),((7,12),(8,12),(9,12)),((7,12),(6,12),(5,12)),((7,12),(6,12),(6,13)),((7,13),(8,13),(9,13)),((8,7),(8,8),(8,9)),((8,7),(8,6),(9,6)),((8,7),(8,6),(7,6)),((8,9),(8,10),(9,10)),((8,9),(8,10),(7,10)),((8,9),(8,8),(8,7)),((9,1),(8,1),(7,1)),((9,2),(10,2),(10,1)),((9,2),(8,2),(7,2)),((9,3),(10,3),(11,3)),((9,3),(8,3),(7,3)),((9,4),(10,4),(11,4)),((9,4),(8,4),(7,4)),((9,5),(10,5),(11,5)),((9,5),(8,5),(7,5)),((9,6),(8,6),(7,6)),((9,6),(8,6),(8,7)),((9,7),(10,7),(11,7)),((9,7),(9,8),(9,9)),((9,9),(10,9),(11,9)),((9,9),(9,8),(9,7)),((9,10),(8,10),(7,10)),((9,10),(8,10),(8,9)),((9,11),(10,11),(11,11)),((9,11),(8,11),(7,11)),((9,12),(10,12),(11,12)),((9,12),(10,12),(10,13)),((9,12),(8,12),(7,12)),((9,13),(8,13),(7,13)),((10,1),(10,2),(9,2)),((10,13),(10,12),(11,12)),((10,13),(10,12),(9,12)),((11,1),(11,2),(11,3)),((11,3),(10,3),(9,3)),((11,3),(11,2),(11,1)),((11,4),(12,4),(12,5)),((11,4),(12,4),(12,3)),((11,4),(10,4),(9,4)),((11,5),(10,5),(9,5)),((11,5),(11,6),(11,7)),((11,7),(10,7),(9,7)),((11,7),(11,6),(11,5)),((11,8),(12,8),(12,9)),((11,8),(12,8),(12,7)),((11,9),(10,9),(9,9)),((11,9),(11,10),(11,11)),((11,11),(10,11),(9,11)),((11,11),(11,10),(11,9)),((11,12),(12,12),(12,11)),((11,12),(10,12),(9,12)),((11,12),(10,12),(10,13)),((12,1),(12,2),(13,2)),((12,1),(12,2),(12,3)),((12,3),(12,4),(11,4)),((12,3),(12,4),(12,5)),((12,3),(12,2),(13,2)),((12,3),(12,2),(12,1)),((12,5),(12,6),(13,6)),((12,5),(12,6),(12,7)),((12,5),(12,4),(11,4)),((12,5),(12,4),(12,3)),((12,7),(12,8),(11,8)),((12,7),(12,8),(12,9)),((12,7),(12,6),(13,6)),((12,7),(12,6),(12,5)),((12,9),(12,10),(13,10)),((12,9),(12,10),(12,11)),((12,9),(12,8),(11,8)),((12,9),(12,8),(12,7)),((12,11),(12,12),(11,12)),((12,11),(12,10),(13,10)),((12,11),(12,10),(12,9)),((13,2),(12,2),(12,3)),((13,2),(12,2),(12,1)),((13,3),(13,4),(13,5)),((13,5),(13,4),(13,3)),((13,6),(12,6),(12,7)),((13,6),(12,6),(12,5)),((13,7),(13,8),(13,9)),((13,9),(13,8),(13,7)),((13,10),(12,10),(12,11)),((13,10),(12,10),(12,9))]
+-- [((1,2),(2,2),(3,2)),((1,2),(2,2),(2,1)), ... ]
 allWallClips :: RaceTrack -> [WallClip]
 allWallClips m = concatMap (wallClipsForPoint m) $ M.keys $ distancesFromStart' m
 
+-- Calculate how much time a racer would save by exploiting a wall clip at a specific point.
 timeSaved :: RaceTrack -> WallClip -> Int
 timeSaved m (p, _, e) =
   let newTime = 2 + distancesFromStart' m M.! p + distancesFromEnd' m M.! e
       oldTime = glitchlessRecord m
    in oldTime - newTime
 
+-- Gather all the time savings possible from every cheat, tempting racers with forbidden speed.
 -- >>> allSavings <$> loadInput "example.txt"
 -- [2,4,4,2,4,8,2,2,4,2,4,12,10,8,6,4,2,64,40,4,2,38,8,10,12,20,36,2,4,6,8,4,4,12,4,4,2,2,2,2,2,2,4,4]
 allSavings :: RaceTrack -> [Int]
 allSavings m = filter (> 0) $ map (timeSaved m) $ allWallClips m
 
+-- Tally up the number of cheats available for each amount of time saved.
 -- >>> allSavingsCounts <$> loadInput "example.txt"
 -- fromList [(2,14),(4,14),(6,2),(8,4),(10,2),(12,3),(20,1),(36,1),(38,1),(40,1),(64,1)]
 allSavingsCounts :: RaceTrack -> M.Map Int Int
 allSavingsCounts m = M.fromListWith (+) $ map (,1) $ allSavings m
 
+-- Count how many cheats would let a racer save at least 100 picoseconds under old rules.
 part1 :: RaceTrack -> Int
 part1 = sum . map snd . filter ((>= 100) . fst) . M.toList . allSavingsCounts
 
+-- Find all possible cheats starting from a point that save at least a given threshold.
 findCheats :: RaceTrack -> Int -> Coord2D -> S.Set Cheat
 findCheats m threshold p@(x, y) = S.map (p,) $ S.filter ((>= threshold) . saving) potentialEnds
   where
@@ -162,10 +182,12 @@ findCheats m threshold p@(x, y) = S.map (p,) $ S.filter ((>= threshold) . saving
     newTimeVia p' = distance p' + distancesFromStart' m M.! p + distancesFromEnd' m M.! p'
     saving p' = glitchlessRecord m - newTimeVia p'
 
+-- Discover every possible cheat across the track that saves at least the given time under new rules.
 -- >>> S.size . allCheats 74 <$> loadInput "example.txt"
 -- 7
 allCheats :: Int -> RaceTrack -> S.Set Cheat
 allCheats threshold m = S.unions $ S.map (findCheats m threshold) $ M.keysSet $ distancesFromStart' m
 
+-- Calculate the total number of cheats saving at least 100 picoseconds with extended cheat duration.
 part2 :: RaceTrack -> Int
 part2 = S.size . allCheats 100
