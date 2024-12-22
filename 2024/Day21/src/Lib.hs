@@ -92,54 +92,12 @@ fastestOptions start end =
         DownKey -> ("", (Num 2, [end]))
    in S.toList $ S.map reverse $ snd (dijkstra startState endState M.! endState)
 
--- Moves the robot's arm on the directional keypad
-move :: Coord2D -> Key -> Coord2D
-move c EnterKey = c
-move (x, y) LeftKey = (x - 1, y)
-move (x, y) RightKey = (x + 1, y)
-move (x, y) UpKey = (x, y + 1)
-move (x, y) DownKey = (x, y - 1)
-
--- Moves the robot's arm on the directional keypad and returns the new key it is pointing at
-moveArrowpad :: Key -> Key -> Key
-moveArrowpad k d = fromMaybe k (move (reverseIndexArrowpad M.! k) d `M.lookup` arrowpadLayout)
-
--- Moves the robot's arm on the numeric keypad and returns the new key it is pointing at
-moveNumpad :: NumPad -> Key -> NumPad
-moveNumpad n d = fromMaybe n (move (reverseIndexNumpad M.! n) d `M.lookup` numpadLayout)
-
 -- Implements Dijkstra's algorithm to find the shortest path of key presses to reach the target state
 dijkstra :: State -> State -> M.Map State (Int, S.Set [Key])
 dijkstra startState (targetOutput, _) = go M.empty $ PSQ.fromList [(Nothing, Nothing, startState) :-> 0]
   where
-    press :: State -> State
-    press (output, (Num n, [])) = (output ++ show n, (Num n, []))
-    press (output, (Submit, [])) = (output ++ "A", (Submit, []))
-    press (output, (n, keys@(arrow : ks)))
-      | all (== EnterKey) keys =
-          let o = case n of
-                Num n' -> show n'
-                Submit -> "A"
-           in (output ++ o, (n, keys))
-      | all (== EnterKey) ks = (output, (moveNumpad n arrow, keys))
-      | otherwise =
-          let revKeys = reverse keys
-              Just firstNonEnter = findIndex (/= EnterKey) revKeys
-              (enters, arrow : key : ks) = splitAt firstNonEnter revKeys
-           in let keys' = reverse (enters ++ arrow : moveArrowpad key arrow : ks)
-               in (output, (n, keys'))
-
-    options :: State -> [(Key, State)]
-    options s@(output, (n, [])) =
-      (EnterKey, press s)
-        : [ (d, (output, (n', []))) | let p = reverseIndexNumpad M.! n, d <- [LeftKey, RightKey, UpKey, DownKey], let p' = move p d, M.member p' numpadLayout, let n' = numpadLayout M.! p'
-          ]
-    options s@(output, (n, keys)) =
-      let k : ks = reverse keys
-       in (EnterKey, press s)
-            : [ (d, (output, (n, reverse (k' : ks)))) | let p = reverseIndexArrowpad M.! k, d <- [LeftKey, RightKey, UpKey, DownKey], let p' = move p d, M.member p' arrowpadLayout, let k' = arrowpadLayout M.! p'
-              ]
-
+    -- Explores the edges of the graph to find the shortest path to the target state
+    go :: M.Map State (Int, S.Set [Key]) -> PSQ.PSQ (Maybe State, Maybe Key, State) Int -> M.Map State (Int, S.Set [Key])
     go costs edges = case PSQ.minView edges of
       Nothing -> costs -- No more edges to explore
       Just ((previous, previousKey, edge) :-> cost, edges') -> case M.lookup edge costs of
@@ -158,6 +116,52 @@ dijkstra startState (targetOutput, _) = go M.empty $ PSQ.fromList [(Nothing, Not
               histories' = S.map (\h -> maybe h (: h) previousKey) histories
               costs' = M.insert edge (cost, histories') costs
            in go costs' edges''
+
+    -- Moves the robot's arm on the directional keypad
+    move :: Coord2D -> Key -> Coord2D
+    move c EnterKey = c
+    move (x, y) LeftKey = (x - 1, y)
+    move (x, y) RightKey = (x + 1, y)
+    move (x, y) UpKey = (x, y + 1)
+    move (x, y) DownKey = (x, y - 1)
+
+    -- Moves the robot's arm on the directional keypad and returns the new key it is pointing at
+    moveArrowpad :: Key -> Key -> Key
+    moveArrowpad k d = fromMaybe k (move (reverseIndexArrowpad M.! k) d `M.lookup` arrowpadLayout)
+
+    -- Moves the robot's arm on the numeric keypad and returns the new key it is pointing at
+    moveNumpad :: NumPad -> Key -> NumPad
+    moveNumpad n d = fromMaybe n (move (reverseIndexNumpad M.! n) d `M.lookup` numpadLayout)
+
+    -- Presses a key on the keypad and returns the new state
+    press :: State -> State
+    press (output, (Num n, [])) = (output ++ show n, (Num n, []))
+    press (output, (Submit, [])) = (output ++ "A", (Submit, []))
+    press (output, (n, keys@(arrow : ks)))
+      | all (== EnterKey) keys =
+          let o = case n of
+                Num n' -> show n'
+                Submit -> "A"
+           in (output ++ o, (n, keys))
+      | all (== EnterKey) ks = (output, (moveNumpad n arrow, keys))
+      | otherwise =
+          let revKeys = reverse keys
+              Just firstNonEnter = findIndex (/= EnterKey) revKeys
+              (enters, arrow : key : ks) = splitAt firstNonEnter revKeys
+           in let keys' = reverse (enters ++ arrow : moveArrowpad key arrow : ks)
+               in (output, (n, keys'))
+
+    -- Returns the possible key presses and the resulting states from the current state
+    options :: State -> [(Key, State)]
+    options s@(output, (n, [])) =
+      (EnterKey, press s)
+        : [ (d, (output, (n', []))) | let p = reverseIndexNumpad M.! n, d <- [LeftKey, RightKey, UpKey, DownKey], let p' = move p d, M.member p' numpadLayout, let n' = numpadLayout M.! p'
+          ]
+    options s@(output, (n, keys)) =
+      let k : ks = reverse keys
+       in (EnterKey, press s)
+            : [ (d, (output, (n, reverse (k' : ks)))) | let p = reverseIndexArrowpad M.! k, d <- [LeftKey, RightKey, UpKey, DownKey], let p' = move p d, M.member p' arrowpadLayout, let k' = arrowpadLayout M.! p'
+              ]
 
 -- Parses the input file to extract the door codes
 parseCodes :: A.Parser [String]
@@ -191,18 +195,25 @@ part2 = sum . map (liftM2 (*) (countStepsWithIterations 25) numericPart)
 countStepsWithIterations :: Int -> [Char] -> Int
 countStepsWithIterations n str = ST.evalState go M.empty
   where
+    -- Finds the fastest way to type the code
     go :: ST.State (M.Map ([Key], Int) Int) Int
     go = minimum <$> mapM (countStepsForDialIteration n) (fastestDials Submit str)
 
     -- Counts the steps required for a single iteration of dialing the code
     countStepsForDialIteration :: Int -> [Key] -> ST.State (M.Map ([Key], Int) Int) Int
+    -- Base case: no more iterations
     countStepsForDialIteration 0 ks = return $ length ks
     countStepsForDialIteration n ks = do
+      -- Memoizes the results to avoid recalculating the same values
       memo <- ST.get
+      -- Checks if the result is already memoized
       case (ks, n) `M.lookup` memo of
         Just c -> return c
         Nothing -> do
+          -- Finds the fastest way to type the code
           let fastestOptionsForEachWithPrevious = zipWith fastestOptions (EnterKey : ks) ks
+          -- Counts the steps required for the fastest way to type the code
           count <- sum . map minimum <$> mapM (mapM (countStepsForDialIteration (n - 1))) fastestOptionsForEachWithPrevious
+          -- Memoizes the result
           ST.modify' (M.insert (ks, n) count)
           return count
